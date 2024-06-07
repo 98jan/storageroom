@@ -55,4 +55,12 @@ dependencies {
     implementation("com.google.mlkit:object-detection:17.0.1")
     // json processor
     implementation(libs.jackson.databind)
+
+    //Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
+    //navigation
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
 }

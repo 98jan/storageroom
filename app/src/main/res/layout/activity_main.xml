@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:context=".MainActivity">
 
-  <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:paddingTop="@dimen/home_page_title_padding_top"
-      android:paddingBottom="@dimen/home_page_title_padding_bottom"
-      android:fontFamily="google-sans"
-      android:gravity="center_horizontal"
-      android:text="@string/app_name"
-      android:textColor="@color/white"
-      android:textSize="@dimen/home_page_title_size"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter data:"
+        android:id="@+id/input" />
 
-  <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/mode_recycler_view"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:scrollbars="vertical"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send"
+        android:id="@+id/btn"
+        android:layout_below="@id/input" />
 
-</LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Read"
+        android:id="@+id/btnReaddata"
+        android:layout_below="@id/btn" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Empty preview"
+        android:id="@+id/textView"
+        android:layout_below="@+id/btnReaddata" />
+
+</RelativeLayout>
