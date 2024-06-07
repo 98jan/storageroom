@@ -32,7 +32,7 @@
     <string name="verification_email_failed">Verification email failed</string>
     <string name="user_not_found">User not found</string>
     <string name="verify_email_prompt">Verify email prompt</string>
-    <string name="password_reset">Password reset</string>
+    <string name="password_reset">Forgot your password?</string>
     <string name="already_registered">You already have an account?</string>
     <string name="not_registered">Don\'t have an account?</string>
     <!-- Barcode implementation -->
