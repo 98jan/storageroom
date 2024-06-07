@@ -130,7 +130,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 public void onCallback(boolean isSuccess) {
                     if (isSuccess) {
                         Toast.makeText(RegistrationActivity.this, getString(R.string.verification_email_sent), Toast.LENGTH_SHORT).show();
-                        FirebaseUtil.checkEmailVerification(RegistrationActivity.this, StorageroomActivity.class);
+                        FirebaseUtil.checkEmailVerification(RegistrationActivity.this, StorageroomOverviewActivity.class);
                     } else {
                         Toast.makeText(RegistrationActivity.this, getString(R.string.verification_email_failed), Toast.LENGTH_SHORT).show();
                     }
