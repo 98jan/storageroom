@@ -8,11 +8,20 @@ on:
 
 jobs:
   build:
+    # configure permissions for Action
+    permissions:
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        # Disabling shallow clones is recommended for improving the relevancy of reporting
+        fetch-depth: 0
     - name: set up JDK 21
       uses: actions/setup-java@v3
       with:
@@ -29,4 +38,9 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    - name: Super-linter
+      uses: super-linter/super-linter@v6.6.0
+      env:
+        # To report GitHub Actions status checks
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
