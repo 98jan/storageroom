@@ -38,7 +38,7 @@ public class StorageroomOverviewActivity extends AppCompatActivity {
         createStorageroom.setOnClickListener(v -> createStorageroomView());
 
         // Retrieve storageroom data from Firebase
-        FirebaseUtil.readData("storagerooms/" + FirebaseUtil.getCurrentUser().getUid(), Storageroom.class, new FirebaseUtil.FirebaseCallback() {
+        FirebaseUtil.readData("storagerooms/" + getIntent().getStringExtra("userId"), Storageroom.class, new FirebaseUtil.FirebaseCallback() {
             @Override
             public void onCallback(boolean isSuccess) {
                 // Not used for reading data
@@ -48,8 +48,7 @@ public class StorageroomOverviewActivity extends AppCompatActivity {
             public void onCallback(List<Object> list) {
                 if (list != null) {
                     for (Object object : list) {
-                        if (object instanceof Storageroom) {
-                            Storageroom storageroom = (Storageroom) object;
+                        if (object instanceof Storageroom storageroom) {
                             // Add key and name of each storageroom to the list
                             storageroomList.add("Key: " + storageroom.getKey() + ", Name: " + storageroom.getName());
                         }
@@ -63,8 +62,7 @@ public class StorageroomOverviewActivity extends AppCompatActivity {
 
     private void createStorageroomView() {
         Intent intent = new Intent(getApplicationContext(), StorageroomActivity.class);
-        FirebaseUser user = FirebaseUtil.getCurrentUser();
-        intent.putExtra("userId", user.getUid());
+        intent.putExtra("userId", getIntent().getStringExtra("userId"));
         startActivity(intent);
         finish();
     }
