@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+import java.io.Serializable;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonRootName("product")
-public class Product {
+public class Product implements Serializable {
 
     private String key;
     @JsonProperty("product_name")
@@ -16,6 +17,7 @@ public class Product {
     private String note;
     @JsonProperty("code")
     private String barcode;
+    @JsonProperty("image_front_url")
     private String image;
     @JsonProperty("brands")
     private String brand;
