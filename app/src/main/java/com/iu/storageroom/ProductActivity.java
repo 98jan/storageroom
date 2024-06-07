@@ -28,7 +28,7 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_barcode);
+        setContentView(R.layout.activity_main);
 
         btnSaveData = findViewById(R.id.btn);
         input = findViewById(R.id.input);
