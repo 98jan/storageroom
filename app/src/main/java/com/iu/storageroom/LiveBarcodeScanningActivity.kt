@@ -203,6 +203,9 @@ class LiveBarcodeScanningActivity : AppCompatActivity(), OnClickListener {
                 val barcodeFieldList = ArrayList<BarcodeField>()
                 barcodeFieldList.add(BarcodeField("Raw Value", (barcode.rawValue + "\t" + productWrapper.product.name)))
                 BarcodeResultFragment.show(supportFragmentManager, barcodeFieldList)
+                startActivity(Intent(this, ProductActivity::class.java).apply {
+                    putExtra("product", productWrapper.product)
+                })
             }
         }
     }
