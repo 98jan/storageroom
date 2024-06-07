@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     // needed for @Parcelize in BarcodeField.kt
     id("org.jetbrains.kotlin.plugin.parcelize")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
