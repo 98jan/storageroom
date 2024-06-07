@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StorageroomActivity">
+
+    <EditText
+        android:id="@+id/storageroom_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/storageroom_image"
+        android:layout_marginTop="24dp"
+        android:hint="Name der Vorratskammer:" />
+
+    <EditText
+        android:id="@+id/storageroom_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="77dp"
+        android:hint="Beschreibung der Vorratskammer:" />
+
+    <ImageView
+        android:id="@+id/storageroom_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnSaveStorageroom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="311dp"
+        android:text="Save"
+        tools:ignore="NotSibling" />
+
+    <Button
+        android:id="@+id/btnReaddata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSaveStorageroom"
+        android:layout_marginTop="45dp"
+        android:text="Read" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/storageroom_description"
+        android:layout_marginTop="25dp"
+        android:text="Empty preview" />
+
+</RelativeLayout>
