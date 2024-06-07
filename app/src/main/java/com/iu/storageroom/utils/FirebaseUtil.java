@@ -46,12 +46,7 @@ public class FirebaseUtil {
     // Sign up a new user with an email and password
     public static void signUp(String email, String password, Activity activity, FirebaseCallback callback) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(activity, task -> {
-            if (task.isSuccessful()) {
-                FirebaseUser user = mAuth.getCurrentUser();
-                sendVerificationEmail(user, callback);
-            } else {
-                callback.onCallback(false);
-            }
+            callback.onCallback(task.isSuccessful());
         });
     }
 
@@ -110,6 +105,7 @@ public class FirebaseUtil {
     // signs in a user with an email and password
     public static void signIn(String email, String password, Activity activity, OnCompleteListener<AuthResult> listener) {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(activity, listener);
+
     }
 
     // sets a specific path for Firebase database
