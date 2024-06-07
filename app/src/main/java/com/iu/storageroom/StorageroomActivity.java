@@ -104,7 +104,6 @@ public class StorageroomActivity extends AppCompatActivity {
             FirebaseUtil.readData("storagerooms/" + userId, Storageroom.class, new FirebaseUtil.FirebaseCallback() {
                 @Override
                 public void onCallback(boolean isSuccess) {
-
                 }
 
                 @Override
