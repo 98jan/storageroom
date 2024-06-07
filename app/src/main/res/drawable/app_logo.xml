@@ -1,0 +1,39 @@
+<vector xmlns:aapt="http://schemas.android.com/aapt" xmlns:android="http://schemas.android.com/apk/res/android" android:height="97.591835dp" android:viewportHeight="79.7" android:viewportWidth="88.2" android:width="108dp">
+      
+    <path android:pathData="M82.2,76.6l-42.6,0l-11.2,-24l32.3,0l21.5,24z" android:strokeWidth="0">
+            
+        <aapt:attr name="android:fillColor">
+                  
+            <gradient android:endX="55.3" android:endY="55.7" android:startX="55.3" android:startY="73.3" android:type="linear">
+                        
+                <item android:color="#00000000" android:offset="0"/>
+                        
+                <item android:color="#44000000" android:offset="1.0"/>
+                      
+            </gradient>
+                
+        </aapt:attr>
+          
+    </path>
+      
+    <path android:fillColor="#fff" android:pathData="M60.7,24.5c0,-0.5 -0.4,-0.9 -0.9,-0.9h-2.1c-0.5,0 -0.9,0.4 -0.9,0.9v10.6h-25.4v-10.6c0,-0.5 -0.4,-0.9 -0.9,-0.9h-2.1c-0.5,0 -0.9,0.4 -0.9,0.9v28.2c0,0.5 0.4,0.9 0.9,0.9h2.1c0.5,0 0.9,-0.4 0.9,-0.9v-1.9h25.4v1.9c0,0.5 0.4,0.9 0.9,0.9h2.1c0.5,0 0.9,-0.4 0.9,-0.9v-28.2h0ZM56.8,49.1h-25.4v-12.2h25.4v12.2Z" android:strokeWidth="0"/>
+      
+    <path android:fillColor="#fff" android:pathData="M34.1,41L41.2,41A1,1 0,0 1,42.2 42L42.2,47.3A1,1 0,0 1,41.2 48.3L34.1,48.3A1,1 0,0 1,33.1 47.3L33.1,42A1,1 0,0 1,34.1 41z" android:strokeWidth="0"/>
+      
+    <path android:fillColor="#fff" android:pathData="M45.2,31.3L54.1,31.3A1,1 0,0 1,55.1 32.3L55.1,33.4A1,1 0,0 1,54.1 34.4L45.2,34.4A1,1 0,0 1,44.2 33.4L44.2,32.3A1,1 0,0 1,45.2 31.3z" android:strokeWidth="0"/>
+      
+    <path android:fillColor="#fff" android:pathData="M46.6,42.8v-1.5s0,0 0,0c0.1,0 0.2,-0.2 0.2,-0.3s-0.1,-0.3 -0.3,-0.3h-1.5c-0.2,0 -0.3,0.1 -0.3,0.3s0,0.2 0.2,0.3c0,0 0,0 0,0v1.5c-0.4,0 -0.7,0.5 -0.7,0.9v3.7c0,0.5 0.4,0.9 0.9,0.9h1.5c0.5,0 0.9,-0.4 0.9,-0.9v-3.7c0,-0.4 -0.3,-0.8 -0.7,-0.9h0ZM47,47.4c0,0.3 -0.2,0.5 -0.5,0.5h-1.5c-0.3,0 -0.5,-0.2 -0.5,-0.5v-3.7c0,-0.3 0.2,-0.5 0.6,-0.5h0.2v-1.9s0,0 0,0h1.1s0,0 0,0v1.9h0.2c0.3,0 0.5,0.2 0.5,0.5 0,0 0,3.7 0,3.7Z" android:strokeWidth="0"/>
+      
+    <path android:fillColor="#fff" android:pathData="M50.3,42.8v-1.5s0,0 0,0c0.1,0 0.2,-0.2 0.2,-0.3s-0.1,-0.3 -0.3,-0.3h-1.5c-0.2,0 -0.3,0.1 -0.3,0.3s0,0.2 0.2,0.3c0,0 0,0 0,0v1.5c-0.4,0 -0.7,0.5 -0.7,0.9v3.7c0,0.5 0.4,0.9 0.9,0.9h1.5c0.5,0 0.9,-0.4 0.9,-0.9v-3.7c0,-0.4 -0.3,-0.8 -0.7,-0.9h0ZM50.7,47.4c0,0.3 -0.2,0.5 -0.5,0.5h-1.5c-0.3,0 -0.5,-0.2 -0.5,-0.5v-3.7c0,-0.3 0.2,-0.5 0.6,-0.5h0.2v-1.9s0,0 0,0h1.1s0,0 0,0v1.9h0.2c0.3,0 0.5,0.2 0.5,0.5 0,0 0,3.7 0,3.7Z" android:strokeWidth="0"/>
+      
+    <path android:fillColor="#fff" android:pathData="M54,42.8v-1.5s0,0 0,0c0.1,0 0.2,-0.2 0.2,-0.3s-0.1,-0.3 -0.3,-0.3h-1.5c-0.2,0 -0.3,0.1 -0.3,0.3s0,0.2 0.2,0.3c0,0 0,0 0,0v1.5c-0.4,0 -0.7,0.5 -0.7,0.9v3.7c0,0.5 0.4,0.9 0.9,0.9h1.5c0.5,0 0.9,-0.4 0.9,-0.9v-3.7c0,-0.4 -0.3,-0.8 -0.7,-0.9h0ZM54.4,47.4c0,0.3 -0.2,0.5 -0.5,0.5h-1.5c-0.3,0 -0.5,-0.2 -0.5,-0.5v-3.7c0,-0.3 0.2,-0.5 0.6,-0.5h0.2v-1.9s0,0 0,0h1.1s0,0 0,0v1.9h0.2c0.3,0 0.5,0.2 0.5,0.5 0,0 0,3.7 0,3.7Z" android:strokeWidth="0"/>
+      
+    <path android:fillColor="#fff" android:pathData="M33.1,27.4L35,27.4A0.6,0.6 0,0 1,35.6 28L35.6,33.8A0.6,0.6 0,0 1,35 34.4L33.1,34.4A0.6,0.6 0,0 1,32.5 33.8L32.5,28A0.6,0.6 0,0 1,33.1 27.4z" android:strokeWidth="0"/>
+      
+    <path android:fillColor="#fff" android:pathData="M36.7,27.4L38.6,27.4A0.6,0.6 0,0 1,39.2 28L39.2,33.8A0.6,0.6 0,0 1,38.6 34.4L36.7,34.4A0.6,0.6 0,0 1,36.1 33.8L36.1,28A0.6,0.6 0,0 1,36.7 27.4z" android:strokeWidth="0"/>
+      
+    <path android:fillColor="#fff" android:pathData="M40.2,27.4L42.1,27.4A0.6,0.6 0,0 1,42.7 28L42.7,33.8A0.6,0.6 0,0 1,42.1 34.4L40.2,34.4A0.6,0.6 0,0 1,39.6 33.8L39.6,28A0.6,0.6 0,0 1,40.2 27.4z" android:strokeWidth="0"/>
+      
+    <path android:fillColor="#fff" android:pathData="M47.9,25.9L53.6,25.9A1,1 0,0 1,54.6 26.9L54.6,29.8A1,1 0,0 1,53.6 30.8L47.9,30.8A1,1 0,0 1,46.9 29.8L46.9,26.9A1,1 0,0 1,47.9 25.9z" android:strokeWidth="0"/>
+    
+</vector>
