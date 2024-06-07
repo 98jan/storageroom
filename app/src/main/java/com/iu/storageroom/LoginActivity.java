@@ -85,25 +85,22 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        FirebaseUtil.signIn(email, password, this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                progressBar.setVisibility(View.GONE);
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "signInWithEmail:success");
-                    Toast.makeText(LoginActivity.this, getString(R.string.login_successful), Toast.LENGTH_SHORT).show();
-                    FirebaseUser user = FirebaseUtil.getCurrentUser();
-                    if (user != null) {
-                        FirebaseUtil.openFbReference("products/" + user.getUid());
-                        Intent intent = new Intent(getApplicationContext(), StorageroomOverviewActivity.class);
-                        intent.putExtra("userId", user.getUid());
-                        startActivity(intent);
-                        finish();
-                    }
-                } else {
-                    Log.w(TAG, "signInWithEmail:failure", task.getException());
-                    Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_SHORT).show();
+        FirebaseUtil.signIn(email, password, this, task -> {
+            progressBar.setVisibility(View.GONE);
+            if (task.isSuccessful()) {
+                Log.d(TAG, "signInWithEmail:success");
+                Toast.makeText(LoginActivity.this, getString(R.string.login_successful), Toast.LENGTH_SHORT).show();
+                FirebaseUser user = FirebaseUtil.getCurrentUser();
+                if (user != null) {
+                    FirebaseUtil.openFbReference("products/" + user.getUid());
+                    Intent intent = new Intent(getApplicationContext(), StorageroomOverviewActivity.class);
+                    intent.putExtra("userId", user.getUid());
+                    startActivity(intent);
+                    finish();
                 }
+            } else {
+                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_SHORT).show();
             }
         });
     }

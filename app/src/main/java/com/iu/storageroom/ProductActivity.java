@@ -97,7 +97,6 @@ public class ProductActivity extends AppCompatActivity {
             FirebaseUtil.readData("products/" + userId, Product.class, new FirebaseUtil.FirebaseCallback() {
                 @Override
                 public void onCallback(boolean isSuccess) {
-
                 }
 
                 @Override
