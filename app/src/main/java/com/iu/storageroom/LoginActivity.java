@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // Initialize AuthStateListener
-        FirebaseUtil.initializeAuthListener(this, ProductActivity.class);
+        FirebaseUtil.initializeAuthListener(this, StorageroomOverviewActivity.class);
     }
 
     private void loginUser() {
