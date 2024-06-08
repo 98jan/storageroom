@@ -28,3 +28,4 @@ jobs:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_DISCOVERY_ACROSS_FILESYSTEM: 1
+          DEFAULT_WORKSPACE: /home/runner/_work/storageroom/storageroom
