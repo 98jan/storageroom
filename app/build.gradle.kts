@@ -4,6 +4,8 @@ plugins {
     // needed for @Parcelize in BarcodeField.kt
     id("org.jetbrains.kotlin.plugin.parcelize")
     alias(libs.plugins.google.gms.google.services)
+    // needed for sonarqube analysis
+    id("org.sonarqube") version "5.0.0.4638"
 }
 
 android {
@@ -32,6 +34,13 @@ android {
     }
     kotlinOptions {
         jvmTarget = "21"
+    }
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "98jan_storageroom_cab43341-633c-4fab-a4d5-e59b14772719")
+        property("sonar.host.url", System.getenv("SONAR_HOST_URL"))
     }
 }
 
