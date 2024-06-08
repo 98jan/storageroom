@@ -153,12 +153,7 @@ public class FirebaseUtil {
     public static <T> void saveData(String path, T data, FirebaseCallback firebaseCallback) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(path);
         databaseReference.push().setValue(data).addOnCompleteListener(task -> {
-
-            if (task.isSuccessful()) {
-                firebaseCallback.onCallback(true);
-            } else {
-                firebaseCallback.onCallback(false);
-            }
+            firebaseCallback.onCallback(task.isSuccessful());
         });
     }
 
