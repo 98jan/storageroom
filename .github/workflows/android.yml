@@ -43,6 +43,10 @@ jobs:
         uses: sonarsource/sonarqube-scan-action@v2.1.0 # Ex: v2.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
         with:
           projectBaseDir: /home/runner/_work/storageroom/storageroom
+          args: >
+            -Dsonar.projectKey=98jan_storageroom_cab43341-633c-4fab-a4d5-e59b14772719
+            -Dsonar.sources=.
+            -Dsonar.java.binaries=app/build
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
