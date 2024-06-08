@@ -35,6 +35,8 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
   #sonarqube:
   #  runs-on: self-hosted
   #  needs: [build]
