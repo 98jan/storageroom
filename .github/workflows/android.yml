@@ -24,6 +24,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # Setup unzip
+      - name: Setup unzip
+        run: |
+          sudo apt install -y unzip
+
       # Setup Android for self-hosted runners
       - name: Setup Android SDK
         uses: amyu/setup-android@v4
