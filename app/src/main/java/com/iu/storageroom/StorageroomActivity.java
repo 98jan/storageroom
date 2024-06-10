@@ -78,7 +78,7 @@ public class StorageroomActivity extends AppCompatActivity {
             DatabaseReference reference = FirebaseUtil.mDatabaseReference.push();
             String key = reference.getKey();
             long timeInTwoWeeks = 14 * 24 * 60 * 60 * 1000;
-            Storageroom storageroom = new Storageroom(key, "Büro", System.currentTimeMillis(), System.currentTimeMillis() + timeInTwoWeeks, 1, 2, new Product());
+            Storageroom storageroom = new Storageroom(key, "Büro", "image", System.currentTimeMillis(), System.currentTimeMillis() + timeInTwoWeeks, 1, 2, new Product());
             FirebaseUtil.saveData("storagerooms/" + userId, storageroom, new FirebaseUtil.FirebaseCallback() {
                 @Override
                 public void onCallback(boolean isSuccess) {
