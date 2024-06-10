@@ -15,6 +15,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.iu.storageroom.R;
 
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ public class FirebaseUtil {
     public static DatabaseReference mDatabaseReference;
     public static FirebaseAuth mAuth;
     public static FirebaseAuth.AuthStateListener mAuthListener;
+    private static FirebaseStorage mFirebaseStorage;
+    private static StorageReference mStorageReference;
 
     // initialize Firebase authentication and database instances
     public static void initializeFirebase() {
@@ -34,6 +38,10 @@ public class FirebaseUtil {
         }
         if (mFireDatabase == null) {
             mFireDatabase = FirebaseDatabase.getInstance();
+        }
+
+        if (mStorageReference == null) {
+            mStorageReference = mFirebaseStorage.getInstance().getReference();
         }
     }
 
