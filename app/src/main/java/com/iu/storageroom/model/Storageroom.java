@@ -6,7 +6,7 @@ public class Storageroom {
 
     private String name;
 
-    private String image;
+    private String imageUrl;
 
     private long expiryDate;
     private long consumptionDate;
@@ -19,10 +19,10 @@ public class Storageroom {
 
     public Storageroom() {}
 
-    public Storageroom(String key, String name, String image, long expiryDate, long consumptionDate, int refill_flag, int state, Product product) {
+    public Storageroom(String key, String name, String imageUrl, long expiryDate, long consumptionDate, int refill_flag, int state, Product product) {
         this.key = key;
         this.name = name;
-        this.image = image;
+        this.imageUrl = imageUrl;
         this.expiryDate = expiryDate;
         this.consumptionDate = consumptionDate;
         this.refill_flag = refill_flag;
@@ -46,12 +46,12 @@ public class Storageroom {
         this.name = name;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public long getExpiryDate() {

@@ -10,6 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="421dp" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="105dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/listView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:contentDescription="Image preview"
+        android:scaleType="centerCrop" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createStorageroomButton"
         android:layout_width="match_parent"
