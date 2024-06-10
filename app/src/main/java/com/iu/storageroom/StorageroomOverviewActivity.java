@@ -49,7 +49,7 @@ public class StorageroomOverviewActivity extends AppCompatActivity {
                     for (Object object : list) {
                         if (object instanceof Storageroom storageroom) {
                             // Add key and name of each storageroom to the list
-                            storageroomList.add("Key: " + storageroom.getKey() + ", Name: " + storageroom.getName());
+                            storageroomList.add("Key: " + storageroom.getKey() + ", Name: " + storageroom.getName() + ", Image: " + storageroom.getImage());
                         }
                     }
                     // Notify adapter about data change

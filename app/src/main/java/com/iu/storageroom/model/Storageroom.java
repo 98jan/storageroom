@@ -19,9 +19,10 @@ public class Storageroom {
 
     public Storageroom() {}
 
-    public Storageroom(String key, String name, long expiryDate, long consumptionDate, int refill_flag, int state, Product product) {
+    public Storageroom(String key, String name, String image, long expiryDate, long consumptionDate, int refill_flag, int state, Product product) {
         this.key = key;
         this.name = name;
+        this.image = image;
         this.expiryDate = expiryDate;
         this.consumptionDate = consumptionDate;
         this.refill_flag = refill_flag;
