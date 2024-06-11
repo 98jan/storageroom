@@ -1,11 +1,29 @@
 <resources>
     <string name="app_name">Storageroom</string>
     <string name="action_settings">Settings</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="save">Save</string>
+    <string name="read">Read</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Authentication implementation -->
+    <string name="auth_failed">Authentication failed.</string>
+    <string name="login_successful">Login Successful.</string>
+    <string name="reg_successful">Registration Successful.</string>
+    <string name="user_not_auth">User not authenticated.</string>
+    <string name="user_not_found">User not found</string>
+    <string name="email_not_verified">Email not verified!</string>
+    <string name="verification_email_failed">Verification email failed</string>
+    <string name="verification_email_sent">Verification email sent</string>
+    <string name="verify_email_prompt">Verify email prompt</string>
+    <string name="password_mismatch">Password mismatch.</string>
+
+    <!-- Strings for login and register -->
     <string name="login">Login</string>
     <string name="email">Email</string>>
     <string name="password">Password</string>
@@ -15,26 +33,26 @@
     <string name="enter_email">Enter Email</string>
     <string name="enter_password">Enter Password</string>
     <string name="repeat_password">Repeat Password</string>
-    <string name="password_mismatch">Password mismatch.</string>
-    <string name="login_successful">Login Successful.</string>
-    <string name="auth_failed">Authentication failed.</string>
-    <string name="reg_successful">Registration Successful.</string>
-    <string name="user_not_auth">User not authenticated.</string>
-    <string name="data_save_success">Data saved successfully</string>
-    <string name="data_save_fail">Failed to save data</string>
-    <string name="data_read_fail">Failed to read data: </string>
-    <string name="data_update_success">Data updated successfully </string>
-    <string name="data_update_fail">Failed to update data:  </string>
-    <string name="data_delete_success">Data deleted successfully </string>
-    <string name="data_delete_fail">Failed to delete data: </string>
-    <string name="email_not_verified">Email not verified!</string>
-    <string name="verification_email_sent">Verification email sent</string>
-    <string name="verification_email_failed">Verification email failed</string>
-    <string name="user_not_found">User not found</string>
-    <string name="verify_email_prompt">Verify email prompt</string>
     <string name="password_reset">Forgot your password?</string>
     <string name="already_registered">You already have an account?</string>
     <string name="not_registered">Don\'t have an account?</string>
+
+    <!-- Data handling implementation -->
+    <string name="data_save_fail">Failed to save data</string>
+    <string name="data_save_success">Data saved successfully</string>
+    <string name="data_read_fail">Failed to read data: </string>
+    <string name="data_update_fail">Failed to update data:  </string>
+    <string name="data_update_success">Data updated successfully </string>
+    <string name="data_delete_fail">Failed to delete data: </string>
+    <string name="data_delete_success">Data deleted successfully </string>
+
+    <!-- Strings for Storageroom -->
+    <string name="add_storageroom">Add Storage Room</string>
+    <string name="storageroom_name_hint">Storage Room Name</string>
+    <string name="storageroom_description_hint">Storage Room Description</string>
+    <string name="storageroom_name_empty">Please enter a name for the storageroom</string>
+    <string name="no_storagerooms">Please create a Storageroom by clicking on the plus button</string>
+
     <!-- Barcode implementation -->
     <string name="prompt_point_at_a_barcode">Point your camera at a barcode</string>
     <string name="prompt_move_camera_closer">Move closer to search</string>
