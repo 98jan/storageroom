@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.iu.storageroom.R;
+import com.iu.storageroom.model.Storageroom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,9 +153,17 @@ public class FirebaseUtil {
     // generic method for saving data in Firebase database
     public static <T> void saveData(String path, T data, FirebaseCallback firebaseCallback) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(path);
-        databaseReference.push().setValue(data).addOnCompleteListener(task -> {
-            firebaseCallback.onCallback(task.isSuccessful());
-        });
+        String key = databaseReference.push().getKey();
+        if (key != null) {
+            databaseReference.child(key).setValue(data).addOnCompleteListener(task -> {
+                if (data instanceof Storageroom) {
+                    ((Storageroom) data).setKey(key);
+                }
+                firebaseCallback.onCallback(task.isSuccessful());
+            });
+        } else {
+            firebaseCallback.onCallback(false);
+        }
     }
 
     // generic method for reading data from Firebase database
@@ -168,7 +177,18 @@ public class FirebaseUtil {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         T data = dataSnapshot.getValue(clazz);
                         if (data != null) {
-                            dataList.add(data);
+                            if (data instanceof Storageroom) {
+                                Storageroom storageroom = (Storageroom) data;
+                                storageroom.setKey(dataSnapshot.getKey()); // Set the key
+                                // Ensure selectedIcon is retrieved as String first and then parsed to int
+                                String selectedIconStr = dataSnapshot.child("selectedIcon").getValue(String.class);
+                                if (selectedIconStr != null) {
+                                    storageroom.setSelectedIcon(selectedIconStr); // Set as string
+                                }
+                                dataList.add(storageroom);
+                            } else {
+                                dataList.add(data);
+                            }
                         }
                     }
                     firebaseCallback.onCallback(dataList);
@@ -201,7 +221,7 @@ public class FirebaseUtil {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(path).child(key);
         databaseReference.removeValue().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                firebaseCallback.onCallback(null);
+                firebaseCallback.onCallback(true);
             } else {
                 firebaseCallback.onCallback(false);
             }
