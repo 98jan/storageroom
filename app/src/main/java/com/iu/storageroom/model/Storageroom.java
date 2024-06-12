@@ -3,26 +3,25 @@ package com.iu.storageroom.model;
 public class Storageroom {
 
     private String key;
-
     private String name;
-
-    private String image;
+    //private String image; // path to image
+    private int selectedIconInt;
+    private String selectedIcon;
 
     private long expiryDate;
     private long consumptionDate;
-
     private int refill_flag;
-
     private int state;
 
     private Product product;
 
     public Storageroom() {}
 
-    public Storageroom(String key, String name, String image, long expiryDate, long consumptionDate, int refill_flag, int state, Product product) {
+    public Storageroom(String key, String name, int selectedIconInt, long expiryDate, long consumptionDate, int refill_flag, int state, Product product) {
         this.key = key;
         this.name = name;
-        this.image = image;
+        this.selectedIconInt = selectedIconInt;
+        this.selectedIcon = String.valueOf(selectedIconInt);
         this.expiryDate = expiryDate;
         this.consumptionDate = consumptionDate;
         this.refill_flag = refill_flag;
@@ -46,12 +45,27 @@ public class Storageroom {
         this.name = name;
     }
 
-    public String getImage() {
-        return image;
+    public int getSelectedIconInt() {
+        return selectedIconInt;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setSelectedIconInt(int selectedIconInt) {
+        this.selectedIconInt = selectedIconInt;
+        this.selectedIcon = String.valueOf(selectedIconInt);
+    }
+
+    public String getSelectedIcon() {
+        return selectedIcon;
+    }
+
+    public void setSelectedIcon(String selectedIcon) {
+        this.selectedIcon = selectedIcon;
+        try {
+            this.selectedIconInt = Integer.parseInt(selectedIcon);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            // Fehlerbehandlung hier, falls die Umwandlung fehlschlägt
+        }
     }
 
     public long getExpiryDate() {
