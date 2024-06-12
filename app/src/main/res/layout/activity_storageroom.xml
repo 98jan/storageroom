@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/storageroom_name_hint"
-        android:layout_margin="16dp" />
+        android:layout_margin="16dp"
+        android:maxLength="40"/>
 
     <Spinner
         android:id="@+id/iconSpinner"
