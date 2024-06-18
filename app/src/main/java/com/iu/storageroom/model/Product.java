@@ -29,7 +29,6 @@ public class Product implements Serializable {
     private String store;
 
     private int rating;
-
     private boolean favourite;
 
     public Product(){}
@@ -99,6 +98,23 @@ public class Product implements Serializable {
     public void setFavourite(boolean favourite) {
         this.favourite = favourite;
     }
+
+    public String getBrand() { return brand; }
+
+    public void setBrand(String brand) { this.brand = brand; }
+
+    public List<String> getCategories() { return categories; }
+
+    public void setCategories(List<String> categories) { this.categories = categories; }
+
+    public String getQuantity() {return quantity; }
+
+    public void setQuantity(String quantity) { this.quantity = quantity; }
+
+    public String getStore() { return store; }
+
+    public void setStore(String store) { this.store = store; }
+
 
     @Override
     public String toString() {
