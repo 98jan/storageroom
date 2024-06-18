@@ -18,6 +18,9 @@ import com.iu.storageroom.utils.FirebaseUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity for displaying and managing storage rooms.
+ */
 public class StorageroomOverviewActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
@@ -27,6 +30,11 @@ public class StorageroomOverviewActivity extends AppCompatActivity {
     private TextView emptyView;
     private String userId;
 
+    /**
+     * Called when the activity is first created.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +50,10 @@ public class StorageroomOverviewActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
+        // Set click listener for create storage room button
         createStorageroom.setOnClickListener(v -> createStorageroomView());
 
+        // Check if userId is provided
         userId = getIntent().getStringExtra("userId");
         if (userId == null) {
             Toast.makeText(this, getString(R.string.user_not_auth), Toast.LENGTH_SHORT).show();
@@ -76,6 +86,10 @@ public class StorageroomOverviewActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Updates the UI based on the storage room list.
+     * If the list is empty, shows the empty view; otherwise, displays the recycler view.
+     */
     private void updateUI() {
         if (storageroomList.isEmpty()) {
             emptyView.setVisibility(View.VISIBLE);
@@ -87,12 +101,20 @@ public class StorageroomOverviewActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Opens the activity to create a new storage room.
+     */
     private void createStorageroomView() {
         Intent intent = new Intent(getApplicationContext(), StorageroomActivity.class);
         intent.putExtra("userId", userId);
         startActivity(intent);
     }
 
+    /**
+     * Opens the activity to edit a storage room.
+     *
+     * @param storageroom the storage room to edit
+     */
     private void editStorageroom(Storageroom storageroom) {
         Intent intent = new Intent(getApplicationContext(), StorageroomActivity.class);
         intent.putExtra("userId", userId);
@@ -103,6 +125,11 @@ public class StorageroomOverviewActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Deletes a storage room from Firebase.
+     *
+     * @param storageroom the storage room to delete
+     */
     private void deleteStorageroom(Storageroom storageroom) {
         String key = storageroom.getKey();
         if (key != null) {
