@@ -23,18 +23,18 @@ import com.iu.storageroom.utils.FirebaseUtil;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Activity class for managing storage rooms.
+ */
 public class StorageroomActivity extends AppCompatActivity {
 
     private EditText inputStorageroomName;
     private Spinner iconSpinner;
-
     private Button btnSaveStorageroom;
-    private Button btnRead;
     private Button btnCancel;
-
     private TextView textView;
 
-    // Icons in Spinner
+    // Icons for spinner
     private int[] iconResIds = {
             R.drawable.image_placeholder_icon,
             R.drawable.home_icon,
@@ -51,6 +51,11 @@ public class StorageroomActivity extends AppCompatActivity {
     private String previousActivity;
     private String storageroomKey;
 
+    /**
+     * Called when the activity is first created.
+     *
+     * @param savedInstanceState if the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,13 +63,11 @@ public class StorageroomActivity extends AppCompatActivity {
 
         inputStorageroomName = findViewById(R.id.storageroom_name);
         iconSpinner = findViewById(R.id.iconSpinner);
-
         btnSaveStorageroom = findViewById(R.id.btnSaveStorageroom);
         btnCancel = findViewById(R.id.btnCancel);
-        //btnRead = findViewById(R.id.btnReaddata);
-
         textView = findViewById(R.id.textView);
 
+        // Get intent extras
         userId = getIntent().getStringExtra("userId");
         editMode = getIntent().getBooleanExtra("editMode", false);
         storageroomKey = getIntent().getStringExtra("storageroomKey");
@@ -73,6 +76,7 @@ public class StorageroomActivity extends AppCompatActivity {
         // Initialize Firebase
         FirebaseUtil.initializeFirebase();
 
+        // Check if userId is provided
         userId = getIntent().getStringExtra("userId");
         if (userId != null) {
             FirebaseUtil.openFbReference("storagerooms/" + userId);
@@ -82,12 +86,14 @@ public class StorageroomActivity extends AppCompatActivity {
             return;
         }
 
+        // Set up spinner with icons
         IconAdapter iconAdapter = new IconAdapter(this, iconResIds);
         iconSpinner.setAdapter(iconAdapter);
 
         // Set default icon selection
         selectedIconResId = iconResIds[0];
 
+        // If edit mode, pre-fill the fields with existing data
         if (editMode) {
             String storageroomName = getIntent().getStringExtra("storageroomName");
             int storageroomIcon = getIntent().getIntExtra("storageroomIcon", iconResIds[0]);
@@ -100,6 +106,7 @@ public class StorageroomActivity extends AppCompatActivity {
         // Set default icon selection
         selectedIconResId = iconResIds[0];
 
+        // Listener for spinner item selection
         iconSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -112,18 +119,20 @@ public class StorageroomActivity extends AppCompatActivity {
             }
         });
 
-        //btnRead.setOnClickListener(v -> readData());
+        // Set click listener for save button
         btnSaveStorageroom.setOnClickListener(v -> {
             saveData();
             clean();
             returnToPreviousActivity();
         });
 
+        // Set click listener for cancel button
         btnCancel.setOnClickListener(v -> {
             clean();
             returnToPreviousActivity();
         });
 
+        // Adjust layout for system insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -131,6 +140,12 @@ public class StorageroomActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Returns the position of the given icon resource ID in the iconResIds array.
+     *
+     * @param iconResId the resource ID of the icon
+     * @return the position of the icon in the array
+     */
     private int getIconPosition(int iconResId) {
         for (int i = 0; i < iconResIds.length; i++) {
             if (iconResIds[i] == iconResId) {
@@ -140,11 +155,17 @@ public class StorageroomActivity extends AppCompatActivity {
         return 0;
     }
 
+    /**
+     * Clears the input fields and resets the spinner selection.
+     */
     private void clean() {
         inputStorageroomName.setText("");
         iconSpinner.setSelection(0); // Reset spinner selection to first item
     }
 
+    /**
+     * Saves the storage room data to Firebase.
+     */
     private void saveData() {
         if (userId != null) {
             DatabaseReference reference = FirebaseUtil.mDatabaseReference.push();
@@ -156,21 +177,26 @@ public class StorageroomActivity extends AppCompatActivity {
                 return;
             }
 
+            // Get selected icon resource ID
             int selectedIconResId = iconResIds[iconSpinner.getSelectedItemPosition()];
+
             // Convert selectedIconResId to String
             String selectedIconStr = String.valueOf(selectedIconResId);
 
             // Use the first icon from the array if no icon was selected
             if (selectedIconResId == 0 && iconResIds.length > 0) {
+                // Convert to String
                 selectedIconStr = String.valueOf(iconResIds[0]);
             }
 
+            // Set timestamps for creation and expiration (2 weeks later)
             long currentTimeMillis = System.currentTimeMillis();
             long timeInTwoWeeks = currentTimeMillis + 14 * 24 * 60 * 60 * 1000;
 
             Storageroom storageroom;
             String storageroomKey = getIntent().getStringExtra("storageroomKey");
 
+            // If storageroomKey exists, update the existing storageroom
             if (storageroomKey != null) {
                 storageroom = new Storageroom(storageroomKey, name, selectedIconResId, currentTimeMillis, timeInTwoWeeks, 1, 2, null);
                 updateData(storageroom);
@@ -183,6 +209,11 @@ public class StorageroomActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Saves new storage room data to Firebase.
+     *
+     * @param storageroom the storage room to save
+     */
     private void saveNewData(Storageroom storageroom) {
         if (userId != null) {
             FirebaseUtil.saveData("storagerooms/" + userId, storageroom, new FirebaseUtil.FirebaseCallback() {
@@ -206,6 +237,9 @@ public class StorageroomActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Reads storage room data from Firebase.
+     */
     private void readData() {
         if (userId != null) {
             FirebaseUtil.readData("storagerooms/" + userId, Storageroom.class, new FirebaseUtil.FirebaseCallback() {
@@ -233,6 +267,11 @@ public class StorageroomActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Updates existing storage room data in Firebase.
+     *
+     * @param storageroom the storage room to update
+     */
     private void updateData(Storageroom storageroom) {
         if (userId != null) {
             FirebaseUtil.updateData("storagerooms/" + userId, storageroom.getKey(), storageroom, new FirebaseUtil.FirebaseCallback() {
@@ -256,6 +295,11 @@ public class StorageroomActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Deletes storage room data from Firebase.
+     *
+     * @param storageroom the storage room to delete
+     */
     private void deleteData(Storageroom storageroom) {
         if (userId != null) {
             FirebaseUtil.deleteData("storagerooms/" + userId, storageroom.getKey(), new FirebaseUtil.FirebaseCallback() {
@@ -274,6 +318,9 @@ public class StorageroomActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Returns to the previous activity.
+     */
     private void returnToPreviousActivity() {
         if (previousActivity != null) {
             try {
