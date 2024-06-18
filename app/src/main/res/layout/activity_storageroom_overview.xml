@@ -6,14 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".StorageroomOverviewActivity">
 
+    <TextView
+        android:id="@+id/headerTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/recyclerView"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="17dp"
+        android:gravity="center"
+        android:text="@string/headline_storageroom_overview"
+        android:textSize="24sp"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textColor="@color/primary"
+        android:visibility="visible" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp"
-        android:clipToPadding="false"
-        android:scrollbars="vertical"
+        android:layout_height="590dp"
         android:layout_above="@id/createStorageroomButton"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        android:scrollbars="vertical"
         android:visibility="visible" />
 
     <TextView
