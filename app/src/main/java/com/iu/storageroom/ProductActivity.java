@@ -1,11 +1,12 @@
 package com.iu.storageroom;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,22 +19,27 @@ import com.iu.storageroom.utils.FirebaseUtil;
 import java.util.List;
 
 public class ProductActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_SCAN_BARCODE = 1;
 
-    private EditText input;
-    private Button btnSaveData;
-    private Button btnReadData;
-    private TextView textView;
+    private Product product;
+    private Button btnReadBarcode;
+    private Button btnDelete;
+    private Button btnEdit;
+    private Button btnSave;
+    private EditText editTextProductName;
+
     private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_product);
 
-        btnSaveData = findViewById(R.id.btn);
-        input = findViewById(R.id.input);
-        btnReadData = findViewById(R.id.btnReaddata);
-        textView = findViewById(R.id.textView);
+        btnReadBarcode = findViewById(R.id.btnReadBarcode);
+        btnDelete = findViewById(R.id.btnDelete);
+        btnEdit = findViewById(R.id.btnEdit);
+        btnSave = findViewById(R.id.btnSave);
+        editTextProductName = findViewById(R.id.product_name);
 
         // Initialize Firebase
         FirebaseUtil.initializeFirebase();
@@ -47,9 +53,13 @@ public class ProductActivity extends AppCompatActivity {
             return;
         }
 
-        btnReadData.setOnClickListener(v -> readData());
+        btnReadBarcode.setOnClickListener(v -> readData());
 
-        btnSaveData.setOnClickListener(v -> {
+        btnDelete.setOnClickListener(v -> deleteData(product));
+
+        btnEdit.setOnClickListener(v -> updateData(product));
+
+        btnSave.setOnClickListener(v -> {
             saveData();
             clean();
         });
@@ -59,61 +69,72 @@ public class ProductActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Get the product from the intent if it exists
+        product = getIntent().getParcelableExtra("product");
+        if (product != null) {
+            editTextProductName.setText(product.getName());
+        }
     }
 
     private void clean() {
-        input.setText("");
+        if (editTextProductName != null) {
+            editTextProductName.setText("");
+        }
+    }
+
+    private void readData() {
+        if (userId != null) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_SCAN_BARCODE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SCAN_BARCODE && resultCode == RESULT_OK) {
+            if (data != null) {
+                product = data.getParcelableExtra("product");
+                if (product != null) {
+                    editTextProductName.setText(product.getName());
+                }
+            }
+        }
     }
 
     private void saveData() {
         if (userId != null) {
             DatabaseReference reference = FirebaseUtil.mDatabaseReference.push();
             String key = reference.getKey();
-            Product product = new Product(key, "Kartoffel", "Ungesund", "00-00-000", "test.com", 2, true);
-            FirebaseUtil.saveData("products/" + userId, product, new FirebaseUtil.FirebaseCallback() {
-                @Override
-                public void onCallback(boolean isSuccess) {
-                    if (isSuccess) {
-                        // Daten wurden erfolgreich gespeichert
-                        Toast.makeText(ProductActivity.this, getString(R.string.data_save_success), Toast.LENGTH_SHORT).show();
-                    } else {
-                        // Fehler beim Speichern der Daten
-                        Toast.makeText(ProductActivity.this, getString(R.string.data_save_fail), Toast.LENGTH_SHORT).show();
-                    }
-                }
+            product = getIntent().getParcelableExtra("product");
+            if (product != null) {
+                product.setKey(key);  // Set the key to the product
+                FirebaseUtil.saveData("products/" + userId, product, new FirebaseUtil.FirebaseCallback() {
+                    @Override
+                    public void onCallback(boolean isSuccess) {
+                        if (isSuccess) {
+                            // Data saved successfully
+                            Toast.makeText(ProductActivity.this, getString(R.string.data_save_success), Toast.LENGTH_SHORT).show();
 
-                @Override
-                public void onCallback(List<Object> list) {
-
-                }
-            });
-        } else {
-            Toast.makeText(this, getString(R.string.user_not_auth), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void readData() {
-        if (userId != null) {
-            FirebaseUtil.readData("products/" + userId, Product.class, new FirebaseUtil.FirebaseCallback() {
-                @Override
-                public void onCallback(boolean isSuccess) {
-                }
-
-                @Override
-                public void onCallback(List<Object> list) {
-                    if (list!=null) {
-                        StringBuilder dataBuilder = new StringBuilder();
-                        for (Object object : list) {
-                            if (object instanceof Product product){
-                                dataBuilder.append(product).append("\n");
-                            }
+                            // Start ProductActivity and pass the product
+                            Intent intent = new Intent(ProductActivity.this, ProductActivity.class);
+                            intent.putExtra("product", product);
+                            startActivity(intent);
+                        } else {
+                            // Failed to save data
+                            Toast.makeText(ProductActivity.this, getString(R.string.data_save_fail), Toast.LENGTH_SHORT).show();
                         }
-                        textView.setText(dataBuilder.toString());
-                    } else {
-                        Toast.makeText(ProductActivity.this, getString(R.string.data_read_fail), Toast.LENGTH_SHORT).show();
                     }
-                }
-            });
+
+                    @Override
+                    public void onCallback(List<Object> list) {
+                        // Not used
+                    }
+                });
+            } else {
+                Toast.makeText(this, getString(R.string.product_not_found), Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(this, getString(R.string.user_not_auth), Toast.LENGTH_SHORT).show();
         }
@@ -124,12 +145,16 @@ public class ProductActivity extends AppCompatActivity {
             FirebaseUtil.updateData("products/" + userId, product.getKey(), product, new FirebaseUtil.FirebaseCallback() {
                 @Override
                 public void onCallback(boolean isSuccess) {
-                    Toast.makeText(ProductActivity.this, getString(R.string.data_update_success), Toast.LENGTH_SHORT).show();
+                    if (isSuccess) {
+                        Toast.makeText(ProductActivity.this, getString(R.string.data_update_success), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ProductActivity.this, getString(R.string.data_update_fail), Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
                 public void onCallback(List<Object> list) {
-                    Toast.makeText(ProductActivity.this, getString(R.string.data_update_fail), Toast.LENGTH_SHORT).show();
+                    // Not used
                 }
             });
         } else {
@@ -142,12 +167,16 @@ public class ProductActivity extends AppCompatActivity {
             FirebaseUtil.deleteData("products/" + userId, product.getKey(), new FirebaseUtil.FirebaseCallback() {
                 @Override
                 public void onCallback(boolean isSuccess) {
-                    Toast.makeText(ProductActivity.this, getString(R.string.data_delete_success), Toast.LENGTH_SHORT).show();
+                    if (isSuccess) {
+                        Toast.makeText(ProductActivity.this, getString(R.string.data_delete_success), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ProductActivity.this, getString(R.string.data_delete_fail), Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
                 public void onCallback(List<Object> list) {
-                    Toast.makeText(ProductActivity.this, getString(R.string.data_delete_fail), Toast.LENGTH_SHORT).show();
+                    // Not used
                 }
             });
         } else {

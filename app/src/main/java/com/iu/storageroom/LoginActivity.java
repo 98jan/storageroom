@@ -92,8 +92,9 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, getString(R.string.login_successful), Toast.LENGTH_SHORT).show();
                 FirebaseUser user = FirebaseUtil.getCurrentUser();
                 if (user != null) {
-                    FirebaseUtil.openFbReference("products/" + user.getUid());
-                    Intent intent = new Intent(getApplicationContext(), StorageroomOverviewActivity.class);
+                    FirebaseUtil.openFbReference("storagerooms/" + user.getUid());
+                //    Intent intent = new Intent(getApplicationContext(), StorageroomOverviewActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
                     intent.putExtra("userId", user.getUid());
                     startActivity(intent);
                     finish();
