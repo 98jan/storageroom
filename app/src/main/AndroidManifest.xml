@@ -26,14 +26,20 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".StorageroomOverviewActivity"
-            android:exported="false" />
-        <activity
             android:name=".ProductActivity"
             android:exported="false" />
         <activity
+            android:name=".ProductOverviewActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Storageroom"/>
+        <activity
             android:name=".StorageroomActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Storageroom" />
+        <activity
+            android:name=".StorageroomOverviewActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Storageroom"/>
         <activity
             android:name=".RegistrationActivity"
             android:exported="false"
