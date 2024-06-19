@@ -1,7 +1,5 @@
 package com.iu.storageroom;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -85,24 +83,46 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        FirebaseUtil.signIn(email, password, this, task -> {
-            progressBar.setVisibility(View.GONE);
-            if (task.isSuccessful()) {
-                Log.d(TAG, "signInWithEmail:success");
-                Toast.makeText(LoginActivity.this, getString(R.string.login_successful), Toast.LENGTH_SHORT).show();
-                FirebaseUser user = FirebaseUtil.getCurrentUser();
-                if (user != null) {
-                    FirebaseUtil.openFbReference("storagerooms/" + user.getUid());
-                    Intent intent = new Intent(getApplicationContext(), StorageroomOverviewActivity.class);
-                    intent.putExtra("userId", user.getUid());
-                    startActivity(intent);
-                    finish();
+        // Sign in with Firebase Authentication
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressBar.setVisibility(View.GONE);
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            if (user != null) {
+                                if (user.isEmailVerified()) {
+                                    Toast.makeText(LoginActivity.this, getString(R.string.login_successful), Toast.LENGTH_SHORT).show();
+                                    FirebaseUtil.openFbReference("storagerooms/" + user.getUid());
+                                    Intent intent = new Intent(getApplicationContext(), StorageroomOverviewActivity.class);
+                                    intent.putExtra("userId", user.getUid());
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    // User email is not verified
+                                    FirebaseAuth.getInstance().signOut(); // Sign out the user
+                                    Toast.makeText(LoginActivity.this, getString(R.string.email_not_verified), Toast.LENGTH_SHORT).show();
+                                    sendVerificationEmail(user);
+                                }
+                            }
+                        } else {
+                            Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void sendVerificationEmail(FirebaseUser user) {
+        if (user != null) {
+            user.sendEmailVerification().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(LoginActivity.this, getString(R.string.verification_email_sent), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginActivity.this, getString(R.string.verification_email_failed), Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                Log.w(TAG, "signInWithEmail:failure", task.getException());
-                Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_SHORT).show();
-            }
-        });
+            });
+        }
     }
 
     private void passwordReset() {
