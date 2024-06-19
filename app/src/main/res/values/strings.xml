@@ -62,8 +62,6 @@
     <string name="product_image">Product image</string>
     <string name="no_product">Please add a Product by clicking on the plus button</string>
     <string name="headline_product_overview">Product Overview</string>
-
-    <!-- Strings for Products -->
     <string name="product_name_hint">Product Name</string>
     <string name="product_group_hint">Product Group</string>
     <string name="product_barcode_hint">Barcode</string>
