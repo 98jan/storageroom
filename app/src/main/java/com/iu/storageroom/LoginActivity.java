@@ -93,8 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                 FirebaseUser user = FirebaseUtil.getCurrentUser();
                 if (user != null) {
                     FirebaseUtil.openFbReference("storagerooms/" + user.getUid());
-                //    Intent intent = new Intent(getApplicationContext(), StorageroomOverviewActivity.class);
-                    Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), StorageroomOverviewActivity.class);
                     intent.putExtra("userId", user.getUid());
                     startActivity(intent);
                     finish();
