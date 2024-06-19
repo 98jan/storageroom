@@ -1,6 +1,7 @@
 package com.iu.storageroom;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -31,6 +32,7 @@ public class StorageroomAdapter extends RecyclerView.Adapter<StorageroomAdapter.
     private Context context;
     private OnEditClickListener editClickListener;
     private OnDeleteClickListener deleteClickListener;
+    private OnOpenProductListener openProductListener;
 
     /**
      * Interface for handling edit button clicks.
@@ -46,6 +48,10 @@ public class StorageroomAdapter extends RecyclerView.Adapter<StorageroomAdapter.
         void onDeleteClick(Storageroom storageroom);
     }
 
+    public interface OnOpenProductListener {
+        void onOpenProduct(Storageroom storageroom);
+    }
+
     /**
      * Constructor for the StorageroomAdapter.
      *
@@ -55,11 +61,13 @@ public class StorageroomAdapter extends RecyclerView.Adapter<StorageroomAdapter.
      * @param deleteClickListener Listener for delete button clicks.
      */
     public StorageroomAdapter(Context context, List<Storageroom> storageroomList,
-                              OnEditClickListener editClickListener, OnDeleteClickListener deleteClickListener) {
+                              OnEditClickListener editClickListener, OnDeleteClickListener deleteClickListener,
+                              OnOpenProductListener openProductListener) {
         this.context = context;
         this.storageroomList = storageroomList;
         this.editClickListener = editClickListener;
         this.deleteClickListener = deleteClickListener;
+        this.openProductListener = openProductListener;
     }
 
     /**
@@ -103,6 +111,13 @@ public class StorageroomAdapter extends RecyclerView.Adapter<StorageroomAdapter.
                 deleteClickListener.onDeleteClick(storageroom);
             }
         });
+
+        // Item click listener to open ProductOverviewActivity
+        holder.itemView.setOnClickListener(v -> {
+            if (openProductListener != null) {
+                openProductListener.onOpenProduct(storageroom);
+            }
+        });
     }
 
     /**
@@ -123,6 +138,7 @@ public class StorageroomAdapter extends RecyclerView.Adapter<StorageroomAdapter.
         public ImageView storageroomImage;
         public ImageView editButton;
         public ImageView deleteButton;
+        public ImageView addProductFab;
 
         /**
          * Constructor for the ViewHolder.
@@ -135,6 +151,7 @@ public class StorageroomAdapter extends RecyclerView.Adapter<StorageroomAdapter.
             storageroomImage = itemView.findViewById(R.id.storageroomImage);
             editButton = itemView.findViewById(R.id.editButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);
+            addProductFab = itemView.findViewById(R.id.createProductButton);
         }
     }
 }
