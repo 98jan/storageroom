@@ -10,6 +10,8 @@
     <string name="save">Save</string>
     <string name="read">Read</string>
     <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="favorite_button">Favorite</string>
 
     <!-- Authentication implementation -->
     <string name="auth_failed">Authentication failed.</string>
@@ -52,6 +54,14 @@
     <string name="storageroom_description_hint">Storage Room Description</string>
     <string name="storageroom_name_empty">Please enter a name for the storageroom</string>
     <string name="no_storagerooms">Please create a Storageroom by clicking on the plus button</string>
+    <string name="invalid_storageroom">Invalid Storagroom</string>
+    <string name="headline_storageroom_overview">Storageroom Overview</string>
+
+
+    <!-- Strings for Products -->
+    <string name="product_image">Product image</string>
+    <string name="no_product">Please add a Product by clicking on the plus button</string>
+    <string name="headline_product_overview">Product Overview</string>
 
     <!-- Strings for Products -->
     <string name="product_name_hint">Product Name</string>
