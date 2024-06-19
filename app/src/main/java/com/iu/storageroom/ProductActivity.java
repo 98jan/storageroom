@@ -107,9 +107,10 @@ public class ProductActivity extends AppCompatActivity {
         if (userId != null) {
             DatabaseReference reference = FirebaseUtil.mDatabaseReference.push();
             String key = reference.getKey();
-            product = getIntent().getParcelableExtra("product");
+        //    product = getIntent().getParcelableExtra("product");
+            product = new Product(key, "Kartoffel", "Ungesund", "00-00-000", "test.com", 2, true);
             if (product != null) {
-                product.setKey(key);  // Set the key to the product
+        //        product.setKey(key);  // Set the key to the product
                 FirebaseUtil.saveData("products/" + userId, product, new FirebaseUtil.FirebaseCallback() {
                     @Override
                     public void onCallback(boolean isSuccess) {
