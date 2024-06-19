@@ -18,7 +18,7 @@ public class Product implements Serializable {
     @JsonProperty("code")
     private String barcode;
     @JsonProperty("image_front_url")
-    private String image;
+    private String imageUrl;
     @JsonProperty("brands")
     private String brand;
     @JsonProperty("categories_tags")
@@ -33,12 +33,12 @@ public class Product implements Serializable {
 
     public Product(){}
 
-    public Product(String key, String name, String note, String barcode, String image, int rating, boolean favourite) {
+    public Product(String key, String name, String note, String barcode, String imageUrl, int rating, boolean favourite) {
         this.key = key;
         this.name = name;
         this.note = note;
         this.barcode = barcode;
-        this.image = image;
+        this.imageUrl = imageUrl;
         this.rating = rating;
         this.favourite = favourite;
     }
@@ -75,12 +75,12 @@ public class Product implements Serializable {
         this.barcode = barcode;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public int getRating() {
@@ -122,7 +122,7 @@ public class Product implements Serializable {
                 ", name='" + name + '\'' +
                 ", note='" + note + '\'' +
                 ", barcode='" + barcode + '\'' +
-                ", image='" + image + '\'' +
+                ", image='" + imageUrl + '\'' +
                 ", rating=" + rating +
                 ", favourite=" + favourite +
                 '}';
