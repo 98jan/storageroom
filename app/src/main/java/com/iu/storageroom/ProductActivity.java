@@ -2,8 +2,10 @@ package com.iu.storageroom;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -22,24 +24,29 @@ public class ProductActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_SCAN_BARCODE = 1;
 
     private Product product;
+    private EditText editTextProductName;
+    private Spinner productGroupSpinner;
     private Button btnReadBarcode;
     private Button btnDelete;
     private Button btnEdit;
     private Button btnSave;
-    private EditText editTextProductName;
 
     private String userId;
+
+    // Icons for spinner
+    private String[] productGroupIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
+        editTextProductName = findViewById(R.id.product_name);
+        productGroupSpinner = findViewById(R.id.productGroupSpinner);
         btnReadBarcode = findViewById(R.id.btnReadBarcode);
         btnDelete = findViewById(R.id.btnDelete);
         btnEdit = findViewById(R.id.btnEdit);
         btnSave = findViewById(R.id.btnSave);
-        editTextProductName = findViewById(R.id.product_name);
 
         // Initialize Firebase
         FirebaseUtil.initializeFirebase();
@@ -52,6 +59,20 @@ public class ProductActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        // Initialize productGroupIds
+        productGroupIds = new String[]{
+                getString(R.string.product_group_food),
+                getString(R.string.product_group_housekeeping),
+                getString(R.string.product_group_cosmetics),
+                getString(R.string.product_group_baby_child),
+                getString(R.string.product_group_others)
+        };
+
+        // Set up the Spinner with productGroupIds
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, productGroupIds);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        productGroupSpinner.setAdapter(adapter);
 
         btnReadBarcode.setOnClickListener(v -> readData());
 
@@ -74,6 +95,15 @@ public class ProductActivity extends AppCompatActivity {
         product = getIntent().getParcelableExtra("product");
         if (product != null) {
             editTextProductName.setText(product.getName());
+
+            // Set the spinner selection based on the product's first category
+            if (product.getCategories() != null && !product.getCategories().isEmpty()) {
+                String productCategory = product.getCategories().get(0);
+                int spinnerPosition = adapter.getPosition(productCategory);
+                if (spinnerPosition >= 0) {
+                    productGroupSpinner.setSelection(spinnerPosition);
+                }
+            }
         }
     }
 
@@ -98,6 +128,14 @@ public class ProductActivity extends AppCompatActivity {
                 product = data.getParcelableExtra("product");
                 if (product != null) {
                     editTextProductName.setText(product.getName());
+                    // Set the spinner selection based on the product's first category
+                    if (product.getCategories() != null && !product.getCategories().isEmpty()) {
+                        String productCategory = product.getCategories().get(0);
+                        int spinnerPosition = ((ArrayAdapter<String>) productGroupSpinner.getAdapter()).getPosition(productCategory);
+                        if (spinnerPosition >= 0) {
+                            productGroupSpinner.setSelection(spinnerPosition);
+                        }
+                    }
                 }
             }
         }
@@ -107,21 +145,19 @@ public class ProductActivity extends AppCompatActivity {
         if (userId != null) {
             DatabaseReference reference = FirebaseUtil.mDatabaseReference.push();
             String key = reference.getKey();
-        //    product = getIntent().getParcelableExtra("product");
-            product = new Product(key, "Kartoffel", "Ungesund", "00-00-000", "test.com", 2, true);
-            if (product != null) {
-        //        product.setKey(key);  // Set the key to the product
+            String productName = editTextProductName.getText().toString();
+            String productGroup = (String) productGroupSpinner.getSelectedItem();
+
+            if (!productName.isEmpty() && productGroup != null) {
+                product = new Product(key, productName, productGroup, "00-00-000", "test.com", 2, true);
                 FirebaseUtil.saveData("products/" + userId, product, new FirebaseUtil.FirebaseCallback() {
                     @Override
                     public void onCallback(boolean isSuccess) {
                         if (isSuccess) {
                             // Data saved successfully
                             Toast.makeText(ProductActivity.this, getString(R.string.data_save_success), Toast.LENGTH_SHORT).show();
-
-                            // Start ProductActivity and pass the product
-                            Intent intent = new Intent(ProductActivity.this, ProductActivity.class);
-                            intent.putExtra("product", product);
-                            startActivity(intent);
+                            // Clear the fields after saving
+                            clean();
                         } else {
                             // Failed to save data
                             Toast.makeText(ProductActivity.this, getString(R.string.data_save_fail), Toast.LENGTH_SHORT).show();
