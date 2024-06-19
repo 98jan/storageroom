@@ -45,7 +45,7 @@ public class StorageroomOverviewActivity extends AppCompatActivity {
         createStorageroom = findViewById(R.id.createStorageroomButton);
 
         storageroomList = new ArrayList<>();
-        adapter = new StorageroomAdapter(this, storageroomList, this::editStorageroom, this::deleteStorageroom);
+        adapter = new StorageroomAdapter(this, storageroomList, this::editStorageroom, this::deleteStorageroom, this::openProductOverview);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -155,5 +155,17 @@ public class StorageroomOverviewActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Failed to delete storageroom: Key is null", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Opens the activity to view products in a storage room.
+     *
+     * @param storageroom the storage room to view products for
+     */
+    private void openProductOverview(Storageroom storageroom) {
+        Intent intent = new Intent(this, ProductOverviewActivity.class);
+        intent.putExtra("storageroomKey", storageroom.getKey());
+        intent.putExtra("userId", userId);
+        startActivity(intent);
     }
 }
