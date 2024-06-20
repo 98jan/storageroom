@@ -6,6 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".StorageroomOverviewActivity">
 
+    <View
+        android:id="@+id/top_background"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/bottom_background"
+        android:background="@drawable/gradient_background" />
+
+    <View
+        android:id="@+id/bottom_background"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:background="#E8E8E8" />
+
+
+
     <TextView
         android:id="@+id/headerTextView"
         android:layout_width="395dp"
@@ -14,7 +31,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/secondary"
         android:gravity="center"
         android:text="@string/headline_storageroom_overview"
         android:textAlignment="center"
@@ -27,8 +43,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="579dp"
+        android:layout_height="570dp"
         android:layout_above="@id/createStorageroomButton"
+        android:layout_below="@+id/headerTextView"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="2dp"
         android:clipToPadding="false"
         android:padding="8dp"
@@ -42,16 +60,17 @@
         android:layout_above="@id/createStorageroomButton"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
         android:gravity="center"
         android:padding="20dp"
         android:text="@string/no_storagerooms"
+        android:textColor="@color/white"
         android:textSize="20sp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createStorageroomButton"
