@@ -7,54 +7,137 @@
     android:layout_height="match_parent"
     tools:context=".StorageroomActivity">
 
-    <EditText
-        android:id="@+id/storageroom_name"
+    <View
+        android:id="@+id/top_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/storageroom_name_hint"
-        android:layout_margin="16dp"
-        android:maxLength="40"/>
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/bottom_background"
+        android:background="@drawable/gradient_background" />
 
-    <Spinner
-        android:id="@+id/iconSpinner"
+    <View
+        android:id="@+id/bottom_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/storageroom_name"
-        android:layout_margin="16dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/iconSpinner"
-        android:orientation="horizontal"
-        android:layout_margin="16dp"
-        android:gravity="end">
-
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel" />
-
-        <Button
-            android:id="@+id/btnSaveStorageroom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/save"
-            android:layout_marginStart="16dp" />
-    </LinearLayout>
-
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:background="#E8E8E8" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
+        android:id="@+id/headerTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/linearLayout"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
-        android:layout_marginTop="680dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="680dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="@string/headline_storageroom_item"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:padding="8dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="22dp"
+        android:layout_below="@id/headerTitle"
+        android:background="@drawable/all_rounded_corners">
+
+        <EditText
+            android:id="@+id/storageroom_name"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/primary"
+            android:hint="@string/storageroom_name_hint"
+            android:maxLength="40" />
+
+        <RelativeLayout
+            android:id="@+id/iconSpinnerBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/storageroom_name"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginBottom="32dp"
+            android:layout_weight=".28"
+            android:background="@drawable/spinner_background"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/iconSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:spinnerMode="dropdown" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/arrow_drop_down" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_below="@+id/iconSpinnerBox"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginBottom="125dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnSaveStorageroom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/bg_button"
+                android:backgroundTint="@color/primary"
+                android:contentDescription="@string/save"
+                android:drawableLeft="@drawable/save_icon"
+                android:padding="10dp"
+                android:text="@string/save"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textColorLink="@color/primary"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_button"
+                android:backgroundTint="@color/primary"
+                android:contentDescription="@string/cancel"
+                android:drawableLeft="@drawable/cancel_icon"
+                android:padding="10dp"
+                android:text="@string/cancel"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textColorLink="@color/primary"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +33,7 @@ public class StorageroomActivity extends AppCompatActivity {
     private Spinner iconSpinner;
     private Button btnSaveStorageroom;
     private Button btnCancel;
-    private TextView textView;
+    //private TextView textView;
 
     // Icons for spinner
     private int[] iconResIds = {
@@ -65,7 +66,7 @@ public class StorageroomActivity extends AppCompatActivity {
         iconSpinner = findViewById(R.id.iconSpinner);
         btnSaveStorageroom = findViewById(R.id.btnSaveStorageroom);
         btnCancel = findViewById(R.id.btnCancel);
-        textView = findViewById(R.id.textView);
+        //textView = findViewById(R.id.textView);
 
         // Get intent extras
         userId = getIntent().getStringExtra("userId");
@@ -256,7 +257,7 @@ public class StorageroomActivity extends AppCompatActivity {
                                 dataBuilder.append(storageroom).append("\n");
                             }
                         }
-                        textView.setText(dataBuilder.toString());
+                        //textView.setText(dataBuilder.toString());
                     } else {
                         Toast.makeText(StorageroomActivity.this, getString(R.string.data_read_fail), Toast.LENGTH_SHORT).show();
                     }
