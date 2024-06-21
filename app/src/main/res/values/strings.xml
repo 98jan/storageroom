@@ -55,12 +55,13 @@
 
     <!-- Strings for Storageroom -->
     <string name="add_storageroom">Add Storage Room</string>
-    <string name="storageroom_name_hint">Storage Room Name</string>
+    <string name="storageroom_name_hint">Please enter a name for a Storageroom (max. 40 characters)</string>
     <string name="storageroom_description_hint">Storage Room Description</string>
     <string name="storageroom_name_empty">Please enter a name for the storageroom</string>
     <string name="no_storagerooms">Please create a Storageroom by clicking on the plus button</string>
     <string name="invalid_storageroom">Invalid Storagroom</string>
     <string name="headline_storageroom_overview">Storageroom Overview</string>
+    <string name="headline_storageroom_item">Storageroom</string>
     <string name="storageroom_icon_description">Storageroom Icon</string>
 
 
