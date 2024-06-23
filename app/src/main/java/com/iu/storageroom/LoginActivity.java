@@ -155,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         // workaround -> forced sign-out
-        FirebaseUtil.signOut();
+    //    FirebaseUtil.signOut();
         super.onStart();
         FirebaseUtil.addAuthStateListener(FirebaseUtil.mAuthListener);
     }

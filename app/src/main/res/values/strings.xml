@@ -64,8 +64,6 @@
     <string name="headline_storageroom_item">Storageroom</string>
     <string name="storageroom_icon_description">Storageroom Icon</string>
 
-
-
     <!-- Strings for Products -->
     <string name="product_image">Product image</string>
     <string name="no_product">Please add a Product by clicking on the plus button</string>
@@ -77,11 +75,20 @@
     <string name="product_edit">Edit</string>
     <string name="product_save">Save</string>
     <string name="product_not_found">Product not found</string>
-    <string name="product_group_food">Food</string>
+    <string name="product_group_food">food</string>
     <string name="product_group_housekeeping">housekeeping</string>
     <string name="product_group_cosmetics">cosmetics</string>
     <string name="product_group_baby_child">baby, child</string>
     <string name="product_group_others">others</string>
+
+    <!-- Strings for Shoppinglist -->
+    <string name="headline_shoppinglist_overview">ShoppingList Overview</string>
+    <string name="add_shoppinglist">Add ShoppingList</string>
+    <string name="no_shoppinglist">Please create a ShoppingList by clicking on the plus button</string>
+    <string name="shoppinglist_icon_description">ShoppingList Icon</string>
+    <string name="shoppinglist_name_hint">Please enter a name for a ShoppingList (max. 40 characters)</string>
+    <string name="shoppinglist_description_hint">ShoppingList Description</string>
+    <string name="headline_shoppinglist_item">ShoppingList</string>
 
     <!-- Barcode implementation -->
     <string name="prompt_point_at_a_barcode">Point your camera at a barcode</string>

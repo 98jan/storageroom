@@ -23,6 +23,7 @@ public class ProductOverviewActivity extends AppCompatActivity {
     private ProductAdapter adapter;
     private List<Product> productList;
     private FloatingActionButton createProductButton;
+    private FloatingActionButton redirectToShoppingList;
     private TextView emptyView;
     private String storageroomKey;
     private String userId;
@@ -35,6 +36,7 @@ public class ProductOverviewActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.productRecyclerView);
         emptyView = findViewById(R.id.productEmptyView);
         createProductButton = findViewById(R.id.createProductButton);
+        redirectToShoppingList = findViewById(R.id.shoppingListActionButton);
 
         productList = new ArrayList<>();
         adapter = new ProductAdapter(this, productList);
@@ -50,6 +52,8 @@ public class ProductOverviewActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        redirectToShoppingList.setOnClickListener(v -> openShoppingListActivity());
 
         createProductButton.setOnClickListener(v -> openAddProductActivity());
 
@@ -86,6 +90,13 @@ public class ProductOverviewActivity extends AppCompatActivity {
             recyclerView.setVisibility(View.VISIBLE);
             adapter.notifyDataSetChanged();
         }
+    }
+
+    private void openShoppingListActivity() {
+        Intent intent = new Intent(this, ShoppingListOverviewActivity.class);
+        intent.putExtra("userId", userId);
+        intent.putExtra("storageroomKey", storageroomKey);
+        startActivity(intent);
     }
 
     private void openAddProductActivity() {
