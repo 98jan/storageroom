@@ -29,7 +29,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="@string/headline_storageroom_item"
+        android:text="@string/headline_shoppinglist_item"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/white"
@@ -54,7 +54,7 @@
             android:layout_marginRight="32dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/primary"
-            android:hint="@string/storageroom_name_hint"
+            android:hint="@string/shoppinglist_name_hint"
             android:maxLength="40" />
 
         <RelativeLayout
@@ -108,7 +108,7 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/btnSaveStorageroom"
+                android:id="@+id/btnSaveShoppingList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
@@ -148,7 +148,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:contentDescription="@string/add_storageroom"
+        android:contentDescription="@string/add_shoppinglist"
         android:src="@drawable/add_plus_icon"
         android:theme="@style/Theme.Storageroom"
         app:backgroundTint="@color/primary"
