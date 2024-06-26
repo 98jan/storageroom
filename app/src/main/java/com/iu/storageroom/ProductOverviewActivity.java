@@ -18,7 +18,8 @@ import com.iu.storageroom.utils.FirebaseUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductOverviewActivity extends AppCompatActivity {
+public class ProductOverviewActivity extends AppCompatActivity implements ProductAdapter.OnItemClickListener {
+
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
     private List<Product> productList;
@@ -33,28 +34,32 @@ public class ProductOverviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_overview);
 
+        // Initialize views
         recyclerView = findViewById(R.id.productRecyclerView);
         emptyView = findViewById(R.id.productEmptyView);
         createProductButton = findViewById(R.id.createProductButton);
         redirectToShoppingList = findViewById(R.id.shoppingListActionButton);
 
+        // Initialize product list and adapter
         productList = new ArrayList<>();
-        adapter = new ProductAdapter(this, productList);
+        adapter = new ProductAdapter(this, productList, this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
+        // Retrieve intent extras
         storageroomKey = getIntent().getStringExtra("storageroomKey");
         userId = getIntent().getStringExtra("userId");
 
+        // Check if required data is received
         if (storageroomKey == null || userId == null) {
             Toast.makeText(this, getString(R.string.invalid_storageroom), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
+        // Set click listeners
         redirectToShoppingList.setOnClickListener(v -> openShoppingListActivity());
-
         createProductButton.setOnClickListener(v -> openAddProductActivity());
 
         // Fetch products from Firebase for the selected storageroom
@@ -81,6 +86,7 @@ public class ProductOverviewActivity extends AppCompatActivity {
         });
     }
 
+    // Update UI based on productList size
     private void updateUI() {
         if (productList.isEmpty()) {
             emptyView.setVisibility(View.VISIBLE);
@@ -92,6 +98,7 @@ public class ProductOverviewActivity extends AppCompatActivity {
         }
     }
 
+    // Open ShoppingListOverviewActivity
     private void openShoppingListActivity() {
         Intent intent = new Intent(this, ShoppingListOverviewActivity.class);
         intent.putExtra("userId", userId);
@@ -99,10 +106,28 @@ public class ProductOverviewActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Open ProductActivity
     private void openAddProductActivity() {
-        Intent intent = new Intent(this,ProductActivity.class);
+        Intent intent = new Intent(this, ProductActivity.class);
         intent.putExtra("userId", userId);
         intent.putExtra("storageroomKey", storageroomKey);
         startActivity(intent);
+    }
+
+    // Handle item click in RecyclerView
+    @Override
+    public void onItemClick(Product product) {
+        Toast.makeText(this, "Clicked: " + product.getName(), Toast.LENGTH_SHORT).show();
+        // Implement further actions upon item click if needed
+    }
+
+    @Override
+    public void onSaveClicked(Product product) {
+        // Implement save logic if needed
+    }
+
+    @Override
+    public void onCancelClicked() {
+        // Implement cancel logic if needed
     }
 }

@@ -1,83 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".ProductActivity">
 
-    <EditText
-        android:id="@+id/product_name"
+    <RelativeLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/product_name_hint"
-        android:layout_margin="16dp"
-        android:maxLength="40"/>
-
-    <Spinner
-        android:id="@+id/productGroupSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/product_name"
-        android:layout_margin="16dp" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@id/productGroupSpinner" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/imageView"
-        android:orientation="horizontal"
-        android:layout_margin="16dp"
-        android:gravity="end">
+        android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/product_barcode"
-            android:layout_width="0dp"
+            android:id="@+id/product_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/product_barcode_hint"
+            android:hint="@string/product_name_hint"
+            android:layout_margin="16dp"
             android:maxLength="40" />
 
-        <Button
-            android:id="@+id/btnReadBarcode"
+        <Spinner
+            android:id="@+id/productGroupSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_name"
+            android:layout_margin="16dp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_below="@id/productGroupSpinner" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageView"
+            android:orientation="horizontal"
+            android:layout_margin="16dp"
+            android:gravity="end">
+
+            <EditText
+                android:id="@+id/product_barcode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/product_barcode_hint"
+                android:maxLength="40" />
+
+            <Button
+                android:id="@+id/btnReadBarcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Barcode" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/product_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/product_note_hint"
+            android:layout_below="@id/linearLayout"
+            android:layout_margin="16dp" />
+
+        <EditText
+            android:id="@+id/product_image_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/product_image_url_hint"
+            android:layout_below="@id/product_note"
+            android:layout_margin="16dp" />
+
+        <EditText
+            android:id="@+id/product_brand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/product_brand_hint"
+            android:layout_below="@id/product_image_url"
+            android:layout_margin="16dp" />
+
+        <EditText
+            android:id="@+id/product_quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/product_quantity_hint"
+            android:layout_below="@id/product_brand"
+            android:layout_margin="16dp" />
+
+        <EditText
+            android:id="@+id/product_store"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/product_store_hint"
+            android:layout_below="@id/product_quantity"
+            android:layout_margin="16dp" />
+
+        <EditText
+            android:id="@+id/product_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/product_rating_hint"
+            android:layout_below="@id/product_store"
+            android:layout_margin="16dp" />
+
+        <CheckBox
+            android:id="@+id/product_favourite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Barcode" />
-    </LinearLayout>
+            android:text="@string/product_favourite"
+            android:layout_below="@id/product_rating"
+            android:layout_margin="16dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/linearLayout"
-        android:orientation="horizontal"
-        android:layout_margin="16dp"
-        android:gravity="end">
-
-        <Button
-            android:id="@+id/btnDelete"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/product_delete" />
+            android:layout_below="@id/product_favourite"
+            android:orientation="horizontal"
+            android:layout_margin="16dp"
+            android:gravity="end">
 
-        <Button
-            android:id="@+id/btnEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/product_edit"/>
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/product_delete" />
 
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/product_save"
-            android:layout_marginStart="16dp" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/product_edit" />
 
-</RelativeLayout>
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/product_save"
+                android:layout_marginStart="16dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>
