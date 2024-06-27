@@ -26,9 +26,6 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ShoppingListProductActivity"
-            android:exported="false" />
-        <activity
             android:name=".ShoppingListActivity"
             android:exported="false" />
         <activity
