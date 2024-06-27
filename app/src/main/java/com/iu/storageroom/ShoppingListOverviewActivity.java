@@ -135,15 +135,15 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
             FirebaseUtil.deleteData("shoppinglist/" + userId, key, new FirebaseUtil.FirebaseCallback() {
                 @Override
                 public void onCallback(boolean isSuccess) {
-                    runOnUiThread(() -> {
-                        if (isSuccess) {
+                    if (isSuccess) {
+                        runOnUiThread(() -> {
                             shoppingListCollection.remove(shoppingList);
                             updateUI();
-                            Toast.makeText(ShoppingListOverviewActivity.this, "Shoppinglist deleted successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(ShoppingListOverviewActivity.this, "Failed to delete shoppinglist", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            Toast.makeText(ShoppingListOverviewActivity.this, "Shopping list deleted successfully", Toast.LENGTH_SHORT).show();
+                        });
+                    } else {
+                        runOnUiThread(() -> Toast.makeText(ShoppingListOverviewActivity.this, "Failed to delete shopping list", Toast.LENGTH_SHORT).show());
+                    }
                 }
 
                 @Override
@@ -162,7 +162,7 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
      * @param shoppingList the shopping list to view products for
      */
     private void openShoppingList(ShoppingList shoppingList) {
-        Intent intent = new Intent(this, ShoppingListProductActivity.class);
+        Intent intent = new Intent(this, ShoppingListOverviewActivity.class);
         intent.putExtra("shoppingListKey", shoppingList.getKey());
         intent.putExtra("userId", userId);
         startActivity(intent);
