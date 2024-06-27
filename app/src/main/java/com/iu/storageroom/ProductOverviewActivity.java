@@ -24,9 +24,12 @@ public class ProductOverviewActivity extends AppCompatActivity {
     private List<Product> productList;
     private FloatingActionButton createProductButton;
     private FloatingActionButton redirectToShoppingList;
+    private FloatingActionButton backButton;
     private TextView emptyView;
+    private TextView headerTextView;
     private String storageroomKey;
     private String userId;
+    private String storageroomName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,8 +38,11 @@ public class ProductOverviewActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.productRecyclerView);
         emptyView = findViewById(R.id.productEmptyView);
+        headerTextView = findViewById(R.id.headerTextView);
+
         createProductButton = findViewById(R.id.createProductButton);
         redirectToShoppingList = findViewById(R.id.shoppingListActionButton);
+        backButton = findViewById(R.id.backButton);
 
         productList = new ArrayList<>();
         adapter = new ProductAdapter(this, productList);
@@ -46,6 +52,8 @@ public class ProductOverviewActivity extends AppCompatActivity {
 
         storageroomKey = getIntent().getStringExtra("storageroomKey");
         userId = getIntent().getStringExtra("userId");
+        storageroomName = getIntent().getStringExtra("storageroomName");
+
 
         if (storageroomKey == null || userId == null) {
             Toast.makeText(this, getString(R.string.invalid_storageroom), Toast.LENGTH_SHORT).show();
@@ -53,9 +61,15 @@ public class ProductOverviewActivity extends AppCompatActivity {
             return;
         }
 
+        if (storageroomName != null) {
+            headerTextView.setText(storageroomName);
+        }
+
         redirectToShoppingList.setOnClickListener(v -> openShoppingListActivity());
 
         createProductButton.setOnClickListener(v -> openAddProductActivity());
+
+        backButton.setOnClickListener(v -> finish());
 
         // Fetch products from Firebase for the selected storageroom
         FirebaseUtil.readData("products/" + userId + "/" + storageroomKey, Product.class, new FirebaseUtil.FirebaseCallback() {
