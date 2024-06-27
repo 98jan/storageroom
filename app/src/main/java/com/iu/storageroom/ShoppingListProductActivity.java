@@ -3,6 +3,7 @@ package com.iu.storageroom;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -10,8 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
 import com.iu.storageroom.model.Product;
 import com.iu.storageroom.model.ShoppingListProduct;
+import com.iu.storageroom.utils.FirebaseUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,8 @@ public class ShoppingListProductActivity extends AppCompatActivity {
     private Button buttonSave;
     private Button buttonBack;
     private TextView textViewEmpty;
+    private EditText editTextProductName;
+    private EditText editTextProductQuantity;
     private String userId;
 
     @Override
@@ -43,9 +48,14 @@ public class ShoppingListProductActivity extends AppCompatActivity {
         buttonSave = findViewById(R.id.buttonSave);
         buttonBack = findViewById(R.id.buttonBack);
         textViewEmpty = findViewById(R.id.textViewEmpty);
+        editTextProductName = findViewById(R.id.editTextProductName);
+        editTextProductQuantity = findViewById(R.id.editTextProductQuantity);
 
         // Set click listeners
-        buttonSave.setOnClickListener(v -> saveData());
+        buttonSave.setOnClickListener(v -> {
+            saveData();
+            clean();
+        });
         buttonBack.setOnClickListener(v -> finish());
 
         // Retrieve userId from intent
@@ -55,17 +65,67 @@ public class ShoppingListProductActivity extends AppCompatActivity {
             finish();
             return;
         }
-
-        // Mock data (replace with actual data retrieval)
-        loadMockData();
     }
 
-    private void loadMockData() {
-        // Simulated data, replace with actual data retrieval logic
-        shoppingListProductList.add(new ShoppingListProduct(null, new Product("12345", "Milk", "Fresh Milk", "1234567890123", "https://example.com/milk.jpg", "DairyX", null, "1 Liter", "Supermarket A", 4, true), 2));
-        shoppingListProductList.add(new ShoppingListProduct(null, new Product("67890", "Bread", "Whole Wheat Bread", "9876543210987", "https://example.com/bread.jpg", "BakeryY", null, "1 Loaf", "Bakery B", 5, false), 1));
+    private void clean() {
+        editTextProductName.setText("");
+        editTextProductQuantity.setText("0");
+    }
 
-        updateUI();
+    private void saveData() {
+        // Validate and retrieve input values
+        String productName = editTextProductName.getText().toString().trim();
+        String quantityStr = editTextProductQuantity.getText().toString().trim();
+
+        if (productName.isEmpty()) {
+            Toast.makeText(this, "Please enter a product name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int quantity;
+        try {
+            quantity = Integer.parseInt(quantityStr);
+            if (quantity <= 0) {
+                Toast.makeText(this, "Quantity must be greater than zero", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Please enter a valid quantity", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Create a new Product object
+        Product product = new Product();
+        product.setName(productName); // Set the product name, you can set other fields as needed
+
+        // Create a new ShoppingListProduct object
+        ShoppingListProduct shoppingListProduct = new ShoppingListProduct(null, product, quantity);
+
+        // Save shoppingListProduct to Firebase
+        if (userId != null) {
+            DatabaseReference ref = FirebaseUtil.mDatabaseReference.child("shoppinglist_products").child(userId).push();
+            String key = ref.getKey();
+            if (key != null) {
+                shoppingListProduct.setKey(key);
+                FirebaseUtil.saveData("shoppinglist_products/" + userId, shoppingListProduct, new FirebaseUtil.FirebaseCallback() {
+                    @Override
+                    public void onCallback(boolean isSuccess) {
+                        if (isSuccess) {
+                            Toast.makeText(ShoppingListProductActivity.this, "Data saved", Toast.LENGTH_SHORT).show();
+                            // Clear input fields after successful save
+                            clean();
+                        } else {
+                            Toast.makeText(ShoppingListProductActivity.this, "Failed to save product", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCallback(List<Object> list) {
+                        // Not used in this context
+                    }
+                });
+            }
+        }
     }
 
     private void updateUI() {
@@ -77,21 +137,5 @@ public class ShoppingListProductActivity extends AppCompatActivity {
             textViewEmpty.setVisibility(View.GONE);
             adapter.notifyDataSetChanged();
         }
-    }
-
-    private void saveData() {
-        // Example: Saving product quantity
-        for (ShoppingListProduct shoppingListProduct : shoppingListProductList) {
-            int quantity = shoppingListProduct.getQuantity();
-            if (quantity <= 0) {
-                // Handle invalid quantity (for example, show a message)
-                Toast.makeText(this, "Invalid quantity for product: " + shoppingListProduct.getProduct().getName(), Toast.LENGTH_SHORT).show();
-                return; // Exit method or continue depending on your logic
-            }
-            // Perform save operation (e.g., update in database)
-        }
-
-        // If all validations pass, show success message
-        Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show();
     }
 }
