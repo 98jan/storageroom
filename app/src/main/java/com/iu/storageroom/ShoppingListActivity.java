@@ -55,7 +55,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         FirebaseUtil.initializeFirebase();
 
         if (userId != null) {
-            FirebaseUtil.openFbReference("shoppinglist/" + userId);
+            FirebaseUtil.openFbReference("shoppinglists/" + userId);
         } else {
             showToastAndFinish(R.string.user_not_auth);
             return;
@@ -176,7 +176,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         if (userId != null) {
             String name = inputShoppingListName.getText().toString().trim();
             if (name.isEmpty()) {
-                Toast.makeText(this, getString(R.string.storageroom_name_empty), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.shoppinglist_name_empty), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -203,7 +203,7 @@ public class ShoppingListActivity extends AppCompatActivity {
      * @param shoppingList the shopping list to save
      */
     private void saveNewData(ShoppingList shoppingList) {
-        FirebaseUtil.saveData("shoppinglist/" + userId, shoppingList, new FirebaseUtil.FirebaseCallback() {
+        FirebaseUtil.saveData("shoppinglists/" + userId, shoppingList, new FirebaseUtil.FirebaseCallback() {
             @Override
             public void onCallback(boolean isSuccess) {
                 showToast(isSuccess ? R.string.data_save_success : R.string.data_save_fail);
@@ -223,7 +223,7 @@ public class ShoppingListActivity extends AppCompatActivity {
      * @param shoppingList the shopping list to update
      */
     private void updateData(ShoppingList shoppingList) {
-        FirebaseUtil.updateData("shoppinglist/" + userId, shoppingList.getKey(), shoppingList, new FirebaseUtil.FirebaseCallback() {
+        FirebaseUtil.updateData("shoppinglists/" + userId, shoppingList.getKey(), shoppingList, new FirebaseUtil.FirebaseCallback() {
             @Override
             public void onCallback(boolean isSuccess) {
                 if (isSuccess) {
