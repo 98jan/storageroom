@@ -5,12 +5,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ShoppingListProductActivity">
 
+    <!-- EditText for entering product name -->
+    <EditText
+        android:id="@+id/editTextProductName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter product name"
+        android:padding="16dp"
+        android:layout_margin="16dp"
+        android:layout_alignParentTop="true"/>
+
+    <!-- EditText for entering product quantity -->
+    <EditText
+        android:id="@+id/editTextProductQuantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter product quantity"
+        android:inputType="number"
+        android:padding="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_below="@id/editTextProductName"/>
+
     <!-- RecyclerView for displaying products -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewShoppingListProducts"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="16dp"
+        android:layout_below="@id/editTextProductQuantity"
         android:layout_above="@id/buttonSave"/>
 
     <!-- Empty view shown when product list is empty -->
@@ -21,7 +44,8 @@
         android:text="No products"
         android:textSize="18sp"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:layout_below="@id/editTextProductQuantity"/>
 
     <!-- Button to save data -->
     <Button

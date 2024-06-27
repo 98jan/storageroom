@@ -62,7 +62,7 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
         }
 
         // Retrieve shopping list data from Firebase
-        FirebaseUtil.readData("shoppinglist/" + userId, ShoppingList.class, new FirebaseUtil.FirebaseCallback() {
+        FirebaseUtil.readData("shoppinglists/" + userId, ShoppingList.class, new FirebaseUtil.FirebaseCallback() {
             @Override
             public void onCallback(boolean isSuccess) {
                 // Not used for reading data
@@ -132,7 +132,7 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
     private void deleteShoppingList(ShoppingList shoppingList) {
         String key = shoppingList.getKey();
         if (key != null) {
-            FirebaseUtil.deleteData("shoppinglist/" + userId, key, new FirebaseUtil.FirebaseCallback() {
+            FirebaseUtil.deleteData("shoppinglists/" + userId, key, new FirebaseUtil.FirebaseCallback() {
                 @Override
                 public void onCallback(boolean isSuccess) {
                     if (isSuccess) {
