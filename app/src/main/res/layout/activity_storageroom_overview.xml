@@ -6,21 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".StorageroomOverviewActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
     <View
         android:id="@+id/top_background"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_alignParentTop="true"
+        android:layout_height="match_parent"
         android:layout_above="@+id/bottom_background"
+        android:layout_alignParentTop="true"
         android:background="@drawable/gradient_background" />
 
     <View
@@ -32,33 +23,29 @@
 
     <TextView
         android:id="@+id/headerTextView"
-        android:layout_width="395dp"
-        android:layout_height="42dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_margin="16dp"
         android:gravity="center"
         android:text="@string/headline_storageroom_overview"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:visibility="visible" />
+        android:textStyle="bold" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="570dp"
-            android:layout_above="@id/createStorageroomButton"
-            android:layout_below="@+id/headerTextView"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="2dp"
-            android:clipToPadding="false"
-            android:padding="8dp"
-            android:scrollbars="vertical"
-            android:visibility="visible" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="540dp"
+        android:layout_above="@id/createStorageroomButton"
+        android:layout_below="@+id/headerTextView"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="34dp"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        android:scrollbars="vertical" />
 
     <TextView
         android:id="@+id/emptyView"
@@ -67,20 +54,13 @@
         android:layout_above="@id/createStorageroomButton"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_margin="20dp"
         android:gravity="center"
         android:padding="20dp"
         android:text="@string/no_storagerooms"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:visibility="visible" />
-
-        </RelativeLayout>
-    </ScrollView>
+        android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createStorageroomButton"
@@ -97,4 +77,5 @@
         app:elevation="6dp"
         app:rippleColor="@color/primary"
         app:tint="@android:color/white" />
+
 </RelativeLayout>

@@ -166,6 +166,7 @@ public class StorageroomOverviewActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ProductOverviewActivity.class);
         intent.putExtra("storageroomKey", storageroom.getKey());
         intent.putExtra("userId", userId);
+        intent.putExtra("storageroomName", storageroom.getName());
         startActivity(intent);
     }
 }
