@@ -162,7 +162,7 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
      * @param shoppingList the shopping list to view products for
      */
     private void openShoppingList(ShoppingList shoppingList) {
-        Intent intent = new Intent(this, ShoppingListOverviewActivity.class);
+        Intent intent = new Intent(this, ShoppingListProductActivity.class);
         intent.putExtra("shoppingListKey", shoppingList.getKey());
         intent.putExtra("userId", userId);
         startActivity(intent);
