@@ -17,6 +17,7 @@
     <string name="cancel_icon_description">Cancel Icon</string>
     <string name="edit_icon_description">Edit Icon</string>
     <string name="delete_icon_description">Delete Icon</string>
+    <string name="back_icon_description">Back to previous Page Icon</string>
 
     <!-- Authentication implementation -->
     <string name="auth_failed">Authentication failed.</string>
@@ -75,7 +76,7 @@
     <string name="product_edit">Edit</string>
     <string name="product_save">Save</string>
     <string name="product_not_found">Product not found</string>
-    <string name="product_group_placeholder"></string>
+    <string name="product_group_placeholder"> </string>
     <string name="product_group_food">food</string>
     <string name="product_group_housekeeping">housekeeping</string>
     <string name="product_group_cosmetics">cosmetics</string>
