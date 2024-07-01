@@ -7,12 +7,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.iu.storageroom.model.Product;
+import com.google.firebase.database.ValueEventListener;
 import com.iu.storageroom.model.ShoppingListProduct;
 import com.iu.storageroom.utils.FirebaseUtil;
 
@@ -21,111 +24,150 @@ import java.util.List;
 
 public class ShoppingListProductActivity extends AppCompatActivity {
 
+    private EditText editTextProductName;
+    private EditText editTextProductQuantity;
     private RecyclerView recyclerViewProducts;
     private ShoppingListProductAdapter adapter;
     private List<ShoppingListProduct> shoppingListProductList;
     private Button buttonSave;
     private Button buttonBack;
     private TextView textViewEmpty;
-    private EditText editTextProductName;
-    private EditText editTextProductQuantity;
     private String userId;
+    private String shoppinglistKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shoppinglist_product);
 
-        // Initialize RecyclerView and adapter
+        // Initialize Views
+        editTextProductName = findViewById(R.id.editTextProductName);
+        editTextProductQuantity = findViewById(R.id.editTextProductQuantity);
         recyclerViewProducts = findViewById(R.id.recyclerViewShoppingListProducts);
+        textViewEmpty = findViewById(R.id.textViewEmpty);
+        buttonSave = findViewById(R.id.buttonSave);
+        buttonBack = findViewById(R.id.buttonBack);
+
+        // Initialize RecyclerView and Adapter
         shoppingListProductList = new ArrayList<>();
         adapter = new ShoppingListProductAdapter(this, shoppingListProductList);
-
         recyclerViewProducts.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewProducts.setAdapter(adapter);
 
-        // Initialize buttons and empty view
-        buttonSave = findViewById(R.id.buttonSave);
-        buttonBack = findViewById(R.id.buttonBack);
-        textViewEmpty = findViewById(R.id.textViewEmpty);
-        editTextProductName = findViewById(R.id.editTextProductName);
-        editTextProductQuantity = findViewById(R.id.editTextProductQuantity);
-
-        // Set click listeners
-        buttonSave.setOnClickListener(v -> {
-            saveData();
-            clean();
-        });
+        // Set Click Listeners
+        buttonSave.setOnClickListener(v -> saveData());
         buttonBack.setOnClickListener(v -> finish());
 
-        // Retrieve userId from intent
+        // Retrieve userId and shoppinglistKey from Intent
         userId = getIntent().getStringExtra("userId");
-        if (userId == null) {
-            Toast.makeText(this, "User ID not found", Toast.LENGTH_SHORT).show();
+        shoppinglistKey = getIntent().getStringExtra("shoppinglistKey");
+
+        if (userId == null || shoppinglistKey == null) {
+            Toast.makeText(this, "User ID or Shopping List Key not found", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
-    }
 
-    private void clean() {
-        editTextProductName.setText("");
-        editTextProductQuantity.setText("0");
+        // Load existing products from Firebase
+        loadShoppingListProducts();
+
+        // Set click listener for edit button in adapter
+        adapter.setOnItemClickListener(new ShoppingListProductAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                // Handle item click if needed
+            }
+
+            @Override
+            public void onEditClick(int position) {
+                ShoppingListProduct product = shoppingListProductList.get(position);
+                editTextProductName.setText(product.getProductName());
+                editTextProductQuantity.setText(String.valueOf(product.getQuantity()));
+            }
+
+            @Override
+            public void onDeleteClick(int position) {
+                ShoppingListProduct deletedProduct = shoppingListProductList.remove(position);
+                DatabaseReference productRef = FirebaseUtil.mDatabaseReference
+                        .child("shoppinglist_products")
+                        .child(userId)
+                        .child(deletedProduct.getKey());
+                productRef.removeValue(); // Delete from Firebase
+                adapter.notifyItemRemoved(position); // Notify adapter
+            }
+        });
     }
 
     private void saveData() {
-        // Validate and retrieve input values
+        // Retrieve input data
         String productName = editTextProductName.getText().toString().trim();
-        String quantityStr = editTextProductQuantity.getText().toString().trim();
+        String productQuantityStr = editTextProductQuantity.getText().toString().trim();
 
+        // Validate input
         if (productName.isEmpty()) {
-            Toast.makeText(this, "Please enter a product name", Toast.LENGTH_SHORT).show();
+            editTextProductName.setError("Product name cannot be empty");
+            editTextProductName.requestFocus();
             return;
         }
 
-        int quantity;
+        int productQuantity;
         try {
-            quantity = Integer.parseInt(quantityStr);
-            if (quantity <= 0) {
-                Toast.makeText(this, "Quantity must be greater than zero", Toast.LENGTH_SHORT).show();
+            productQuantity = Integer.parseInt(productQuantityStr);
+            if (productQuantity <= 0) {
+                editTextProductQuantity.setError("Product quantity must be greater than zero");
+                editTextProductQuantity.requestFocus();
                 return;
             }
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Please enter a valid quantity", Toast.LENGTH_SHORT).show();
+            editTextProductQuantity.setError("Enter a valid number for quantity");
+            editTextProductQuantity.requestFocus();
             return;
         }
 
-        // Create a new Product object
-        Product product = new Product();
-        product.setName(productName); // Set the product name, you can set other fields as needed
-
         // Create a new ShoppingListProduct object
-        ShoppingListProduct shoppingListProduct = new ShoppingListProduct(null, product, quantity);
+        ShoppingListProduct shoppingListProduct = new ShoppingListProduct(shoppinglistKey, productName, productQuantity);
 
-        // Save shoppingListProduct to Firebase
-        if (userId != null) {
-            DatabaseReference ref = FirebaseUtil.mDatabaseReference.child("shoppinglist_products").child(userId).push();
-            String key = ref.getKey();
-            if (key != null) {
-                shoppingListProduct.setKey(key);
-                FirebaseUtil.saveData("shoppinglist_products/" + userId, shoppingListProduct, new FirebaseUtil.FirebaseCallback() {
-                    @Override
-                    public void onCallback(boolean isSuccess) {
-                        if (isSuccess) {
-                            Toast.makeText(ShoppingListProductActivity.this, "Data saved", Toast.LENGTH_SHORT).show();
-                            // Clear input fields after successful save
-                            clean();
-                        } else {
-                            Toast.makeText(ShoppingListProductActivity.this, "Failed to save product", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+        // Save to Firebase under shoppinglist_products -> userId
+        DatabaseReference productsRef = FirebaseUtil.mDatabaseReference
+                .child("shoppinglist_products")
+                .child(userId)
+                .push(); // Push creates a unique key for the product
+        shoppingListProduct.setKey(productsRef.getKey()); // Set the key locally
 
-                    @Override
-                    public void onCallback(List<Object> list) {
-                        // Not used in this context
-                    }
+        // Set value to Firebase
+        productsRef.setValue(shoppingListProduct)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(ShoppingListProductActivity.this, "Product saved successfully", Toast.LENGTH_SHORT).show();
+                    clearFields(); // Clear input fields after successful save
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(ShoppingListProductActivity.this, "Failed to save product: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private void loadShoppingListProducts() {
+        DatabaseReference ref = FirebaseUtil.mDatabaseReference.child("shoppinglist_products").child(userId);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                shoppingListProductList.clear();
+                for (DataSnapshot productSnapshot : snapshot.getChildren()) {
+                    ShoppingListProduct product = productSnapshot.getValue(ShoppingListProduct.class);
+                    shoppingListProductList.add(product);
+                }
+                updateUI();
             }
-        }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ShoppingListProductActivity.this, "Failed to load products", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void clearFields() {
+        editTextProductName.setText("");
+        editTextProductQuantity.setText("");
     }
 
     private void updateUI() {
