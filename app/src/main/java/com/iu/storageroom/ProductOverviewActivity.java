@@ -2,6 +2,7 @@ package com.iu.storageroom;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +19,7 @@ import com.iu.storageroom.utils.FirebaseUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductOverviewActivity extends AppCompatActivity {
+public class ProductOverviewActivity extends AppCompatActivity implements ProductAdapter.OnFavoriteClickListener {
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
     private List<Product> productList;
@@ -45,15 +46,10 @@ public class ProductOverviewActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
 
         productList = new ArrayList<>();
-        adapter = new ProductAdapter(this, productList);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
 
         storageroomKey = getIntent().getStringExtra("storageroomKey");
         userId = getIntent().getStringExtra("userId");
         storageroomName = getIntent().getStringExtra("storageroomName");
-
 
         if (storageroomKey == null || userId == null) {
             Toast.makeText(this, getString(R.string.invalid_storageroom), Toast.LENGTH_SHORT).show();
@@ -69,13 +65,27 @@ public class ProductOverviewActivity extends AppCompatActivity {
 
         createProductButton.setOnClickListener(v -> openAddProductActivity());
 
-        backButton.setOnClickListener(v -> finish());
+        backButton.setOnClickListener(v -> {
+            // Navigiere zur StorageroomOverviewActivity
+            Intent intent = new Intent(ProductOverviewActivity.this, StorageroomOverviewActivity.class);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
+            finish();
+        });
 
-        // Fetch products from Firebase for the selected storageroom
+        // Hier wird der ProductAdapter nach der Initialisierung von storageroomKey erstellt
+        adapter = new ProductAdapter(this, productList, this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        fetchProductsFromFirebase();
+    }
+
+    private void fetchProductsFromFirebase() {
         FirebaseUtil.readData("products/" + userId + "/" + storageroomKey, Product.class, new FirebaseUtil.FirebaseCallback() {
             @Override
             public void onCallback(boolean isSuccess) {
-                // Not used
+                // Nicht verwendet
             }
 
             @Override
@@ -83,12 +93,16 @@ public class ProductOverviewActivity extends AppCompatActivity {
                 if (list != null) {
                     productList.clear();
                     for (Object object : list) {
-                        if (object instanceof Product product) {
+                        if (object instanceof Product) {
+                            Product product = (Product) object;
                             productList.add(product);
+                            // Debug-Ausgabe
+                            Log.d("ProductOverview", "Product added: " + product.getName());
                         }
                     }
                     updateUI();
                 } else {
+                    Log.d("ProductOverview", "No products found.");
                     updateUI();
                 }
             }
@@ -102,7 +116,7 @@ public class ProductOverviewActivity extends AppCompatActivity {
         } else {
             emptyView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
-            adapter.notifyDataSetChanged();
+            adapter.updateProductList(productList);
         }
     }
 
@@ -114,9 +128,33 @@ public class ProductOverviewActivity extends AppCompatActivity {
     }
 
     private void openAddProductActivity() {
-        Intent intent = new Intent(this,ProductActivity.class);
+        Intent intent = new Intent(this, ProductActivity.class);
         intent.putExtra("userId", userId);
         intent.putExtra("storageroomKey", storageroomKey);
         startActivity(intent);
+    }
+
+    @Override
+    public void onFavoriteClick(Product product, int position) {
+        product.setFavourite(!product.isFavourite());
+
+        FirebaseUtil.updateProductFavouriteStatus(userId, storageroomKey, product.getKey(), product.isFavourite(), new FirebaseUtil.FirebaseCallback() {
+            @Override
+            public void onCallback(boolean isSuccess) {
+                if (isSuccess) {
+                    adapter.notifyItemChanged(position);
+                    Toast.makeText(ProductOverviewActivity.this, "Favoritenstatus aktualisiert", Toast.LENGTH_SHORT).show();
+                } else {
+                    product.setFavourite(!product.isFavourite()); // Rückgängigmachen der Änderung im Fehlerfall
+                    adapter.notifyItemChanged(position);
+                    Toast.makeText(ProductOverviewActivity.this, "Favoritenstatus konnte nicht aktualisiert werden", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCallback(List<Object> list) {
+                // Nicht relevant für diesen Kontext
+            }
+        });
     }
 }

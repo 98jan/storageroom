@@ -223,7 +223,7 @@ public class ShoppingListActivity extends AppCompatActivity {
      * @param shoppingList the shopping list to update
      */
     private void updateData(ShoppingList shoppingList) {
-        FirebaseUtil.updateData("shoppinglists/" + userId, shoppingList.getKey(), shoppingList, new FirebaseUtil.FirebaseCallback() {
+        FirebaseUtil.updateData("shoppinglists/" + userId, shoppingList, new FirebaseUtil.FirebaseCallback() {
             @Override
             public void onCallback(boolean isSuccess) {
                 if (isSuccess) {

@@ -9,87 +9,113 @@
     android:elevation="4dp"
     android:layout_margin="8dp">
 
-    <!-- Produktbild -->
-    <ImageView
-        android:id="@+id/productImage"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/image_placeholder_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:contentDescription="@string/product_image" />
-
-    <!-- Produktname -->
-    <TextView
-        android:id="@+id/productName"
-        android:layout_width="0dp"
+    <!-- Oberer Block -->
+    <LinearLayout
+        android:id="@+id/topContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="@color/primary"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/productImage"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/buttonContainer"
-        app:layout_constraintBottom_toTopOf="@+id/productQuantity" />
-
-    <!-- Produktmenge -->
-    <TextView
-        android:id="@+id/productQuantity"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintStart_toEndOf="@id/productImage"
-        app:layout_constraintTop_toBottomOf="@+id/productName"
-        app:layout_constraintEnd_toStartOf="@id/buttonContainer"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/buttonContainer"
-        android:maxLines="1"
-        android:text="Product Quantity" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!-- Aktionsschaltflächen -->
+        <!-- Produktbild -->
+        <ImageView
+            android:id="@+id/productImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:contentDescription="@string/product_image"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image_placeholder_icon" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="vertical">
+
+            <!-- Produktname -->
+            <TextView
+                android:id="@+id/productName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text=""
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Produktmenge -->
+            <TextView
+                android:id="@+id/productQuantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:maxLines="1"
+                android:text=""
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Unterer Block -->
     <LinearLayout
         android:id="@+id/buttonContainer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="end"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonContainer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <!-- Favoritenschaltfläche -->
-        <ImageView
+        <ImageButton
             android:id="@+id/favoriteButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_gravity="start"
             android:layout_marginStart="8dp"
-            android:src="@drawable/favorite_icon"
-            android:contentDescription="@string/favorite_button" />
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:contentDescription="@string/favorite_button"
+            android:focusable="true"
+            android:onClick="onFavoriteButtonClick"
+            android:scaleType="fitCenter"
+            android:src="@drawable/favorite_icon" />
 
-        <!-- Bearbeiten-Schaltfläche -->
+        <!-- Platzhalter für Flexibilität -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Bearbeiten-Button -->
         <ImageView
             android:id="@+id/editButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:src="@drawable/edit_square_icon"
-            android:contentDescription="@string/edit_button" />
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/edit_button"
+            android:src="@drawable/edit_square_icon" />
 
-        <!-- Löschen-Schaltfläche -->
+        <!-- Löschen-Button -->
         <ImageView
             android:id="@+id/deleteButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:src="@drawable/delete_icon"
-            android:contentDescription="@string/delete_button" />
+            android:layout_gravity="end"
+            android:contentDescription="@string/delete_button"
+            android:src="@drawable/delete_icon" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
