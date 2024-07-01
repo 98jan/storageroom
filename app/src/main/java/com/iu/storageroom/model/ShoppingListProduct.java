@@ -2,11 +2,13 @@ package com.iu.storageroom.model;
 
 public class ShoppingListProduct {
 
-    private ShoppingList shoppingList;
-    private Product product;
-    private int quantity;
+    private String key;              // Firebase key for identifying the product
+    private ShoppingList shoppingList; // Represents the shopping list to which this product belongs
+    private Product product;           // Represents the product details
+    private int quantity;              // Represents the quantity of the product in the shopping list
 
     public ShoppingListProduct() {
+        // Default constructor required for Firebase serialization
     }
 
     public ShoppingListProduct(ShoppingList shoppingList, Product product, int quantity) {
@@ -37,5 +39,13 @@ public class ShoppingListProduct {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

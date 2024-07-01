@@ -4,6 +4,8 @@ plugins {
     // needed for @Parcelize in BarcodeField.kt
     id("org.jetbrains.kotlin.plugin.parcelize")
     alias(libs.plugins.google.gms.google.services)
+    // needed for sonarqube analysis
+    id("org.sonarqube") version "5.0.0.4638"
 }
 
 android {
@@ -35,6 +37,13 @@ android {
     }
 }
 
+sonar {
+    properties {
+        property("sonar.projectKey", "98jan_storageroom_cab43341-633c-4fab-a4d5-e59b14772719")
+        property("sonar.host.url", System.getenv("SONAR_HOST_URL"))
+    }
+}
+
 dependencies {
 
     implementation(libs.appcompat)
@@ -56,6 +65,10 @@ dependencies {
     implementation("com.google.mlkit:object-detection:17.0.1")
     // json processor
     implementation(libs.jackson.databind)
+
+    // using glide for handling of the product images
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
     //Firebase
     implementation(platform(libs.firebase.bom))
