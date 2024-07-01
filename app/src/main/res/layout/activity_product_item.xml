@@ -88,7 +88,6 @@
             android:clickable="true"
             android:contentDescription="@string/favorite_button"
             android:focusable="true"
-            android:onClick="onFavoriteButtonClick"
             android:scaleType="fitCenter"
             android:src="@drawable/favorite_icon" />
 
