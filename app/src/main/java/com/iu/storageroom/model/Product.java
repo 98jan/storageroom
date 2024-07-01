@@ -18,7 +18,7 @@ public class Product implements Serializable {
     @JsonProperty("code")
     private String barcode;
     @JsonProperty("image_front_url")
-    private String image;
+    private String imageUrl;
     @JsonProperty("brands")
     private String brand;
     @JsonProperty("categories_tags")
@@ -29,17 +29,20 @@ public class Product implements Serializable {
     private String store;
 
     private int rating;
-
     private boolean favourite;
 
     public Product(){}
 
-    public Product(String key, String name, String note, String barcode, String image, int rating, boolean favourite) {
+    public Product(String key, String name, String note, String barcode, String imageUrl, String brand, List<String> categories, String quantity, String store, int rating, boolean favourite) {
         this.key = key;
         this.name = name;
         this.note = note;
         this.barcode = barcode;
-        this.image = image;
+        this.imageUrl = imageUrl;
+        this.brand = brand;
+        this.categories = categories;
+        this.quantity = quantity;
+        this.store = store;
         this.rating = rating;
         this.favourite = favourite;
     }
@@ -76,12 +79,12 @@ public class Product implements Serializable {
         this.barcode = barcode;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public int getRating() {
@@ -100,16 +103,53 @@ public class Product implements Serializable {
         this.favourite = favourite;
     }
 
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getStore() {
+        return store;
+    }
+
+    public void setStore(String store) {
+        this.store = store;
+    }
+
+
     @Override
     public String toString() {
         return "Product{" +
+                "key='" + key + '\'' +
                 ", name='" + name + '\'' +
                 ", note='" + note + '\'' +
                 ", barcode='" + barcode + '\'' +
-                ", image='" + image + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", brand='" + brand + '\'' +
+                ", categories=" + categories +
+                ", quantity='" + quantity + '\'' +
+                ", store='" + store + '\'' +
                 ", rating=" + rating +
                 ", favourite=" + favourite +
                 '}';
     }
-
 }

@@ -125,20 +125,14 @@ public class RegistrationActivity extends AppCompatActivity {
     private void sendVerificationEmail() {
         FirebaseUser user = FirebaseUtil.getCurrentUser();
         if (user != null) {
-            FirebaseUtil.sendVerificationEmail(user, new FirebaseUtil.FirebaseCallback() {
-                @Override
-                public void onCallback(boolean isSuccess) {
-                    if (isSuccess) {
-                        Toast.makeText(RegistrationActivity.this, getString(R.string.verification_email_sent), Toast.LENGTH_SHORT).show();
-                        FirebaseUtil.checkEmailVerification(RegistrationActivity.this, StorageroomOverviewActivity.class);
-                    } else {
-                        Toast.makeText(RegistrationActivity.this, getString(R.string.verification_email_failed), Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onCallback(List<Object> list) {
-                    // Not used in this context
+            user.sendEmailVerification().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(RegistrationActivity.this, getString(R.string.verification_email_sent), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(RegistrationActivity.this, getString(R.string.verification_email_failed), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
