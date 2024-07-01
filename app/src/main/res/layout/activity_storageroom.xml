@@ -140,19 +140,5 @@
 
         </LinearLayout>
     </RelativeLayout>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/createStorageroomButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="@string/add_storageroom"
-        android:src="@drawable/add_plus_icon"
-        android:theme="@style/Theme.Storageroom"
-        app:backgroundTint="@color/primary"
-        app:elevation="6dp"
-        app:rippleColor="@color/primary"
-        app:tint="@android:color/white" />
+
 </RelativeLayout>
