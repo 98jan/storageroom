@@ -15,7 +15,7 @@ import com.iu.storageroom.model.ShoppingList;
 import java.util.List;
 
 /**
- * Adapter for displaying Storage Room items in a RecyclerView.
+ * Adapter for displaying ShoppingList items in a RecyclerView.
  */
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder> {
     private final List<ShoppingList> shoppingListCollection;
@@ -89,6 +89,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         ShoppingList shoppingList = shoppingListCollection.get(position);
         holder.shoppingListName.setText(shoppingList.getName());
 
+        // Set image resource based on shopping list item
         int iconResId = shoppingList.getSelectedIconInt();
         holder.shoppingListImage.setImageResource(iconResId);
 

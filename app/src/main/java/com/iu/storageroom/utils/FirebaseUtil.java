@@ -17,6 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.iu.storageroom.R;
 import com.iu.storageroom.model.Product;
+import com.iu.storageroom.model.ShoppingList;
+import com.iu.storageroom.model.ShoppingListProduct;
 import com.iu.storageroom.model.Storageroom;
 
 import java.util.ArrayList;
@@ -161,6 +163,13 @@ public class FirebaseUtil {
             } else if (data instanceof Storageroom) {
                 ((Storageroom) data).setKey(key);
             }
+            else if (data instanceof ShoppingList) {
+                ((ShoppingList) data).setKey(key);
+            }
+            else if (data instanceof ShoppingListProduct) {
+                ((ShoppingListProduct) data).setKey(key);
+            }
+
             databaseReference.child(key).setValue(data).addOnCompleteListener(task -> {
                 firebaseCallback.onCallback(task.isSuccessful());
             });
@@ -189,7 +198,18 @@ public class FirebaseUtil {
                                     storageroom.setSelectedIcon(selectedIconStr); // Set as string
                                 }
                                 dataList.add(storageroom);
-                            } else {
+                            }
+                            else if (data instanceof ShoppingList) {
+                                ShoppingList shoppingList = (ShoppingList) data;
+                                shoppingList.setKey(dataSnapshot.getKey()); // Set the key
+                                // Ensure selectedIcon is retrieved as String first and then parsed to int
+                                String selectedIconStr = dataSnapshot.child("selectedIcon").getValue(String.class);
+                                if (selectedIconStr != null) {
+                                    shoppingList.setSelectedIcon(selectedIconStr); // Set as string
+                                }
+                                dataList.add(shoppingList);
+                            }
+                            else {
                                 dataList.add(data);
                             }
                         }
@@ -215,6 +235,13 @@ public class FirebaseUtil {
         } else if (data instanceof Storageroom) {
             key = ((Storageroom) data).getKey();
         }
+        else if (data instanceof ShoppingList) {
+            key = ((ShoppingList) data).getKey();
+        }
+        else if (data instanceof ShoppingListProduct) {
+            key = ((ShoppingListProduct) data).getKey();
+        }
+
         if (key != null && !key.isEmpty()) {
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(path).child(key);
             databaseReference.setValue(data).addOnCompleteListener(task -> {
