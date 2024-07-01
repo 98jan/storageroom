@@ -2,6 +2,7 @@ package com.iu.storageroom;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -12,16 +13,14 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
-
 import com.google.firebase.database.DatabaseReference;
 import com.iu.storageroom.model.Product;
+import com.iu.storageroom.model.Storageroom;
 import com.iu.storageroom.utils.FirebaseUtil;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ProductActivity extends AppCompatActivity {
@@ -42,11 +41,12 @@ public class ProductActivity extends AppCompatActivity {
     private Button btnDelete;
     private Button btnEdit;
     private Button btnSave;
-    private ImageView imageView; // ImageView for displaying product image
+    private ImageView imageView;
 
     private String userId;
+    private String storageroomKey;
 
-    // Icons for spinner
+    // Product groups
     private String[] productGroupIds;
 
     @Override
@@ -66,6 +66,8 @@ public class ProductActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        storageroomKey = getIntent().getStringExtra("storageroomKey");
 
         initializeProductGroups();
         setupListeners();
@@ -92,12 +94,6 @@ public class ProductActivity extends AppCompatActivity {
         btnEdit = findViewById(R.id.btnEdit);
         btnSave = findViewById(R.id.btnSave);
         imageView = findViewById(R.id.imageView); // Initialize the ImageView
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
     }
 
     private void initializeProductGroups() {
@@ -117,8 +113,20 @@ public class ProductActivity extends AppCompatActivity {
 
     private void setupListeners() {
         btnReadBarcode.setOnClickListener(v -> readData());
-        btnDelete.setOnClickListener(v -> deleteData(product));
-        btnEdit.setOnClickListener(v -> updateData(product));
+        btnDelete.setOnClickListener(v -> {
+            if (product != null) {
+                deleteData(product);
+            } else {
+                showToast(R.string.product_not_found);
+            }
+        });
+        btnEdit.setOnClickListener(v -> {
+            if (product != null) {
+                updateData(product);
+            } else {
+                showToast(R.string.product_not_found);
+            }
+        });
         btnSave.setOnClickListener(v -> {
             saveData();
             cleanFields();
@@ -184,9 +192,8 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     private void saveData() {
-        if (userId != null) {
-            DatabaseReference reference = FirebaseUtil.mDatabaseReference.push();
-            String key = reference.getKey();
+        if (userId != null && storageroomKey != null) {
+            // Retrieve product details from UI
             String productName = editTextProductName.getText().toString();
             String productGroup = (String) productGroupSpinner.getSelectedItem();
             String productNote = editTextProductNote.getText().toString();
@@ -195,46 +202,60 @@ public class ProductActivity extends AppCompatActivity {
             String productBrand = editTextProductBrand.getText().toString();
             String productQuantity = editTextProductQuantity.getText().toString();
             String productStore = editTextProductStore.getText().toString();
-            int productRating = Integer.parseInt(editTextProductRating.getText().toString());
-            boolean productFavourite = checkBoxProductFavourite.isChecked();
 
-            if (productName.isEmpty()) {
-                showToast(R.string.product_name_required);
-                return;
+            String productRatingText = editTextProductRating.getText().toString();
+            int productRating;
+            try {
+                productRating = Integer.parseInt(productRatingText);
+            } catch (NumberFormatException e) {
+                productRating = 0;
             }
 
-            product = new Product();
-            product.setKey(key);
-            product.setName(productName);
-            product.setCategories(List.of(productGroup)); // Set categories as a list with one element
-            product.setNote(productNote);
-            product.setBarcode(productBarcode);
-            product.setImageUrl(productImageUrl);
-            product.setBrand(productBrand);
-            product.setQuantity(productQuantity);
-            product.setStore(productStore);
-            product.setRating(productRating);
-            product.setFavourite(productFavourite);
+            boolean productFavourite = checkBoxProductFavourite.isChecked();
 
-            FirebaseUtil.saveData("products/" + userId, product, new FirebaseUtil.FirebaseCallback() {
-                @Override
-                public void onCallback(boolean isSuccess) {
-                    showToast(isSuccess ? R.string.data_save_success : R.string.data_save_fail);
-                }
-
-                @Override
-                public void onCallback(List<Object> list) {
-                    // Not used
-                }
-            });
+            // Check if the product is new or existing
+            // Check if the product is new or existing
+            if (product == null || product.getKey() == null) {
+                product = new Product(null, productName, productNote, productBarcode, productImageUrl,
+                        productBrand, Arrays.asList(productGroup), productQuantity, productStore, productRating, productFavourite);
+                saveNewData(product);
+            } else {
+                // Use the existing productKey
+                product = new Product(product.getKey(), productName, productNote, productBarcode, productImageUrl,
+                        productBrand, Arrays.asList(productGroup), productQuantity, productStore, productRating, productFavourite);
+                updateData(product);
+            }
         } else {
             showToast(R.string.user_not_auth);
         }
     }
 
+    private void saveNewData(Product product) {
+        if (userId != null) {
+            FirebaseUtil.saveData("products/" + userId + "/" + storageroomKey, product, new FirebaseUtil.FirebaseCallback() {
+                @Override
+                public void onCallback(boolean isSuccess) {
+                    if (isSuccess) {
+                        Toast.makeText(ProductActivity.this, getString(R.string.data_save_success), Toast.LENGTH_SHORT).show();
+                        finish(); // Return to the overview activity
+                    } else {
+                        Toast.makeText(ProductActivity.this, getString(R.string.data_save_fail), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onCallback(List<Object> list) {
+                    // Not used in this context
+                }
+            });
+        } else {
+            Toast.makeText(this, getString(R.string.user_not_auth), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void updateData(Product product) {
         if (userId != null && product != null) {
-            FirebaseUtil.updateData("products/" + userId, product.getKey(), product, new FirebaseUtil.FirebaseCallback() {
+            FirebaseUtil.updateData("products/" + userId + "/" + storageroomKey, product, new FirebaseUtil.FirebaseCallback() {
                 @Override
                 public void onCallback(boolean isSuccess) {
                     showToast(isSuccess ? R.string.data_update_success : R.string.data_update_fail);
@@ -252,7 +273,7 @@ public class ProductActivity extends AppCompatActivity {
 
     private void deleteData(Product product) {
         if (userId != null && product != null) {
-            FirebaseUtil.deleteData("products/" + userId, product.getKey(), new FirebaseUtil.FirebaseCallback() {
+            FirebaseUtil.deleteData("products/" + userId + "/" + storageroomKey, product.getKey(), new FirebaseUtil.FirebaseCallback() {
                 @Override
                 public void onCallback(boolean isSuccess) {
                     showToast(isSuccess ? R.string.data_delete_success : R.string.data_delete_fail);
@@ -270,5 +291,13 @@ public class ProductActivity extends AppCompatActivity {
 
     private void showToast(int messageId) {
         Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show();
+    }
+
+    private void returnToProductOverview() {
+        Intent intent = new Intent(ProductActivity.this, ProductOverviewActivity.class);
+        intent.putExtra("userId", userId);
+        intent.putExtra("storageroomKey", storageroomKey);
+        startActivity(intent);
+        finish();
     }
 }
