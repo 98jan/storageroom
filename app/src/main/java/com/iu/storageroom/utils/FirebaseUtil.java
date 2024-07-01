@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.iu.storageroom.R;
+import com.iu.storageroom.model.Product;
 import com.iu.storageroom.model.Storageroom;
 
 import java.util.ArrayList;
@@ -155,10 +156,12 @@ public class FirebaseUtil {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(path);
         String key = databaseReference.push().getKey();
         if (key != null) {
+            if (data instanceof Product) {
+                ((Product) data).setKey(key);
+            } else if (data instanceof Storageroom) {
+                ((Storageroom) data).setKey(key);
+            }
             databaseReference.child(key).setValue(data).addOnCompleteListener(task -> {
-                if (data instanceof Storageroom) {
-                    ((Storageroom) data).setKey(key);
-                }
                 firebaseCallback.onCallback(task.isSuccessful());
             });
         } else {
@@ -205,21 +208,41 @@ public class FirebaseUtil {
     }
 
     // generic method for updating data from Firebase database
-    public static <T> void updateData(String path, String key, T data, FirebaseCallback firebaseCallback) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(path).child(key);
-        databaseReference.setValue(data).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                firebaseCallback.onCallback(null);
-            } else {
-                firebaseCallback.onCallback(false);
-            }
-        });
+    public static <T> void updateData(String path, T data, FirebaseCallback firebaseCallback) {
+        String key = null;
+        if (data instanceof Product) {
+            key = ((Product) data).getKey();
+        } else if (data instanceof Storageroom) {
+            key = ((Storageroom) data).getKey();
+        }
+        if (key != null && !key.isEmpty()) {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(path).child(key);
+            databaseReference.setValue(data).addOnCompleteListener(task -> {
+                firebaseCallback.onCallback(task.isSuccessful());
+            });
+        } else {
+            firebaseCallback.onCallback(false);
+        }
     }
 
-    // generic method for deleting data from Firebase database
+
+            // generic method for deleting data from Firebase database
     public static void deleteData(String path, String key, FirebaseCallback firebaseCallback) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(path).child(key);
         databaseReference.removeValue().addOnCompleteListener(task -> {
+            firebaseCallback.onCallback(task.isSuccessful());
+        });
+    }
+
+    // Update the favourite status of a product
+    public static void updateProductFavouriteStatus(String userId, String storageroomKey, String productKey, boolean favourite, FirebaseCallback firebaseCallback) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("products")
+                .child(userId)
+                .child(storageroomKey)
+                .child(productKey)
+                .child("favourite");
+
+        databaseReference.setValue(favourite).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 firebaseCallback.onCallback(true);
             } else {
