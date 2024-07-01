@@ -6,6 +6,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:allowBackup="true"
@@ -26,14 +27,29 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".StorageroomOverviewActivity"
+            android:name=".ShoppingListProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ShoppingListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ShoppingListOverviewActivity"
             android:exported="false" />
         <activity
             android:name=".ProductActivity"
             android:exported="false" />
         <activity
+            android:name=".ProductOverviewActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Storageroom"/>
+        <activity
             android:name=".StorageroomActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Storageroom" />
+        <activity
+            android:name=".StorageroomOverviewActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Storageroom"/>
         <activity
             android:name=".RegistrationActivity"
             android:exported="false"
