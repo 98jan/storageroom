@@ -163,7 +163,7 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
      */
     private void openShoppingList(ShoppingList shoppingList) {
         Intent intent = new Intent(this, ShoppingListProductActivity.class);
-        intent.putExtra("shoppingListKey", shoppingList.getKey());
+        intent.putExtra("shoppinglistKey", shoppingList.getKey());
         intent.putExtra("userId", userId);
         startActivity(intent);
     }
