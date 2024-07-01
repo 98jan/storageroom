@@ -1,11 +1,37 @@
 <resources>
     <string name="app_name">Storageroom</string>
     <string name="action_settings">Settings</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="save">Save</string>
+    <string name="read">Read</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="favorite_button">Favorite</string>
+    <string name="save_icon_description">Save Icon</string>
+    <string name="cancel_icon_description">Cancel Icon</string>
+    <string name="edit_icon_description">Edit Icon</string>
+    <string name="delete_icon_description">Delete Icon</string>
+    <string name="back_icon_description">Back to previous Page Icon</string>
+
+    <!-- Authentication implementation -->
+    <string name="auth_failed">Authentication failed.</string>
+    <string name="login_successful">Login Successful.</string>
+    <string name="reg_successful">Registration Successful.</string>
+    <string name="user_not_auth">User not authenticated.</string>
+    <string name="user_not_found">User not found</string>
+    <string name="email_not_verified">Email not verified!</string>
+    <string name="verification_email_failed">Verification email failed</string>
+    <string name="verification_email_sent">Verification email sent</string>
+    <string name="verify_email_prompt">Verify email prompt</string>
+    <string name="password_mismatch">Password mismatch.</string>
+
+    <!-- Strings for login and register -->
     <string name="login">Login</string>
     <string name="email">Email</string>>
     <string name="password">Password</string>
@@ -15,26 +41,65 @@
     <string name="enter_email">Enter Email</string>
     <string name="enter_password">Enter Password</string>
     <string name="repeat_password">Repeat Password</string>
-    <string name="password_mismatch">Password mismatch.</string>
-    <string name="login_successful">Login Successful.</string>
-    <string name="auth_failed">Authentication failed.</string>
-    <string name="reg_successful">Registration Successful.</string>
-    <string name="user_not_auth">User not authenticated.</string>
-    <string name="data_save_success">Data saved successfully</string>
-    <string name="data_save_fail">Failed to save data</string>
-    <string name="data_read_fail">Failed to read data: </string>
-    <string name="data_update_success">Data updated successfully </string>
-    <string name="data_update_fail">Failed to update data:  </string>
-    <string name="data_delete_success">Data deleted successfully </string>
-    <string name="data_delete_fail">Failed to delete data: </string>
-    <string name="email_not_verified">Email not verified!</string>
-    <string name="verification_email_sent">Verification email sent</string>
-    <string name="verification_email_failed">Verification email failed</string>
-    <string name="user_not_found">User not found</string>
-    <string name="verify_email_prompt">Verify email prompt</string>
     <string name="password_reset">Forgot your password?</string>
     <string name="already_registered">You already have an account?</string>
     <string name="not_registered">Don\'t have an account?</string>
+
+    <!-- Data handling implementation -->
+    <string name="data_save_fail">Failed to save data</string>
+    <string name="data_save_success">Data saved successfully</string>
+    <string name="data_read_fail">Failed to read data: </string>
+    <string name="data_update_fail">Failed to update data:  </string>
+    <string name="data_update_success">Data updated successfully </string>
+    <string name="data_delete_fail">Failed to delete data: </string>
+    <string name="data_delete_success">Data deleted successfully </string>
+
+    <!-- Strings for Storageroom -->
+    <string name="add_storageroom">Add Storage Room</string>
+    <string name="storageroom_name_hint">Please enter a name for a Storageroom (max. 40 characters)</string>
+    <string name="storageroom_description_hint">Storage Room Description</string>
+    <string name="storageroom_name_empty">Please enter a name for the storageroom</string>
+    <string name="no_storagerooms">Please create a Storageroom by clicking on the plus button</string>
+    <string name="invalid_storageroom">Invalid Storagroom</string>
+    <string name="headline_storageroom_overview">Storageroom Overview</string>
+    <string name="headline_storageroom_item">Storageroom</string>
+    <string name="storageroom_icon_description">Storageroom Icon</string>
+
+    <!-- Strings for Products -->
+    <string name="product_image">Product image</string>
+    <string name="no_product">Please add a Product by clicking on the plus button</string>
+    <string name="headline_product_overview">Product Overview</string>
+    <string name="product_name_hint">Product Name</string>
+    <string name="product_group_hint">Product Group</string>
+    <string name="product_barcode_hint">Barcode</string>
+    <string name="product_key_null">No Product found</string>
+    <string name="product_not_found">Product not found</string>
+    <string name="product_group_placeholder"> </string>
+    <string name="product_group_food">food</string>
+    <string name="product_group_housekeeping">housekeeping</string>
+    <string name="product_group_cosmetics">cosmetics</string>
+    <string name="product_group_baby_child">baby, child</string>
+    <string name="product_group_others">others</string>
+    <string name="product_name_required">Product name required</string>
+    <string name="product_note_hint">Note</string>
+    <string name="product_image_url_hint">Image url</string>
+    <string name="product_brand_hint">Product brand</string>
+    <string name="product_quantity_hint">Product Quantity</string>
+    <string name="product_store_hint">Product store</string>
+    <string name="product_rating_hint">Rating</string>
+    <string name="product_favourite">Favourite</string>
+
+    <!-- Strings for Shoppinglist -->
+    <string name="headline_shoppinglist_overview">ShoppingList Overview</string>
+    <string name="add_shoppinglist">Add ShoppingList</string>
+    <string name="no_shoppinglist">Please create a ShoppingList by clicking on the plus button</string>
+    <string name="shoppinglist_icon_description">ShoppingList Icon</string>
+    <string name="shoppinglist_name_hint">Please enter a name for a ShoppingList (max. 40 characters)</string>
+    <string name="shoppinglist_description_hint">ShoppingList Description</string>
+    <string name="headline_shoppinglist_item">ShoppingList</string>
+    <string name="edit_button">Edit</string>
+    <string name="delete_button">Delete</string>
+
     <!-- Barcode implementation -->
     <string name="prompt_point_at_a_barcode">Point your camera at a barcode</string>
     <string name="prompt_move_camera_closer">Move closer to search</string>
@@ -87,5 +152,6 @@
     <string name="pref_key_delay_loading_barcode_result" translatable="false">barcode_dlbr</string>
     <string name="pref_title_delay_loading_barcode_result">Delay loading barcode result</string>
     <string name="pref_summary_delay_loading_barcode_result">Will show the loading spinner for 2s</string>
+    <string name="shoppinglist_name_empty">Enter a shoppinglist name:</string>
 
 </resources>
