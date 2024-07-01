@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProductOverviewActivity">
+
+    <View
+        android:id="@+id/top_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/bottom_background"
+        android:background="@drawable/gradient_background" />
+
+    <View
+        android:id="@+id/bottom_background"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:background="#E8E8E8" />
+
+    <RelativeLayout
+        android:id="@+id/contentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="22dp"
+        android:background="@drawable/all_rounded_corners">
+
+        <TextView
+            android:id="@+id/headerTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:text=""
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/primary"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/productRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/headerTextView"
+            android:layout_above="@id/buttonContainer"
+            android:layout_margin="16dp"
+            android:clipToPadding="false"
+            android:padding="8dp"
+            android:scrollbars="vertical" />
+
+        <TextView
+            android:id="@+id/productEmptyView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/buttonContainer"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="@string/no_product"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/buttonContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="16dp">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="@string/back_icon_description"
+                android:src="@drawable/arrow_back_icon"
+                android:theme="@style/Theme.Storageroom"
+                android:clickable="true"
+                android:backgroundTint="@color/primary"
+                app:elevation="6dp"
+                app:rippleColor="@color/primary"
+                app:tint="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/shoppingListActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="@string/shoppinglist_icon_description"
+                android:src="@drawable/shopping_bag_icon"
+                android:theme="@style/Theme.Storageroom"
+                android:clickable="true"
+                android:backgroundTint="@color/secondary"
+                app:elevation="6dp"
+                app:rippleColor="@color/secondary"
+                app:tint="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/createProductButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="@string/add_storageroom"
+                android:src="@drawable/add_plus_icon"
+                android:theme="@style/Theme.Storageroom"
+                android:clickable="true"
+                app:backgroundTint="@color/primary"
+                app:elevation="6dp"
+                app:rippleColor="@color/primary"
+                app:tint="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</RelativeLayout>
