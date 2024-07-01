@@ -188,8 +188,8 @@ public class ShoppingListActivity extends AppCompatActivity {
                 updateData(shoppingList);
             } else {
                 DatabaseReference reference = FirebaseUtil.mDatabaseReference.push();
-                String key = reference.getKey();
-                shoppingList = new ShoppingList(key, name, userId, System.currentTimeMillis(), 0, null, null);
+                //String key = reference.getKey();
+                shoppingList = new ShoppingList(null, name, userId, System.currentTimeMillis(), 0, null, null);
                 saveNewData(shoppingList);
             }
         } else {
