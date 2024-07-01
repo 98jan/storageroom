@@ -72,9 +72,7 @@
     <string name="product_name_hint">Product Name</string>
     <string name="product_group_hint">Product Group</string>
     <string name="product_barcode_hint">Barcode</string>
-    <string name="product_delete">Delete</string>
-    <string name="product_edit">Edit</string>
-    <string name="product_save">Save</string>
+    <string name="product_key_null">No Product found</string>
     <string name="product_not_found">Product not found</string>
     <string name="product_group_placeholder"> </string>
     <string name="product_group_food">food</string>

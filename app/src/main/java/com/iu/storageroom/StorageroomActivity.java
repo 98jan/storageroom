@@ -275,7 +275,7 @@ public class StorageroomActivity extends AppCompatActivity {
      */
     private void updateData(Storageroom storageroom) {
         if (userId != null) {
-            FirebaseUtil.updateData("storagerooms/" + userId, storageroom.getKey(), storageroom, new FirebaseUtil.FirebaseCallback() {
+            FirebaseUtil.updateData("storagerooms/" + userId, storageroom, new FirebaseUtil.FirebaseCallback() {
                 @Override
                 public void onCallback(boolean isSuccess) {
                     if (isSuccess) {

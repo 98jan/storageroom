@@ -135,6 +135,7 @@ public class Product implements Serializable {
         this.store = store;
     }
 
+
     @Override
     public String toString() {
         return "Product{" +

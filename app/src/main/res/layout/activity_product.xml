@@ -126,19 +126,19 @@
                 android:id="@+id/btnDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/product_delete" />
+                android:text="@string/delete" />
 
             <Button
                 android:id="@+id/btnEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/product_edit" />
+                android:text="@string/edit" />
 
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/product_save"
+                android:text="@string/save"
                 android:layout_marginStart="16dp" />
         </LinearLayout>
 
