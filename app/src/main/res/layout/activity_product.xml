@@ -123,16 +123,11 @@
             android:gravity="end">
 
             <Button
-                android:id="@+id/btnDelete"
+                android:id="@+id/btnCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/delete" />
-
-            <Button
-                android:id="@+id/btnEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/edit" />
+                android:text="@string/cancel"
+                android:layout_marginStart="16dp" />
 
             <Button
                 android:id="@+id/btnSave"
