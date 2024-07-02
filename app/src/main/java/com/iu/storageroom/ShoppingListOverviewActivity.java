@@ -3,6 +3,7 @@ package com.iu.storageroom;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +29,9 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
     private List<ShoppingList> shoppingListCollection;
     private FloatingActionButton createShoppingList;
     private TextView emptyView;
+    private FloatingActionButton backButton;
     private String userId;
+    private String storageroomKey;
 
     /**
      * Called when the activity is first created.
@@ -40,8 +43,11 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shoppinglist_overview);
 
+        storageroomKey = getIntent().getStringExtra("storageroomKey");
+
         recyclerView = findViewById(R.id.recyclerView);
         emptyView = findViewById(R.id.emptyView);
+        backButton = findViewById(R.id.btnCancel);
         createShoppingList = findViewById(R.id.createShoppingListButton);
 
         shoppingListCollection = new ArrayList<>();
@@ -52,6 +58,14 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
 
         // Set click listener for create shopping list button
         createShoppingList.setOnClickListener(v -> createShoppingListView());
+
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ShoppingListOverviewActivity.this, ProductOverviewActivity.class);
+            intent.putExtra("userId", userId);
+            intent.putExtra("storageroomKey", storageroomKey);
+            startActivity(intent);
+            finish();
+        });
 
         // Check if userId is provided
         userId = getIntent().getStringExtra("userId");
