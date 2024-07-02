@@ -38,8 +38,7 @@ public class ProductActivity extends AppCompatActivity {
     private EditText editTextProductRating;
     private CheckBox checkBoxProductFavourite;
     private Button btnReadBarcode;
-    private Button btnDelete;
-    private Button btnEdit;
+    private Button backButton;
     private Button btnSave;
     private ImageView imageView;
 
@@ -90,8 +89,7 @@ public class ProductActivity extends AppCompatActivity {
         editTextProductRating = findViewById(R.id.product_rating);
         checkBoxProductFavourite = findViewById(R.id.product_favourite);
         btnReadBarcode = findViewById(R.id.btnReadBarcode);
-        btnDelete = findViewById(R.id.btnDelete);
-        btnEdit = findViewById(R.id.btnEdit);
+        backButton = findViewById(R.id.btnCancel);
         btnSave = findViewById(R.id.btnSave);
         imageView = findViewById(R.id.imageView); // Initialize the ImageView
     }
@@ -113,19 +111,12 @@ public class ProductActivity extends AppCompatActivity {
 
     private void setupListeners() {
         btnReadBarcode.setOnClickListener(v -> readData());
-        btnDelete.setOnClickListener(v -> {
-            if (product != null) {
-                deleteData(product);
-            } else {
-                showToast(R.string.product_not_found);
-            }
-        });
-        btnEdit.setOnClickListener(v -> {
-            if (product != null) {
-                updateData(product);
-            } else {
-                showToast(R.string.product_not_found);
-            }
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProductActivity.this, ProductOverviewActivity.class);
+            intent.putExtra("userId", userId);
+            intent.putExtra("storageroomKey", storageroomKey);
+            startActivity(intent);
+            finish();
         });
         btnSave.setOnClickListener(v -> {
             saveData();
@@ -259,24 +250,6 @@ public class ProductActivity extends AppCompatActivity {
                 @Override
                 public void onCallback(boolean isSuccess) {
                     showToast(isSuccess ? R.string.data_update_success : R.string.data_update_fail);
-                }
-
-                @Override
-                public void onCallback(List<Object> list) {
-                    // Not used
-                }
-            });
-        } else {
-            showToast(R.string.user_not_auth);
-        }
-    }
-
-    private void deleteData(Product product) {
-        if (userId != null && product != null) {
-            FirebaseUtil.deleteData("products/" + userId + "/" + storageroomKey, product.getKey(), new FirebaseUtil.FirebaseCallback() {
-                @Override
-                public void onCallback(boolean isSuccess) {
-                    showToast(isSuccess ? R.string.data_delete_success : R.string.data_delete_fail);
                 }
 
                 @Override
