@@ -2,7 +2,6 @@ package com.iu.storageroom;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,14 +14,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.DatabaseReference;
 import com.iu.storageroom.model.Product;
-import com.iu.storageroom.model.Storageroom;
 import com.iu.storageroom.utils.FirebaseUtil;
 
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Activity for displaying and editing product information.
+ */
 public class ProductActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_SCAN_BARCODE = 1;
 
@@ -44,6 +44,7 @@ public class ProductActivity extends AppCompatActivity {
 
     private String userId;
     private String storageroomKey;
+    private String storageroomName;
 
     // Product groups
     private String[] productGroupIds;
@@ -67,16 +68,21 @@ public class ProductActivity extends AppCompatActivity {
         }
 
         storageroomKey = getIntent().getStringExtra("storageroomKey");
+        storageroomName = getIntent().getStringExtra("storageroomName");
+
+        product = (Product) getIntent().getSerializableExtra("product");
 
         initializeProductGroups();
         setupListeners();
 
-        product = getIntent().getParcelableExtra("product");
         if (product != null) {
             populateFields(product);
         }
     }
 
+    /**
+     * Initializes UI elements from the layout.
+     */
     private void initUI() {
         editTextProductName = findViewById(R.id.product_name);
         productGroupSpinner = findViewById(R.id.productGroupSpinner);
@@ -94,6 +100,9 @@ public class ProductActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView); // Initialize the ImageView
     }
 
+    /**
+     * Initializes the dropdown list of product groups.
+     */
     private void initializeProductGroups() {
         productGroupIds = new String[]{
                 getString(R.string.product_group_placeholder),
@@ -109,21 +118,37 @@ public class ProductActivity extends AppCompatActivity {
         productGroupSpinner.setAdapter(adapter);
     }
 
+    /**
+     * Sets up click listeners for buttons.
+     */
     private void setupListeners() {
         btnReadBarcode.setOnClickListener(v -> readData());
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ProductActivity.this, ProductOverviewActivity.class);
-            intent.putExtra("userId", userId);
-            intent.putExtra("storageroomKey", storageroomKey);
-            startActivity(intent);
-            finish();
-        });
+        backButton.setOnClickListener(v ->  returnToProductOverview());
         btnSave.setOnClickListener(v -> {
             saveData();
             cleanFields();
         });
     }
 
+    /**
+     * Sets the spinner selection based on the given value.
+     *
+     * @param spinner The spinner to set the selection for.
+     * @param value   The value to set as selected.
+     */
+    private void setSpinnerSelection(Spinner spinner, String value) {
+        ArrayAdapter<String> adapter = (ArrayAdapter<String>) spinner.getAdapter();
+        int position = adapter.getPosition(value);
+        if (position >= 0) {
+            spinner.setSelection(position);
+        }
+    }
+
+    /**
+     * Populates UI fields with data from a Product object.
+     *
+     * @param product The Product object containing data to populate.
+     */
     private void populateFields(Product product) {
         editTextProductName.setText(product.getName());
         editTextProductNote.setText(product.getNote());
@@ -138,11 +163,7 @@ public class ProductActivity extends AppCompatActivity {
         // Set the spinner selection based on the product's first category
         if (product.getCategories() != null && !product.getCategories().isEmpty()) {
             String productCategory = product.getCategories().get(0);
-            ArrayAdapter<String> adapter = (ArrayAdapter<String>) productGroupSpinner.getAdapter();
-            int spinnerPosition = adapter.getPosition(productCategory);
-            if (spinnerPosition >= 0) {
-                productGroupSpinner.setSelection(spinnerPosition);
-            }
+            setSpinnerSelection(productGroupSpinner, productCategory);
         }
 
         // Display product image if available
@@ -151,6 +172,9 @@ public class ProductActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Clears all input fields.
+     */
     private void cleanFields() {
         editTextProductName.setText("");
         productGroupSpinner.setSelection(0);
@@ -164,6 +188,9 @@ public class ProductActivity extends AppCompatActivity {
         checkBoxProductFavourite.setChecked(false);
     }
 
+    /**
+     * Initiates data reading process, typically for barcode scanning.
+     */
     private void readData() {
         if (userId != null) {
             Intent intent = new Intent(this, MainActivity.class);
@@ -182,6 +209,9 @@ public class ProductActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Saves the entered data to Firebase.
+     */
     private void saveData() {
         if (userId != null && storageroomKey != null) {
             // Retrieve product details from UI
@@ -205,7 +235,6 @@ public class ProductActivity extends AppCompatActivity {
             boolean productFavourite = checkBoxProductFavourite.isChecked();
 
             // Check if the product is new or existing
-            // Check if the product is new or existing
             if (product == null || product.getKey() == null) {
                 product = new Product(null, productName, productNote, productBarcode, productImageUrl,
                         productBrand, Arrays.asList(productGroup), productQuantity, productStore, productRating, productFavourite);
@@ -221,6 +250,11 @@ public class ProductActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Saves new product data to Firebase.
+     *
+     * @param product The Product object to save.
+     */
     private void saveNewData(Product product) {
         if (userId != null) {
             FirebaseUtil.saveData("products/" + userId + "/" + storageroomKey, product, new FirebaseUtil.FirebaseCallback() {
@@ -244,12 +278,22 @@ public class ProductActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Updates existing product data in Firebase.
+     *
+     * @param product The Product object containing updated data.
+     */
     private void updateData(Product product) {
         if (userId != null && product != null) {
             FirebaseUtil.updateData("products/" + userId + "/" + storageroomKey, product, new FirebaseUtil.FirebaseCallback() {
                 @Override
                 public void onCallback(boolean isSuccess) {
-                    showToast(isSuccess ? R.string.data_update_success : R.string.data_update_fail);
+                    if (isSuccess) {
+                        showToast(R.string.data_update_success);
+                    } else {
+                        showToast(R.string.data_update_fail);
+                    }
+                    returnToProductOverview();
                 }
 
                 @Override
@@ -262,14 +306,23 @@ public class ProductActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Displays a toast message with the specified message.
+     *
+     * @param messageId The resource ID of the string message to display.
+     */
     private void showToast(int messageId) {
         Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Returns to the product overview activity.
+     */
     private void returnToProductOverview() {
         Intent intent = new Intent(ProductActivity.this, ProductOverviewActivity.class);
         intent.putExtra("userId", userId);
         intent.putExtra("storageroomKey", storageroomKey);
+        intent.putExtra("storageroomName", storageroomName);
         startActivity(intent);
         finish();
     }

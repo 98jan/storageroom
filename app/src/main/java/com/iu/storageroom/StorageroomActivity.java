@@ -6,9 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,12 +15,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.database.DatabaseReference;
-import com.iu.storageroom.model.Product;
 import com.iu.storageroom.model.Storageroom;
 import com.iu.storageroom.utils.FirebaseUtil;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Activity class for managing storage rooms.
@@ -33,7 +29,6 @@ public class StorageroomActivity extends AppCompatActivity {
     private Spinner iconSpinner;
     private Button btnSaveStorageroom;
     private Button btnCancel;
-    //private TextView textView;
 
     // Icons for spinner
     private int[] iconResIds = {
@@ -55,7 +50,7 @@ public class StorageroomActivity extends AppCompatActivity {
     /**
      * Called when the activity is first created.
      *
-     * @param savedInstanceState if the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle)
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down, this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +61,6 @@ public class StorageroomActivity extends AppCompatActivity {
         iconSpinner = findViewById(R.id.iconSpinner);
         btnSaveStorageroom = findViewById(R.id.btnSaveStorageroom);
         btnCancel = findViewById(R.id.btnCancel);
-        //textView = findViewById(R.id.textView);
 
         // Get intent extras
         userId = getIntent().getStringExtra("userId");
@@ -90,9 +84,6 @@ public class StorageroomActivity extends AppCompatActivity {
         // Set up spinner with icons
         IconAdapter iconAdapter = new IconAdapter(this, iconResIds);
         iconSpinner.setAdapter(iconAdapter);
-
-        // Set default icon selection
-        selectedIconResId = iconResIds[0];
 
         // If edit mode, pre-fill the fields with existing data
         if (editMode) {
