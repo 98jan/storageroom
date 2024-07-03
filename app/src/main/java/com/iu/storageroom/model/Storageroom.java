@@ -1,4 +1,5 @@
 package com.iu.storageroom.model;
+
 /**
  * Represents a storage room which contains various items and their details.
  */
@@ -23,14 +24,14 @@ public class Storageroom {
     /**
      * Constructs a Storageroom with the specified details.
      *
-     * @param key the unique identifier for the storage room
-     * @param name the name of the storage room
+     * @param key             the unique identifier for the storage room
+     * @param name            the name of the storage room
      * @param selectedIconInt the integer representing the selected icon
-     * @param expiryDate the expiry date of the storage room items
+     * @param expiryDate      the expiry date of the storage room items
      * @param consumptionDate the consumption date of the storage room items
-     * @param refill_flag the flag indicating if a refill is needed
-     * @param state the state of the storage room
-     * @param product the product contained in the storage room
+     * @param refill_flag     the flag indicating if a refill is needed
+     * @param state           the state of the storage room
+     * @param product         the product contained in the storage room
      */
     public Storageroom(String key, String name, int selectedIconInt, long expiryDate, long consumptionDate, int refill_flag, int state, Product product) {
         this.key = key;
