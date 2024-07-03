@@ -1,12 +1,6 @@
 package com.iu.storageroom;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.iu.storageroom.model.Storageroom;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -48,6 +38,9 @@ public class StorageroomAdapter extends RecyclerView.Adapter<StorageroomAdapter.
         void onDeleteClick(Storageroom storageroom);
     }
 
+    /**
+     * Interface for handling opening a product from storageroom.
+     */
     public interface OnOpenProductListener {
         void onOpenProduct(Storageroom storageroom);
     }
@@ -55,10 +48,11 @@ public class StorageroomAdapter extends RecyclerView.Adapter<StorageroomAdapter.
     /**
      * Constructor for the StorageroomAdapter.
      *
-     * @param context            The context in which the adapter is being used.
-     * @param storageroomList    The list of storagerooms to display.
-     * @param editClickListener  Listener for edit button clicks.
-     * @param deleteClickListener Listener for delete button clicks.
+     * @param context               The context in which the adapter is being used.
+     * @param storageroomList       The list of storagerooms to display.
+     * @param editClickListener     Listener for edit button clicks.
+     * @param deleteClickListener   Listener for delete button clicks.
+     * @param openProductListener   Listener for opening a product.
      */
     public StorageroomAdapter(Context context, List<Storageroom> storageroomList,
                               OnEditClickListener editClickListener, OnDeleteClickListener deleteClickListener,
@@ -73,8 +67,8 @@ public class StorageroomAdapter extends RecyclerView.Adapter<StorageroomAdapter.
     /**
      * Creates a new ViewHolder instance.
      *
-     * @param parent   The ViewGroup into which the new View will be added after it is bound to an adapter position.
-     * @param viewType The view type of the new View.
+     * @param parent    The ViewGroup into which the new View will be added after it is bound to an adapter position.
+     * @param viewType  The view type of the new View.
      * @return A new ViewHolder that holds a View of the given view type.
      */
     @NonNull
@@ -87,8 +81,8 @@ public class StorageroomAdapter extends RecyclerView.Adapter<StorageroomAdapter.
     /**
      * Binds data to the ViewHolder.
      *
-     * @param holder   The ViewHolder to bind data to.
-     * @param position The position of the item within the adapter's data set.
+     * @param holder    The ViewHolder to bind data to.
+     * @param position  The position of the item within the adapter's data set.
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -143,7 +137,7 @@ public class StorageroomAdapter extends RecyclerView.Adapter<StorageroomAdapter.
         /**
          * Constructor for the ViewHolder.
          *
-         * @param itemView The View object that represents the RecyclerView item.
+         * @param itemView  The View object that represents the RecyclerView item.
          */
         public ViewHolder(View itemView) {
             super(itemView);
