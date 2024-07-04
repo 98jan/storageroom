@@ -69,12 +69,12 @@
     <string name="product_image">Product image</string>
     <string name="no_product">Please add a Product by clicking on the plus button</string>
     <string name="headline_product_overview">Product Overview</string>
-    <string name="product_name_hint">Product Name</string>
+    <string name="product_name_hint">Please enter a productname (max. 40 characters)</string>
     <string name="product_group_hint">Product Group</string>
     <string name="product_barcode_hint">Barcode</string>
     <string name="product_key_null">No Product found</string>
     <string name="product_not_found">Product not found</string>
-    <string name="product_group_placeholder"> </string>
+    <string name="product_group_placeholder">Select a product category</string>
     <string name="product_group_food">food</string>
     <string name="product_group_housekeeping">housekeeping</string>
     <string name="product_group_cosmetics">cosmetics</string>
@@ -88,6 +88,9 @@
     <string name="product_store_hint">Product store</string>
     <string name="product_rating_hint">Rating</string>
     <string name="product_favourite">Favourite</string>
+    <string name="barcode_button_description">Button to open Barcode Scanner</string>
+
+
 
     <!-- Strings for Shoppinglist -->
     <string name="headline_shoppinglist_overview">ShoppingList Overview</string>
