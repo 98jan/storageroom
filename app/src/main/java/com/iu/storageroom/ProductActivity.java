@@ -6,14 +6,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.iu.storageroom.model.Product;
 import com.iu.storageroom.utils.FirebaseUtil;
 
@@ -37,17 +36,13 @@ public class ProductActivity extends AppCompatActivity {
     private EditText editTextProductStore;
     private EditText editTextProductRating;
     private CheckBox checkBoxProductFavourite;
-    private Button btnReadBarcode;
+    private ImageButton btnReadBarcode;
     private Button backButton;
     private Button btnSave;
-    private ImageView imageView;
 
     private String userId;
     private String storageroomKey;
     private String storageroomName;
-
-    // Product groups
-    private String[] productGroupIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,14 +92,13 @@ public class ProductActivity extends AppCompatActivity {
         btnReadBarcode = findViewById(R.id.btnReadBarcode);
         backButton = findViewById(R.id.btnCancel);
         btnSave = findViewById(R.id.btnSave);
-        imageView = findViewById(R.id.imageView); // Initialize the ImageView
     }
 
     /**
      * Initializes the dropdown list of product groups.
      */
     private void initializeProductGroups() {
-        productGroupIds = new String[]{
+        String[] productGroupIds = new String[]{
                 getString(R.string.product_group_placeholder),
                 getString(R.string.product_group_food),
                 getString(R.string.product_group_housekeeping),
@@ -164,11 +158,6 @@ public class ProductActivity extends AppCompatActivity {
         if (product.getCategories() != null && !product.getCategories().isEmpty()) {
             String productCategory = product.getCategories().get(0);
             setSpinnerSelection(productGroupSpinner, productCategory);
-        }
-
-        // Display product image if available
-        if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
-            Glide.with(this).load(product.getImageUrl()).into(imageView);
         }
     }
 
