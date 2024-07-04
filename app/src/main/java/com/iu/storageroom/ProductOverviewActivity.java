@@ -155,6 +155,7 @@ public class ProductOverviewActivity extends AppCompatActivity implements Produc
         Intent intent = new Intent(this, ShoppingListOverviewActivity.class);
         intent.putExtra("userId", userId);
         intent.putExtra("storageroomKey", storageroomKey);
+        intent.putExtra("storageroomName", storageroomName);
         startActivity(intent);
     }
 
@@ -165,6 +166,7 @@ public class ProductOverviewActivity extends AppCompatActivity implements Produc
         Intent intent = new Intent(this, ProductActivity.class);
         intent.putExtra("userId", userId);
         intent.putExtra("storageroomKey", storageroomKey);
+        intent.putExtra("storageroomName", storageroomName);
         startActivity(intent);
     }
 
