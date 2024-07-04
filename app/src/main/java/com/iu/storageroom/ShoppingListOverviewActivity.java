@@ -32,6 +32,7 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
     private FloatingActionButton backButton;
     private String userId;
     private String storageroomKey;
+    private String storageroomName;
 
     /**
      * Called when the activity is first created.
@@ -44,6 +45,7 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shoppinglist_overview);
 
         storageroomKey = getIntent().getStringExtra("storageroomKey");
+        storageroomName = getIntent().getStringExtra("storageroomName");
 
         recyclerView = findViewById(R.id.recyclerView);
         emptyView = findViewById(R.id.emptyView);
@@ -63,6 +65,7 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
             Intent intent = new Intent(ShoppingListOverviewActivity.this, ProductOverviewActivity.class);
             intent.putExtra("userId", userId);
             intent.putExtra("storageroomKey", storageroomKey);
+            intent.putExtra("storageroomName", storageroomName);
             startActivity(intent);
             finish();
         });
@@ -178,6 +181,7 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
     private void openShoppingList(ShoppingList shoppingList) {
         Intent intent = new Intent(this, ShoppingListProductActivity.class);
         intent.putExtra("shoppinglistKey", shoppingList.getKey());
+        intent.putExtra("storageroomName", storageroomName);
         intent.putExtra("userId", userId);
         startActivity(intent);
     }
