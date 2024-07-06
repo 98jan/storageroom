@@ -120,8 +120,7 @@ public class ProductOverviewActivity extends AppCompatActivity implements Produc
                 if (list != null) {
                     productList.clear();
                     for (Object object : list) {
-                        if (object instanceof Product) {
-                            Product product = (Product) object;
+                        if (object instanceof Product product) {
                             productList.add(product);
                         }
                     }
@@ -244,5 +243,8 @@ public class ProductOverviewActivity extends AppCompatActivity implements Produc
                 // Not relevant in this context
             }
         });
+    }
+
+    public void onFavoriteClick(View view) {
     }
 }
