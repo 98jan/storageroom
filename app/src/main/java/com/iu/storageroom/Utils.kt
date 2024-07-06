@@ -48,7 +48,7 @@ import java.util.ArrayList
 import kotlin.math.abs
 
 /** Utility class to provide helper methods.  */
-object Utils {
+public object Utils {
 
     /**
      * If the absolute difference between aspect ratios is less than this tolerance, they are
@@ -60,12 +60,12 @@ object Utils {
 
     private const val TAG = "Utils"
 
-    internal fun requestRuntimePermissions(activity: Activity) {
+    @JvmStatic
+    fun requestRuntimePermissions(activity: Activity) {
 
         val allNeededPermissions = getRequiredPermissions(activity).filter {
             checkSelfPermission(activity, it) != PackageManager.PERMISSION_GRANTED
         }
-
         if (allNeededPermissions.isNotEmpty()) {
             ActivityCompat.requestPermissions(
                 activity, allNeededPermissions.toTypedArray(), /* requestCode= */ 0
@@ -73,7 +73,8 @@ object Utils {
         }
     }
 
-    internal fun allPermissionsGranted(context: Context): Boolean = getRequiredPermissions(
+    @JvmStatic
+    fun allPermissionsGranted(context: Context): Boolean = getRequiredPermissions(
         context
     )
         .all { checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED }
