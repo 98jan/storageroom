@@ -83,7 +83,6 @@ class LiveBarcodeScanningActivity : AppCompatActivity(), OnClickListener {
 
     override fun onResume() {
         super.onResume()
-
         workflowModel?.markCameraFrozen()
         settingsButton?.isEnabled = true
         currentWorkflowState = WorkflowState.NOT_STARTED
@@ -204,7 +203,8 @@ class LiveBarcodeScanningActivity : AppCompatActivity(), OnClickListener {
                 barcodeFieldList.add(BarcodeField("Raw Value", (barcode.rawValue + "\t" + productWrapper.product.name)))
                 BarcodeResultFragment.show(supportFragmentManager, barcodeFieldList)
                 startActivity(Intent(this, ProductActivity::class.java).apply {
-                    putExtra("product", productWrapper.product)
+                    putExtra("product", productWrapper?.product ?: run {null})
+                    putExtra("userId", intent.getStringExtra("userId"))
                 })
             }
         }
