@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "master" ]
 
+# set default permission to readonly
+permissions: read-all
+
 jobs:
   linting:
     # configure permissions for Action
