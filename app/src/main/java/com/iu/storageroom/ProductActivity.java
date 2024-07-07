@@ -1,6 +1,7 @@
 package com.iu.storageroom;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -10,12 +11,20 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.iu.storageroom.model.Product;
 import com.iu.storageroom.utils.FirebaseUtil;
+import android.Manifest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -182,137 +191,177 @@ public class ProductActivity extends AppCompatActivity {
      */
     private void readData() {
         if (userId != null) {
-            Intent intent = new Intent(this, MainActivity.class);
+            requestCameraPermission();
+        }
+    }
+
+    private void requestCameraPermission() {
+        // check if permission for camera was already granted
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            // permission was already denied and can only be updated from App-Settings
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)){
+                Toast.makeText(this, "Kameraberechtigung wurde bereits abgelehnt, bitte in den App-Einstellungen anpassen", Toast.LENGTH_LONG).show();
+            } else {
+                // permission wasn't denied, request for needed permissions
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 100);
+            }
+        } else {
+            // permission was already granted
+            Toast.makeText(this, "Kameraberechtigung bereits erteilt", Toast.LENGTH_SHORT).show();
+            // start QR Scanning process
+            Intent intent = new Intent(this, LiveBarcodeScanningActivity.class);
+            intent.putExtra("userId", getIntent().getStringExtra("userId"));
             startActivityForResult(intent, REQUEST_CODE_SCAN_BARCODE);
         }
     }
 
+    // wait for user input in permission request and handle the response
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_SCAN_BARCODE && resultCode == RESULT_OK && data != null) {
-            product = data.getParcelableExtra("product");
-            if (product != null) {
-                populateFields(product);
-            }
-        }
-    }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-    /**
-     * Saves the entered data to Firebase.
-     */
-    private void saveData() {
-        if (userId != null && storageroomKey != null) {
-            // Retrieve product details from UI
-            String productName = editTextProductName.getText().toString();
-            String productGroup = (String) productGroupSpinner.getSelectedItem();
-            String productNote = editTextProductNote.getText().toString();
-            String productBarcode = editTextProductBarcode.getText().toString();
-            String productImageUrl = editTextProductImageUrl.getText().toString();
-            String productBrand = editTextProductBrand.getText().toString();
-            String productQuantity = editTextProductQuantity.getText().toString();
-            String productStore = editTextProductStore.getText().toString();
-
-            String productRatingText = editTextProductRating.getText().toString();
-            int productRating;
-            try {
-                productRating = Integer.parseInt(productRatingText);
-            } catch (NumberFormatException e) {
-                productRating = 0;
-            }
-
-            boolean productFavourite = checkBoxProductFavourite.isChecked();
-
-            // Check if the product is new or existing
-            if (product == null || product.getKey() == null) {
-                product = new Product(null, productName, productNote, productBarcode, productImageUrl,
-                        productBrand, Arrays.asList(productGroup), productQuantity, productStore, productRating, productFavourite);
-                saveNewData(product);
+        if (requestCode == 100) {
+            // check if permission for camera was granted
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // permission granted
+                Toast.makeText(this, "Kameraberechtigung erteilt", Toast.LENGTH_SHORT).show();
+                // Hier können Sie Code hinzufügen, der ausgeführt werden soll, wenn die Berechtigung erteilt wurde
+                Intent intent = new Intent(this, LiveBarcodeScanningActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_SCAN_BARCODE);
             } else {
-                // Use the existing productKey
-                product = new Product(product.getKey(), productName, productNote, productBarcode, productImageUrl,
-                        productBrand, Arrays.asList(productGroup), productQuantity, productStore, productRating, productFavourite);
-                updateData(product);
+                // permission denied
+                Toast.makeText(this, "Kameraberechtigung abgelehnt", Toast.LENGTH_SHORT).show();
+                // Hier können Sie Code hinzufügen, der ausgeführt werden soll, wenn die Berechtigung abgelehnt wurde
             }
-        } else {
-            showToast(R.string.user_not_auth);
         }
     }
 
-    /**
-     * Saves new product data to Firebase.
-     *
-     * @param product The Product object to save.
-     */
-    private void saveNewData(Product product) {
-        if (userId != null) {
-            FirebaseUtil.saveData("products/" + userId + "/" + storageroomKey, product, new FirebaseUtil.FirebaseCallback() {
-                @Override
-                public void onCallback(boolean isSuccess) {
-                    if (isSuccess) {
-                        Toast.makeText(ProductActivity.this, getString(R.string.data_save_success), Toast.LENGTH_SHORT).show();
-                        finish(); // Return to the overview activity
-                    } else {
-                        Toast.makeText(ProductActivity.this, getString(R.string.data_save_fail), Toast.LENGTH_SHORT).show();
+        @Override
+        protected void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data){
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == REQUEST_CODE_SCAN_BARCODE && resultCode == RESULT_OK && data != null) {
+                product = data.getParcelableExtra("product");
+                if (product != null) {
+                    populateFields(product);
+                }
+            }
+        }
+
+        /**
+         * Saves the entered data to Firebase.
+         */
+        private void saveData () {
+            if (userId != null && storageroomKey != null) {
+                // Retrieve product details from UI
+                String productName = editTextProductName.getText().toString();
+                String productGroup = (String) productGroupSpinner.getSelectedItem();
+                String productNote = editTextProductNote.getText().toString();
+                String productBarcode = editTextProductBarcode.getText().toString();
+                String productImageUrl = editTextProductImageUrl.getText().toString();
+                String productBrand = editTextProductBrand.getText().toString();
+                String productQuantity = editTextProductQuantity.getText().toString();
+                String productStore = editTextProductStore.getText().toString();
+
+                String productRatingText = editTextProductRating.getText().toString();
+                int productRating;
+                try {
+                    productRating = Integer.parseInt(productRatingText);
+                } catch (NumberFormatException e) {
+                    productRating = 0;
+                }
+
+                boolean productFavourite = checkBoxProductFavourite.isChecked();
+
+                // Check if the product is new or existing
+                if (product == null || product.getKey() == null) {
+                    product = new Product(null, productName, productNote, productBarcode, productImageUrl,
+                            productBrand, Arrays.asList(productGroup), productQuantity, productStore, productRating, productFavourite);
+                    saveNewData(product);
+                } else {
+                    // Use the existing productKey
+                    product = new Product(product.getKey(), productName, productNote, productBarcode, productImageUrl,
+                            productBrand, Arrays.asList(productGroup), productQuantity, productStore, productRating, productFavourite);
+                    updateData(product);
+                }
+            } else {
+                showToast(R.string.user_not_auth);
+            }
+        }
+
+        /**
+         * Saves new product data to Firebase.
+         *
+         * @param product The Product object to save.
+         */
+        private void saveNewData (Product product){
+            if (userId != null) {
+                FirebaseUtil.saveData("products/" + userId + "/" + storageroomKey, product, new FirebaseUtil.FirebaseCallback() {
+                    @Override
+                    public void onCallback(boolean isSuccess) {
+                        if (isSuccess) {
+                            Toast.makeText(ProductActivity.this, getString(R.string.data_save_success), Toast.LENGTH_SHORT).show();
+                            finish(); // Return to the overview activity
+                        } else {
+                            Toast.makeText(ProductActivity.this, getString(R.string.data_save_fail), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
 
-                @Override
-                public void onCallback(List<Object> list) {
-                    // Not used in this context
-                }
-            });
-        } else {
-            Toast.makeText(this, getString(R.string.user_not_auth), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * Updates existing product data in Firebase.
-     *
-     * @param product The Product object containing updated data.
-     */
-    private void updateData(Product product) {
-        if (userId != null && product != null) {
-            FirebaseUtil.updateData("products/" + userId + "/" + storageroomKey, product, new FirebaseUtil.FirebaseCallback() {
-                @Override
-                public void onCallback(boolean isSuccess) {
-                    if (isSuccess) {
-                        showToast(R.string.data_update_success);
-                    } else {
-                        showToast(R.string.data_update_fail);
+                    @Override
+                    public void onCallback(List<Object> list) {
+                        // Not used in this context
                     }
-                    returnToProductOverview();
-                }
+                });
+            } else {
+                Toast.makeText(this, getString(R.string.user_not_auth), Toast.LENGTH_SHORT).show();
+            }
+        }
 
-                @Override
-                public void onCallback(List<Object> list) {
-                    // Not used
-                }
-            });
-        } else {
-            showToast(R.string.user_not_auth);
+        /**
+         * Updates existing product data in Firebase.
+         *
+         * @param product The Product object containing updated data.
+         */
+        private void updateData (Product product){
+            if (userId != null && product != null) {
+                FirebaseUtil.updateData("products/" + userId + "/" + storageroomKey, product, new FirebaseUtil.FirebaseCallback() {
+                    @Override
+                    public void onCallback(boolean isSuccess) {
+                        if (isSuccess) {
+                            showToast(R.string.data_update_success);
+                        } else {
+                            showToast(R.string.data_update_fail);
+                        }
+                        returnToProductOverview();
+                    }
+
+                    @Override
+                    public void onCallback(List<Object> list) {
+                        // Not used
+                    }
+                });
+            } else {
+                showToast(R.string.user_not_auth);
+            }
+        }
+
+        /**
+         * Displays a toast message with the specified message.
+         *
+         * @param messageId The resource ID of the string message to display.
+         */
+        private void showToast ( int messageId){
+            Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show();
+        }
+
+        /**
+         * Returns to the product overview activity.
+         */
+        private void returnToProductOverview () {
+            Intent intent = new Intent(ProductActivity.this, ProductOverviewActivity.class);
+            intent.putExtra("userId", userId);
+            intent.putExtra("storageroomKey", storageroomKey);
+            intent.putExtra("storageroomName", storageroomName);
+            startActivity(intent);
+            finish();
         }
     }
-
-    /**
-     * Displays a toast message with the specified message.
-     *
-     * @param messageId The resource ID of the string message to display.
-     */
-    private void showToast(int messageId) {
-        Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Returns to the product overview activity.
-     */
-    private void returnToProductOverview() {
-        Intent intent = new Intent(ProductActivity.this, ProductOverviewActivity.class);
-        intent.putExtra("userId", userId);
-        intent.putExtra("storageroomKey", storageroomKey);
-        intent.putExtra("storageroomName", storageroomName);
-        startActivity(intent);
-        finish();
-    }
-}
