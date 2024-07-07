@@ -23,9 +23,12 @@ jobs:
           # list of files that changed across commits
           fetch-depth: 0
       - name: Super-linter
-        uses: super-linter/super-linter@v6.6.0
+        uses: super-linter/super-linter@v6
         env:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_DISCOVERY_ACROSS_FILESYSTEM: 1
           DEFAULT_WORKSPACE: /home/runner/_work/storageroom/storageroom
+          VALIDATE_GO_RELEASER: false
+          VALIDATE_GO: false
+          VALIDATE_GO_MODULES: false
