@@ -32,6 +32,7 @@ public class ProductOverviewActivity extends AppCompatActivity implements Produc
     private TextView emptyView;
     private TextView headerTextView;
     private String storageroomKey;
+    private String productKey;
     private String userId;
     private String storageroomName;
 
@@ -179,6 +180,7 @@ public class ProductOverviewActivity extends AppCompatActivity implements Produc
         intent.putExtra("userId", userId);
         intent.putExtra("storageroomKey", storageroomKey);
         intent.putExtra("storageroomName", storageroomName);
+        intent.putExtra("productKey", productKey);
         intent.putExtra("product", product);
         startActivity(intent);
     }

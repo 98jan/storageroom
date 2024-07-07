@@ -1,6 +1,11 @@
 package com.iu.storageroom;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -67,6 +72,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser() {
+
+        // check for internet connection
+        if (!isInternetAvailable()) {
+            Toast.makeText(LoginActivity.this, getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         progressBar.setVisibility(View.VISIBLE);
         String email = editTextEmail.getText().toString().trim();
@@ -150,6 +161,25 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private boolean isInternetAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+                if (capabilities != null) {
+                    return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                            (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
+                }
+            } else {
+                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+            }
+        }
+        return false;
     }
 
     @Override
