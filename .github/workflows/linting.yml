@@ -15,7 +15,7 @@ jobs:
       # To report GitHub Actions status checks
       statuses: write
     # run on self-hosted runners to be not dependent on free tier
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,9 +27,6 @@ jobs:
         env:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_WORKSPACE: /home/runner/_work/storageroom/storageroom
-          GITHUB_WORKSPACE: /home/runner/_work/storageroom/storageroom
-          USE_FIND_ALGORITHM: true
           VALIDATE_GO_RELEASER: false
           VALIDATE_GO: false
           VALIDATE_GO_MODULES: false
