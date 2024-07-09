@@ -78,8 +78,6 @@ public class ProductActivity extends AppCompatActivity {
 
         FirebaseUtil.initializeFirebase();
         initUI();
-        initializeProductGroups();
-        setupListeners();
 
 
         userId = getIntent().getStringExtra("userId");
@@ -93,27 +91,14 @@ public class ProductActivity extends AppCompatActivity {
 
         storageroomKey = getIntent().getStringExtra("storageroomKey");
         storageroomName = getIntent().getStringExtra("storageroomName");
-        productKey = getIntent().getStringExtra("productKey");
-       // product = (Product) getIntent().getSerializableExtra("product");
 
-        if (productKey != null) {
-            // Retrieve product data from Firebase
-            FirebaseUtil.mDatabaseReference
-                    .child(storageroomKey)
-                    .child("products")
-                    .child(productKey)
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            Product product = dataSnapshot.getValue(Product.class);
-                            populateFields(product); // Update UI with product data
-                        }
+        product = (Product) getIntent().getSerializableExtra("product");
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Toast.makeText(ProductActivity.this, "Failed to load product data.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+        initializeProductGroups();
+        setupListeners();
+
+        if (product != null) {
+            populateFields(product);
         }
     }
 
@@ -251,13 +236,8 @@ public class ProductActivity extends AppCompatActivity {
             // For simplicity, the below code assumes a requestHandler to fetch product details.
             ProductWrapper productWrapper = RequestHandler.getProduct(productBarcode);
 
-            if (productWrapper != null) {
-                editTextProductName.setText(productWrapper.getProduct().getName());
-                editTextProductBrand.setText(productWrapper.getProduct().getBrand());
-                editTextProductStore.setText(productWrapper.getProduct().getStore());
-                editTextProductQuantity.setText("1");
-                editTextProductRating.setText("5");
-                loadImageWithGlide(productWrapper.getProduct().getImageUrl());
+            if (productWrapper != null && productWrapper.getProduct() != null) {
+                populateFields(productWrapper.getProduct());
             } else {
                 Toast.makeText(this, getString(R.string.product_not_found), Toast.LENGTH_SHORT).show();
             }
@@ -315,12 +295,13 @@ public class ProductActivity extends AppCompatActivity {
     }
 
         @Override
-        protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        protected void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data){
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == REQUEST_CODE_SCAN_BARCODE && resultCode == RESULT_OK && data != null) {
-                String barcode = data.getStringExtra("barcode");
-                editTextProductBarcode.setText(barcode);
-                searchData();
+                product = data.getParcelableExtra("product");
+                if (product != null) {
+                    populateFields(product);
+                }
             }
         }
 
@@ -364,18 +345,9 @@ public class ProductActivity extends AppCompatActivity {
                             productBrand, productGroup, productQuantity, productStore, productRating, productFavourite);
                     saveNewData(product);
                 } else {
-                    // Updating an existing product
-                    product.setName(productName);
-                    product.setNote(productNote);
-                    product.setBarcode(productBarcode);
-                    product.setBrand(productBrand);
-                    product.setQuantity(productQuantity);
-                    product.setStore(productStore);
-                    product.setRating(productRating);
-                    product.setFavourite(productFavourite);
-                    product.setCategories(productGroup);
-                    product.setImageUrl(imageUrl);
-
+                    // Use the existing productKey
+                    product = new Product(product.getKey(), productName, productNote, productBarcode, imageUrl,
+                            productBrand, productGroup, productQuantity, productStore, productRating, productFavourite);
                     updateData(product);
                 }
             } else {
@@ -414,7 +386,7 @@ public class ProductActivity extends AppCompatActivity {
 
 
         private void updateData(Product updatedProduct) {
-            String path = "products/" + userId + "/" + storageroomKey + "/" + updatedProduct.getKey();
+            String path = "products/" + userId + "/" + storageroomKey + "/" + updatedProduct;
 
             FirebaseUtil.updateData(path, updatedProduct, new FirebaseUtil.FirebaseCallback() {
                 @Override
@@ -425,6 +397,7 @@ public class ProductActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(ProductActivity.this, "Failed to update product.", Toast.LENGTH_SHORT).show();
                     }
+                    returnToProductOverview();
                 }
 
                 @Override
