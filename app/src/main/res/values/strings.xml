@@ -44,6 +44,7 @@
     <string name="password_reset">Forgot your password?</string>
     <string name="already_registered">You already have an account?</string>
     <string name="not_registered">Don\'t have an account?</string>
+    <string name="no_internet_connection">Internet connection required!</string>
 
     <!-- Data handling implementation -->
     <string name="data_save_fail">Failed to save data</string>
@@ -89,8 +90,11 @@
     <string name="product_rating_hint">Rating</string>
     <string name="product_favourite">Favourite</string>
     <string name="barcode_button_description">Button to open Barcode Scanner</string>
-
-
+    <string name="headline_product_label">Add new product</string>
+    <string name="barcode_button_search">Button for searching Barcode</string>
+    <string name="product_image_description">Product as image</string>
+    <string name="product_updated">Product updated!</string>
+    <string name="failed_to_update_product">Failed to update product!</string>
 
     <!-- Strings for Shoppinglist -->
     <string name="headline_shoppinglist_overview">ShoppingList Overview</string>

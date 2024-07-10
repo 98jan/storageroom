@@ -1,14 +1,19 @@
 package com.iu.storageroom;
 
+import static com.iu.storageroom.utils.FirebaseUtil.updateData;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -20,8 +25,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.iu.storageroom.model.Product;
+import com.iu.storageroom.model.ProductWrapper;
 import com.iu.storageroom.utils.FirebaseUtil;
+import com.iu.storageroom.utils.RequestHandler;
+
 import android.Manifest;
 
 import java.util.ArrayList;
@@ -35,17 +48,19 @@ public class ProductActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_SCAN_BARCODE = 1;
 
     private Product product;
+    private TextView editTextProductLabel;
     private EditText editTextProductName;
     private Spinner productGroupSpinner;
     private EditText editTextProductNote;
     private EditText editTextProductBarcode;
-    private EditText editTextProductImageUrl;
+    private ImageView imageViewProduct;
     private EditText editTextProductBrand;
     private EditText editTextProductQuantity;
     private EditText editTextProductStore;
     private EditText editTextProductRating;
     private CheckBox checkBoxProductFavourite;
     private ImageButton btnReadBarcode;
+    private ImageButton btnSearchBarcode;
     private Button backButton;
     private Button btnSave;
 
@@ -53,14 +68,17 @@ public class ProductActivity extends AppCompatActivity {
     private String storageroomKey;
     private String storageroomName;
 
+    private String productKey;
+    private String imageUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
+        FirebaseUtil.initializeFirebase();
         initUI();
 
-        FirebaseUtil.initializeFirebase();
 
         userId = getIntent().getStringExtra("userId");
         if (userId != null) {
@@ -88,17 +106,19 @@ public class ProductActivity extends AppCompatActivity {
      * Initializes UI elements from the layout.
      */
     private void initUI() {
+        editTextProductLabel = findViewById(R.id.headerTextView);
         editTextProductName = findViewById(R.id.product_name);
         productGroupSpinner = findViewById(R.id.productGroupSpinner);
         editTextProductNote = findViewById(R.id.product_note);
         editTextProductBarcode = findViewById(R.id.product_barcode);
-        editTextProductImageUrl = findViewById(R.id.product_image_url);
+        imageViewProduct = findViewById(R.id.product_image_url);
         editTextProductBrand = findViewById(R.id.product_brand);
         editTextProductQuantity = findViewById(R.id.product_quantity);
         editTextProductStore = findViewById(R.id.product_store);
         editTextProductRating = findViewById(R.id.product_rating);
         checkBoxProductFavourite = findViewById(R.id.product_favourite);
         btnReadBarcode = findViewById(R.id.btnReadBarcode);
+        btnSearchBarcode = findViewById(R.id.btnSearchBarcode);
         backButton = findViewById(R.id.btnCancel);
         btnSave = findViewById(R.id.btnSave);
     }
@@ -125,8 +145,9 @@ public class ProductActivity extends AppCompatActivity {
      * Sets up click listeners for buttons.
      */
     private void setupListeners() {
+        btnSearchBarcode.setOnClickListener(v -> searchData());
         btnReadBarcode.setOnClickListener(v -> readData());
-        backButton.setOnClickListener(v ->  returnToProductOverview());
+        backButton.setOnClickListener(v -> returnToProductOverview());
         btnSave.setOnClickListener(v -> {
             saveData();
             cleanFields();
@@ -153,20 +174,22 @@ public class ProductActivity extends AppCompatActivity {
      * @param product The Product object containing data to populate.
      */
     private void populateFields(Product product) {
-        editTextProductName.setText(product.getName());
-        editTextProductNote.setText(product.getNote());
-        editTextProductBrand.setText(product.getBrand());
-        editTextProductQuantity.setText(product.getQuantity());
-        editTextProductStore.setText(product.getStore());
-        editTextProductBarcode.setText(product.getBarcode());
-        editTextProductImageUrl.setText(product.getImageUrl());
-        editTextProductRating.setText(String.valueOf(product.getRating()));
-        checkBoxProductFavourite.setChecked(product.isFavourite());
+        if (product == null) {
+            Toast.makeText(ProductActivity.this, getString(R.string.product_not_found), Toast.LENGTH_SHORT).show();
+        } else {
+            editTextProductName.setText(product.getName());
+            editTextProductNote.setText(product.getNote());
+            editTextProductBarcode.setText(product.getBarcode());
+            editTextProductBrand.setText(product.getBrand());
+            editTextProductQuantity.setText(product.getQuantity());
+            editTextProductStore.setText(product.getStore());
+            loadImageWithGlide(product.getImageUrl());
+            editTextProductRating.setText(String.valueOf(product.getRating()));
+            checkBoxProductFavourite.setChecked(product.isFavourite());
 
-        // Set the spinner selection based on the product's first category
-        if (product.getCategories() != null && !product.getCategories().isEmpty()) {
-            String productCategory = product.getCategories().get(0);
-            setSpinnerSelection(productGroupSpinner, productCategory);
+            if (product.getCategories() != null && !product.getCategories().isEmpty()) {
+                setSpinnerSelection(productGroupSpinner, product.getCategories().get(0));
+            }
         }
     }
 
@@ -178,12 +201,47 @@ public class ProductActivity extends AppCompatActivity {
         productGroupSpinner.setSelection(0);
         editTextProductNote.setText("");
         editTextProductBarcode.setText("");
-        editTextProductImageUrl.setText("");
         editTextProductBrand.setText("");
         editTextProductQuantity.setText("");
         editTextProductStore.setText("");
         editTextProductRating.setText("");
         checkBoxProductFavourite.setChecked(false);
+    }
+
+    private void loadImageWithGlide(String imageUrl) {
+        this.imageUrl = imageUrl;
+        if (!TextUtils.isEmpty(imageUrl)) {
+            Glide.with(this)
+                    .load(imageUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.ic_image_search_vd_black_24)
+                    .error(R.drawable.ic_image_search_vd_black_24)
+                    .into(imageViewProduct);
+        } else {
+            imageViewProduct.setImageResource(R.drawable.ic_image_search_vd_black_24);
+        }
+    }
+
+    private void searchData() {
+        if (userId != null) {
+            String productBarcode = editTextProductBarcode.getText().toString().trim();
+            if (TextUtils.isEmpty(productBarcode)) {
+                editTextProductBarcode.setError("Please enter a product barcode");
+                editTextProductBarcode.requestFocus();
+                return;
+            }
+
+            // Example of handling product data retrieval or scanning
+            // This section should be adjusted to fit your specific implementation
+            // For simplicity, the below code assumes a requestHandler to fetch product details.
+            ProductWrapper productWrapper = RequestHandler.getProduct(productBarcode);
+
+            if (productWrapper != null && productWrapper.getProduct() != null) {
+                populateFields(productWrapper.getProduct());
+            } else {
+                Toast.makeText(this, getString(R.string.product_not_found), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**
@@ -250,18 +308,22 @@ public class ProductActivity extends AppCompatActivity {
         /**
          * Saves the entered data to Firebase.
          */
-        private void saveData () {
+        private void saveData() {
             if (userId != null && storageroomKey != null) {
-                // Retrieve product details from UI
-                String productName = editTextProductName.getText().toString();
-                String productGroup = (String) productGroupSpinner.getSelectedItem();
-                String productNote = editTextProductNote.getText().toString();
-                String productBarcode = editTextProductBarcode.getText().toString();
-                String productImageUrl = editTextProductImageUrl.getText().toString();
-                String productBrand = editTextProductBrand.getText().toString();
-                String productQuantity = editTextProductQuantity.getText().toString();
-                String productStore = editTextProductStore.getText().toString();
+                // Validate and retrieve product data from UI components
+                String productName = editTextProductName.getText().toString().trim();
+                if (TextUtils.isEmpty(productName)) {
+                    editTextProductName.setError(getString(R.string.product_name_required));
+                    editTextProductName.requestFocus();
+                    return;
+                }
 
+                String productNote = editTextProductNote.getText().toString().trim();
+                String productBarcode = editTextProductBarcode.getText().toString().trim();
+                String productBrand = editTextProductBrand.getText().toString().trim();
+                String productQuantity = editTextProductQuantity.getText().toString().trim();
+                String productStore = editTextProductStore.getText().toString().trim();
+                boolean productFavourite = checkBoxProductFavourite.isChecked();
                 String productRatingText = editTextProductRating.getText().toString();
                 int productRating;
                 try {
@@ -270,17 +332,22 @@ public class ProductActivity extends AppCompatActivity {
                     productRating = 0;
                 }
 
-                boolean productFavourite = checkBoxProductFavourite.isChecked();
+                List<String> productGroup = new ArrayList<>();
+                String selectedProductGroup = (String) productGroupSpinner.getSelectedItem();
+                if (!selectedProductGroup.equals(getString(R.string.product_group_placeholder))) {
+                    productGroup.add(selectedProductGroup);
+                }
 
-                // Check if the product is new or existing
+                // Create or update the product object
                 if (product == null || product.getKey() == null) {
-                    product = new Product(null, productName, productNote, productBarcode, productImageUrl,
-                            productBrand, Arrays.asList(productGroup), productQuantity, productStore, productRating, productFavourite);
+                    // Creating a new product
+                    product = new Product(null, productName, productNote, productBarcode, imageUrl,
+                            productBrand, productGroup, productQuantity, productStore, productRating, productFavourite);
                     saveNewData(product);
                 } else {
                     // Use the existing productKey
-                    product = new Product(product.getKey(), productName, productNote, productBarcode, productImageUrl,
-                            productBrand, Arrays.asList(productGroup), productQuantity, productStore, productRating, productFavourite);
+                    product = new Product(product.getKey(), productName, productNote, productBarcode, imageUrl,
+                            productBrand, productGroup, productQuantity, productStore, productRating, productFavourite);
                     updateData(product);
                 }
             } else {
@@ -288,7 +355,8 @@ public class ProductActivity extends AppCompatActivity {
             }
         }
 
-        /**
+
+    /**
          * Saves new product data to Firebase.
          *
          * @param product The Product object to save.
@@ -316,33 +384,32 @@ public class ProductActivity extends AppCompatActivity {
             }
         }
 
-        /**
-         * Updates existing product data in Firebase.
-         *
-         * @param product The Product object containing updated data.
-         */
-        private void updateData (Product product){
-            if (userId != null && product != null) {
-                FirebaseUtil.updateData("products/" + userId + "/" + storageroomKey, product, new FirebaseUtil.FirebaseCallback() {
+
+        private void updateData(Product updatedProduct) {
+            if (userId != null) {
+                String path = "products/" + userId + "/" + storageroomKey;
+
+                FirebaseUtil.updateData(path, updatedProduct, new FirebaseUtil.FirebaseCallback() {
                     @Override
                     public void onCallback(boolean isSuccess) {
                         if (isSuccess) {
-                            showToast(R.string.data_update_success);
+                            Toast.makeText(ProductActivity.this, "Product updated successfully.", Toast.LENGTH_SHORT).show();
                         } else {
-                            showToast(R.string.data_update_fail);
+                            Toast.makeText(ProductActivity.this, "Failed to update product.", Toast.LENGTH_SHORT).show();
                         }
                         returnToProductOverview();
                     }
 
                     @Override
                     public void onCallback(List<Object> list) {
-                        // Not used
+
                     }
                 });
             } else {
                 showToast(R.string.user_not_auth);
             }
         }
+
 
         /**
          * Displays a toast message with the specified message.

@@ -27,7 +27,7 @@ public class Product implements Serializable {
     @JsonProperty("categories_tags")
     private List<String> categories;
     @JsonProperty("quantity")
-    private String quantity;
+    private String quantity = "1";
     @JsonProperty("stores")
     private String store;
 
