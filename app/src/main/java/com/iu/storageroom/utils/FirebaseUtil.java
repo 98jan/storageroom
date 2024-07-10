@@ -38,6 +38,7 @@ public class FirebaseUtil {
         }
         if (mFireDatabase == null) {
             mFireDatabase = FirebaseDatabase.getInstance();
+            mFireDatabase.setPersistenceEnabled(true); // Enable offline persistence
         }
     }
 
@@ -198,8 +199,7 @@ public class FirebaseUtil {
                                     storageroom.setSelectedIcon(selectedIconStr); // Set as string
                                 }
                                 dataList.add(storageroom);
-                            }
-                            else if (data instanceof ShoppingList) {
+                            } else if (data instanceof ShoppingList) {
                                 ShoppingList shoppingList = (ShoppingList) data;
                                 shoppingList.setKey(dataSnapshot.getKey()); // Set the key
                                 // Ensure selectedIcon is retrieved as String first and then parsed to int
@@ -208,8 +208,7 @@ public class FirebaseUtil {
                                     shoppingList.setSelectedIcon(selectedIconStr); // Set as string
                                 }
                                 dataList.add(shoppingList);
-                            }
-                            else {
+                            } else {
                                 dataList.add(data);
                             }
                         }
