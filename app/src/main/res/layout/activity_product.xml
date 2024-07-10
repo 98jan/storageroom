@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ProductActivity">
 
+    <!-- Background views with gradients -->
     <View
         android:id="@+id/top_background"
         android:layout_width="match_parent"
@@ -21,6 +22,7 @@
         android:layout_alignParentBottom="true"
         android:background="#E8E8E8" />
 
+    <!-- Main content area with rounded corners -->
     <RelativeLayout
         android:id="@+id/main"
         android:layout_width="wrap_content"
@@ -28,16 +30,36 @@
         android:layout_margin="22dp"
         android:background="@drawable/all_rounded_corners">
 
+        <!-- ScrollView to handle vertical scrolling -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <!-- Vertical LinearLayout for stacking UI elements -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <!-- Header TextView -->
+                <TextView
+                    android:id="@+id/headerTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:text="@string/headline_product_label"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/primary"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <!-- EditText for Product Name -->
                 <EditText
                     android:id="@+id/product_name"
                     android:layout_width="match_parent"
@@ -50,6 +72,7 @@
                     android:hint="@string/product_name_hint"
                     android:maxLength="40" />
 
+                <!-- RelativeLayout for Product Group Spinner -->
                 <RelativeLayout
                     android:id="@+id/spinnerBox"
                     android:layout_width="match_parent"
@@ -61,6 +84,7 @@
                     android:background="@drawable/spinner_background"
                     android:orientation="horizontal">
 
+                    <!-- Spinner for selecting product group -->
                     <Spinner
                         android:id="@+id/productGroupSpinner"
                         android:layout_width="match_parent"
@@ -72,6 +96,7 @@
                         android:gravity="center"
                         android:spinnerMode="dropdown" />
 
+                    <!-- ImageView for dropdown arrow -->
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -83,7 +108,7 @@
 
                 </RelativeLayout>
 
-
+                <!-- LinearLayout for Barcode EditText and Buttons -->
                 <LinearLayout
                     android:id="@+id/linearLayout"
                     android:layout_width="match_parent"
@@ -95,6 +120,7 @@
                     android:layout_marginBottom="8dp"
                     android:gravity="end">
 
+                    <!-- EditText for Product Barcode -->
                     <EditText
                         android:id="@+id/product_barcode"
                         android:layout_width="0dp"
@@ -103,6 +129,18 @@
                         android:backgroundTint="@color/primary"
                         android:hint="@string/product_barcode_hint"
                         android:maxLength="40" />
+
+                    <!-- ImageButton for searching barcode -->
+                    <ImageButton
+                        android:id="@+id/btnSearchBarcode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/barcode_icon"
+                        android:padding="16dp"
+                        android:contentDescription="@string/barcode_button_search"
+                        android:backgroundTint="@color/primary" />
+
+                    <!-- ImageButton for reading barcode -->
                     <ImageButton
                         android:id="@+id/btnReadBarcode"
                         android:layout_width="wrap_content"
@@ -113,6 +151,7 @@
                         android:backgroundTint="@color/primary" />
                 </LinearLayout>
 
+                <!-- EditText for Product Note -->
                 <EditText
                     android:id="@+id/product_note"
                     android:layout_width="match_parent"
@@ -124,17 +163,20 @@
                     android:layout_marginBottom="16dp"
                     android:backgroundTint="@color/primary"/>
 
-                <EditText
+                <!-- ImageView for Product Image -->
+                <ImageView
                     android:id="@+id/product_image_url"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/product_image_url_hint"
-                    android:layout_marginLeft="32dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="32dp"
-                    android:layout_marginBottom="16dp"
-                    android:backgroundTint="@color/primary" />
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_image_search_vd_black_24"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/product_image_description" />
 
+                <!-- EditText for Product Brand -->
                 <EditText
                     android:id="@+id/product_brand"
                     android:layout_width="match_parent"
@@ -146,6 +188,7 @@
                     android:layout_marginBottom="16dp"
                     android:backgroundTint="@color/primary" />
 
+                <!-- EditText for Product Quantity -->
                 <EditText
                     android:id="@+id/product_quantity"
                     android:layout_width="match_parent"
@@ -157,6 +200,7 @@
                     android:layout_marginBottom="16dp"
                     android:backgroundTint="@color/primary" />
 
+                <!-- EditText for Product Store -->
                 <EditText
                     android:id="@+id/product_store"
                     android:layout_width="match_parent"
@@ -168,6 +212,7 @@
                     android:layout_marginBottom="16dp"
                     android:backgroundTint="@color/primary" />
 
+                <!-- EditText for Product Rating -->
                 <EditText
                     android:id="@+id/product_rating"
                     android:layout_width="match_parent"
@@ -179,6 +224,7 @@
                     android:layout_marginBottom="16dp"
                     android:backgroundTint="@color/primary" />
 
+                <!-- CheckBox for marking Product as Favorite -->
                 <CheckBox
                     android:id="@+id/product_favourite"
                     android:layout_width="wrap_content"
@@ -194,6 +240,7 @@
                     android:text="@string/product_favourite"
                     android:textSize="18sp" />
 
+                <!-- LinearLayout for Save and Cancel Buttons -->
                 <LinearLayout
                     android:id="@+id/linearLayout2"
                     android:layout_width="match_parent"
@@ -209,6 +256,7 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
+                    <!-- Button for saving product -->
                     <Button
                         android:id="@+id/btnSave"
                         android:layout_width="match_parent"
@@ -222,9 +270,9 @@
                         android:text="@string/save"
                         android:textAllCaps="true"
                         android:textColor="@android:color/white"
-                        android:textColorLink="@color/primary"
                         android:textSize="20sp" />
 
+                    <!-- Button for cancelling action -->
                     <Button
                         android:id="@+id/btnCancel"
                         android:layout_width="match_parent"
@@ -237,10 +285,10 @@
                         android:text="@string/cancel"
                         android:textAllCaps="true"
                         android:textColor="@android:color/white"
-                        android:textColorLink="@color/primary"
                         android:textSize="18sp" />
 
                 </LinearLayout>
+
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
