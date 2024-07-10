@@ -386,14 +386,13 @@ public class ProductActivity extends AppCompatActivity {
 
 
         private void updateData(Product updatedProduct) {
-            String path = "products/" + userId + "/" + storageroomKey + "/" + updatedProduct;
+            String path = "products/" + userId + "/" + storageroomKey;
 
             FirebaseUtil.updateData(path, updatedProduct, new FirebaseUtil.FirebaseCallback() {
                 @Override
                 public void onCallback(boolean isSuccess) {
                     if (isSuccess) {
                         Toast.makeText(ProductActivity.this, "Product updated successfully.", Toast.LENGTH_SHORT).show();
-                        finish(); // Optionally finish the activity after successful update
                     } else {
                         Toast.makeText(ProductActivity.this, "Failed to update product.", Toast.LENGTH_SHORT).show();
                     }

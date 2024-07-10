@@ -135,10 +135,10 @@ public class ShoppingListProductActivity extends AppCompatActivity {
         productToUpdate.setProductName(updatedProductName);
         productToUpdate.setQuantity(updatedProductQuantity);
 
-        // Update in Firebase under shoppinglist_products -> userId -> productKey
+
         DatabaseReference productRef = FirebaseUtil.mDatabaseReference
+                .child(shoppinglistKey)
                 .child("shoppinglist_products")
-                .child(userId)
                 .child(productToUpdate.getKey()); // Use the existing product key
         productRef.setValue(productToUpdate)
                 .addOnSuccessListener(aVoid -> {
@@ -184,8 +184,8 @@ public class ShoppingListProductActivity extends AppCompatActivity {
 
         // Save to Firebase under shoppinglist_products -> userId
         DatabaseReference productsRef = FirebaseUtil.mDatabaseReference
+                .child(shoppinglistKey)
                 .child("shoppinglist_products")
-                .child(userId)
                 .push(); // Push creates a unique key for the product
         shoppingListProduct.setKey(productsRef.getKey()); // Set the key locally
 
@@ -201,7 +201,7 @@ public class ShoppingListProductActivity extends AppCompatActivity {
     }
 
     private void loadShoppingListProducts() {
-        DatabaseReference ref = FirebaseUtil.mDatabaseReference.child("shoppinglist_products").child(userId);
+        DatabaseReference ref = FirebaseUtil.mDatabaseReference.child(shoppinglistKey).child("shoppinglist_products");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
