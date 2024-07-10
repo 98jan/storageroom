@@ -83,6 +83,13 @@ public class ShoppingListProductActivity extends AppCompatActivity {
                 ShoppingListProduct product = shoppingListProductList.get(position);
                 editTextProductName.setText(product.getProductName());
                 editTextProductQuantity.setText(String.valueOf(product.getQuantity()));
+
+                // Update the save button to update instead of saving new
+                buttonSave.setText("Update"); // Change button text to indicate update action
+
+                // Set a tag on the save button to indicate that it is in update mode
+                buttonSave.setTag(product); // Tag the button with the product to be updated
+                buttonSave.setOnClickListener(v -> updateData(product)); // Set click listener for update action
             }
 
             @Override
@@ -96,6 +103,54 @@ public class ShoppingListProductActivity extends AppCompatActivity {
                 adapter.notifyItemRemoved(position); // Notify adapter
             }
         });
+    }
+
+    private void updateData(ShoppingListProduct productToUpdate) {
+        // Retrieve updated input data
+        String updatedProductName = editTextProductName.getText().toString().trim();
+        String updatedProductQuantityStr = editTextProductQuantity.getText().toString().trim();
+
+        // Validate updated input
+        if (updatedProductName.isEmpty()) {
+            editTextProductName.setError("Product name cannot be empty");
+            editTextProductName.requestFocus();
+            return;
+        }
+
+        int updatedProductQuantity;
+        try {
+            updatedProductQuantity = Integer.parseInt(updatedProductQuantityStr);
+            if (updatedProductQuantity <= 0) {
+                editTextProductQuantity.setError("Product quantity must be greater than zero");
+                editTextProductQuantity.requestFocus();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            editTextProductQuantity.setError("Enter a valid number for quantity");
+            editTextProductQuantity.requestFocus();
+            return;
+        }
+
+        // Update the existing ShoppingListProduct object
+        productToUpdate.setProductName(updatedProductName);
+        productToUpdate.setQuantity(updatedProductQuantity);
+
+
+        DatabaseReference productRef = FirebaseUtil.mDatabaseReference
+                .child(shoppinglistKey)
+                .child("shoppinglist_products")
+                .child(productToUpdate.getKey()); // Use the existing product key
+        productRef.setValue(productToUpdate)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(ShoppingListProductActivity.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                    clearFields(); // Clear input fields after successful update
+                    buttonSave.setText("Save"); // Change button text back to "Save" after update
+                    buttonSave.setTag(null); // Clear the button tag after update
+                    buttonSave.setOnClickListener(v -> saveData()); // Set click listener for save action
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(ShoppingListProductActivity.this, "Failed to update product: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void saveData() {
@@ -129,8 +184,8 @@ public class ShoppingListProductActivity extends AppCompatActivity {
 
         // Save to Firebase under shoppinglist_products -> userId
         DatabaseReference productsRef = FirebaseUtil.mDatabaseReference
+                .child(shoppinglistKey)
                 .child("shoppinglist_products")
-                .child(userId)
                 .push(); // Push creates a unique key for the product
         shoppingListProduct.setKey(productsRef.getKey()); // Set the key locally
 
@@ -146,7 +201,7 @@ public class ShoppingListProductActivity extends AppCompatActivity {
     }
 
     private void loadShoppingListProducts() {
-        DatabaseReference ref = FirebaseUtil.mDatabaseReference.child("shoppinglist_products").child(userId);
+        DatabaseReference ref = FirebaseUtil.mDatabaseReference.child(shoppinglistKey).child("shoppinglist_products");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
