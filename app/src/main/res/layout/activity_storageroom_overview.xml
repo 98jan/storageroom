@@ -21,12 +21,23 @@
         android:layout_alignParentBottom="true"
         android:background="#E8E8E8" />
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/custom_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:foregroundTint="#FEFEFE"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="@android:color/white" />
+
     <TextView
         android:id="@+id/headerTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_margin="16dp"
+        android:layout_below="@id/custom_toolbar"
         android:gravity="center"
         android:text="@string/headline_storageroom_overview"
         android:textAlignment="center"
