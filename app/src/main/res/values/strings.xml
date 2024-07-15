@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Storageroom</string>
+    <string name="app_name">Storageroom-App</string>
     <string name="action_settings">Settings</string>
 
     <!-- Strings used for fragments for navigation -->
@@ -18,6 +18,9 @@
     <string name="edit_icon_description">Edit Icon</string>
     <string name="delete_icon_description">Delete Icon</string>
     <string name="back_icon_description">Back to previous Page Icon</string>
+    <string name="logout">Logout</string>
+    <string name="logout_description">Logout clicked</string>
+
 
     <!-- Authentication implementation -->
     <string name="auth_failed">Authentication failed.</string>
