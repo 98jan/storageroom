@@ -32,7 +32,6 @@ public class RequestHandler {
     }
 
     public static ProductWrapper getProduct(String productId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             ExecutorService executorService = Executors.newFixedThreadPool(4);
             Future<ProductWrapper> productResult = executorService.submit(() -> {
                 ProductWrapper object;
@@ -59,7 +58,6 @@ public class RequestHandler {
             } catch (ExecutionException | InterruptedException e) {
                 Log.e(TAG, e.getMessage());
             }
-        }
         return null;
     }
 
