@@ -6,9 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".ShoppingListOverviewActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/custom_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:foregroundTint="#FEFEFE"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="@android:color/white" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/custom_toolbar"
         android:fillViewport="true">
 
         <RelativeLayout
@@ -77,43 +89,49 @@
         android:textSize="20sp"
         android:visibility="visible" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnCancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="26dp"
-                android:layout_marginEnd="330dp"
-                android:layout_marginBottom="18dp"
-                android:backgroundTint="@color/primary"
-                android:clickable="true"
-                android:contentDescription="@string/back_icon_description"
-                android:src="@drawable/arrow_back_icon"
-                android:theme="@style/Theme.Storageroom"
-                app:elevation="6dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:rippleColor="@color/primary"
-                app:tint="@android:color/white" />
 
         </RelativeLayout>
     </ScrollView>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="16dp">
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/createShoppingListButton"
+        android:id="@+id/btnCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:contentDescription="@string/add_shoppinglist"
-        android:src="@drawable/add_plus_icon"
+        android:contentDescription="@string/back_icon_description"
+        android:src="@drawable/arrow_back_icon"
         android:theme="@style/Theme.Storageroom"
-        app:backgroundTint="@color/primary"
+        android:backgroundTint="@color/primary"
         app:elevation="6dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:rippleColor="@color/primary"
         app:tint="@android:color/white" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/createShoppingListButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/add_shoppinglist"
+            android:src="@drawable/add_plus_icon"
+            android:theme="@style/Theme.Storageroom"
+            android:clickable="true"
+            app:backgroundTint="@color/primary"
+            app:elevation="6dp"
+            app:rippleColor="@color/primary"
+            app:tint="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

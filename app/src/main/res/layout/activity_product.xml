@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/productMain"
     android:layout_width="match_parent"
@@ -22,12 +23,24 @@
         android:layout_alignParentBottom="true"
         android:background="#E8E8E8" />
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/custom_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:foregroundTint="#FEFEFE"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="@android:color/white" />
+
     <!-- Main content area with rounded corners -->
     <RelativeLayout
         android:id="@+id/main"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_margin="22dp"
+        android:layout_below="@id/custom_toolbar"
         android:background="@drawable/all_rounded_corners">
 
         <!-- ScrollView to handle vertical scrolling -->
@@ -135,7 +148,7 @@
                         android:id="@+id/btnSearchBarcode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/barcode_icon"
+                        android:src="@drawable/search_icon"
                         android:padding="16dp"
                         android:contentDescription="@string/barcode_button_search"
                         android:backgroundTint="@color/primary" />
@@ -168,13 +181,11 @@
                     android:id="@+id/product_image_url"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
                     android:layout_gravity="center"
                     android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_image_search_vd_black_24"
-                    android:scaleType="centerCrop"
-                    android:contentDescription="@string/product_image_description" />
+                    android:contentDescription="@string/product_image_description"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_image_search_vd_black_24" />
 
                 <!-- EditText for Product Brand -->
                 <EditText
