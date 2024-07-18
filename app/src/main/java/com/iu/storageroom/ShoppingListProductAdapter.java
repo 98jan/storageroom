@@ -45,6 +45,12 @@ public class ShoppingListProductAdapter extends RecyclerView.Adapter<ShoppingLis
             }
         });
 
+        holder.checkButton.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(position);
+            }
+        });
+
         holder.editButton.setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onEditClick(position);
@@ -78,11 +84,14 @@ public class ShoppingListProductAdapter extends RecyclerView.Adapter<ShoppingLis
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView productName;
         public TextView productQuantity;
+
+        public ImageView checkButton;
         public ImageView editButton;
         public ImageView deleteButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            checkButton = itemView.findViewById(R.id.checkButton);
             productName = itemView.findViewById(R.id.productName);
             productQuantity = itemView.findViewById(R.id.productQuantity);
             editButton = itemView.findViewById(R.id.editButton);
