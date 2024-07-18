@@ -29,11 +29,14 @@ public class ShoppingListProductActivity extends AppCompatActivity {
     private RecyclerView recyclerViewProducts;
     private ShoppingListProductAdapter adapter;
     private List<ShoppingListProduct> shoppingListProductList;
+
     private Button buttonSave;
     private Button buttonBack;
     private TextView textViewEmpty;
     private String userId;
     private String shoppinglistKey;
+
+    private boolean checkProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,16 @@ public class ShoppingListProductActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 // Handle item click if needed
+                ShoppingListProduct product = shoppingListProductList.get(position);
+
+                checkProduct = product.isCheckProduct();
+
+                if(checkProduct){
+                    product.setCheckProduct(false);
+                }
+                else {
+                    product.setCheckProduct(true);
+                }
             }
 
             @Override
@@ -180,7 +193,7 @@ public class ShoppingListProductActivity extends AppCompatActivity {
         }
 
         // Create a new ShoppingListProduct object
-        ShoppingListProduct shoppingListProduct = new ShoppingListProduct(shoppinglistKey, productName, productQuantity);
+        ShoppingListProduct shoppingListProduct = new ShoppingListProduct(shoppinglistKey, productName, productQuantity, checkProduct);
 
         // Save to Firebase under shoppinglist_products -> userId
         DatabaseReference productsRef = FirebaseUtil.mDatabaseReference
