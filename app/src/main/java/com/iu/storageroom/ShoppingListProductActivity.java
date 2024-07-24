@@ -1,6 +1,9 @@
 package com.iu.storageroom;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,9 +12,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +36,7 @@ public class ShoppingListProductActivity extends AppCompatActivity {
     private List<ShoppingListProduct> shoppingListProductList;
 
     private Button buttonSave;
-    private Button buttonBack;
+    private FloatingActionButton buttonBack;
     private TextView textViewEmpty;
     private String userId;
     private String shoppinglistKey;
@@ -42,6 +47,9 @@ public class ShoppingListProductActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shoppinglist_product);
+
+        Toolbar toolbar = findViewById(R.id.custom_toolbar);
+        setSupportActionBar(toolbar);
 
         // Initialize Views
         editTextProductName = findViewById(R.id.editTextProductName);
@@ -81,14 +89,16 @@ public class ShoppingListProductActivity extends AppCompatActivity {
                 // Handle item click if needed
                 ShoppingListProduct product = shoppingListProductList.get(position);
 
-                checkProduct = product.isCheckProduct();
+                boolean isChecked = product.isCheckProduct();
+                product.setCheckProduct(!isChecked);
 
-                if(checkProduct){
-                    product.setCheckProduct(false);
-                }
-                else {
-                    product.setCheckProduct(true);
-                }
+                DatabaseReference productRef = FirebaseUtil.mDatabaseReference
+                        .child(shoppinglistKey)
+                        .child("shoppinglist_products")
+                        .child(product.getKey());
+                productRef.setValue(product);
+
+                adapter.notifyItemChanged(position);
             }
 
             @Override
@@ -247,5 +257,35 @@ public class ShoppingListProductActivity extends AppCompatActivity {
             textViewEmpty.setVisibility(View.GONE);
             adapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_logout) {
+            // Handle logout action
+            //Toast.makeText(this, getString(R.string.logout_description), Toast.LENGTH_SHORT).show();
+            logoutUser();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void logoutUser() {
+        FirebaseUtil.signOut();
+        navigateToLoginActivity();
+    }
+
+    private void navigateToLoginActivity() {
+        Intent intent = new Intent(ShoppingListProductActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

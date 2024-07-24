@@ -9,12 +9,11 @@
     android:padding="16dp">
 
     <!-- Check Icon -->
-    <CheckBox
+    <ImageView
         android:id="@+id/checkButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:button="@drawable/check_box_outline"
-        android:gravity="center_vertical"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/check_box_outline"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
