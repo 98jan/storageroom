@@ -1,72 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shoppingListProductMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    tools:context=".ShoppingListProductActivity">
 
-    <!-- EditText for entering product name -->
-    <EditText
-        android:id="@+id/editTextProductName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter product name"
-        android:padding="16dp"
-        android:layout_margin="16dp"
-        android:layout_alignParentTop="true"/>
+    <!-- Background views with gradients -->
+    <View
+    android:id="@+id/top_background"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_alignParentTop="true"
+    android:layout_above="@+id/bottom_background"
+    android:background="@drawable/gradient_background" />
 
-    <!-- EditText for entering product quantity -->
-    <EditText
-        android:id="@+id/editTextProductQuantity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter product quantity"
-        android:inputType="number"
-        android:padding="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_below="@id/editTextProductName"/>
+    <View
+    android:id="@+id/bottom_background"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_alignParentBottom="true"
+    android:background="#E8E8E8" />
 
-    <!-- RecyclerView for displaying products -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewShoppingListProducts"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:layout_below="@id/editTextProductQuantity"
-        android:layout_above="@id/buttonSave"/>
+    <androidx.appcompat.widget.Toolbar
+    android:id="@+id/custom_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="?attr/colorPrimary"
+    android:elevation="4dp"
+    android:foregroundTint="#FEFEFE"
+    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    app:titleTextColor="@android:color/white" />
 
-    <!-- Empty view shown when product list is empty -->
-    <TextView
-        android:id="@+id/textViewEmpty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No products"
-        android:textSize="18sp"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:layout_below="@id/editTextProductQuantity"/>
+    <!-- Main content area with rounded corners -->
+    <RelativeLayout
+    android:id="@+id/main"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_margin="22dp"
+    android:layout_below="@id/custom_toolbar"
+    android:background="@drawable/all_rounded_corners_checkered">
 
-    <!-- Button to save data -->
-    <Button
-        android:id="@+id/buttonSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_alignParentEnd="true"/>
+        <!-- EditText for entering product name -->
+        <EditText
+            android:id="@+id/editTextProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter product name"
+            android:padding="16dp"
+            android:layout_margin="16dp"
+            android:layout_alignParentTop="true"/>
 
-    <!-- Button to go back -->
-    <Button
-        android:id="@+id/buttonBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cancel"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_alignParentStart="true"/>
+        <!-- EditText for entering product quantity -->
+        <EditText
+            android:id="@+id/editTextProductQuantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter product quantity"
+            android:inputType="number"
+            android:padding="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_below="@id/editTextProductName"/>
 
+        <!-- RecyclerView for displaying products -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewShoppingListProducts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_below="@id/editTextProductQuantity"
+            android:layout_above="@id/buttonSave"/>
+
+        <!-- Empty view shown when product list is empty -->
+        <TextView
+            android:id="@+id/textViewEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No products"
+            android:textSize="18sp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:layout_below="@id/editTextProductQuantity"/>
+
+        <!-- Button to save data -->
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_button"
+            android:backgroundTint="@color/primary"
+            android:contentDescription="@string/save"
+            android:drawableEnd="@drawable/save_icon"
+            android:padding="10dp"
+            android:text="@string/save"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentEnd="true"/>
+
+
+        <!-- Button to go back -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/back_icon_description"
+            android:src="@drawable/arrow_back_icon"
+            android:theme="@style/Theme.Storageroom"
+            android:backgroundTint="@color/primary"
+            app:elevation="6dp"
+            android:clickable="true"
+            app:rippleColor="@color/primary"
+            app:tint="@android:color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_alignParentStart="true"/>
+    </RelativeLayout>
 </RelativeLayout>
