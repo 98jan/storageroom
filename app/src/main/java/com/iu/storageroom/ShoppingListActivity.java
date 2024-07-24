@@ -62,7 +62,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         FirebaseUtil.initializeFirebase();
 
         if (userId != null) {
-            FirebaseUtil.openFbReference("shoppinglists/" + userId + "/storageroomKey");
+            FirebaseUtil.openFbReference("shoppinglists/" + userId + "/" + storageroomKey);
         } else {
             showToastAndFinish(R.string.user_not_auth);
             return;
