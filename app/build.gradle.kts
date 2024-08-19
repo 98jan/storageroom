@@ -62,7 +62,7 @@ dependencies {
     // Barcode model
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
     // Object feature and model
-    implementation("com.google.mlkit:object-detection:17.0.1")
+    implementation("com.google.mlkit:object-detection:17.0.2")
     // json processor
     implementation(libs.jackson.databind)
 
