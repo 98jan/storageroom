@@ -31,7 +31,7 @@ jobs:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # disable java and kotlin linters, as SonarQube is used
-          GOOGLE_JAVA_FORMAT: false
+          VALIDATE_GOOGLE_JAVA_FORMAT: false
           VALIDATE_JAVA: false
           VALIDATE_JSCPD: false
           VALIDATE_KOTLIN: false
