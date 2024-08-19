@@ -30,6 +30,8 @@ jobs:
         env:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_GO_RELEASER: false
-          VALIDATE_GO: false
-          VALIDATE_GO_MODULES: false
+          # disable java and kotlin linters, as SonarQube is used
+          GOOGLE_JAVA_FORMAT: false
+          VALIDATE_JAVA: false
+          VALIDATE_JSCPD: false
+          VALIDATE_KOTLIN: false
