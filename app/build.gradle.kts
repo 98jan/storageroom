@@ -60,7 +60,7 @@ dependencies {
     api("com.google.guava:guava:32.0.1-jre")
     implementation("androidx.preference:preference-ktx:1.2.1")
     // Barcode model
-    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
     // Object feature and model
     implementation("com.google.mlkit:object-detection:17.0.1")
     // json processor
