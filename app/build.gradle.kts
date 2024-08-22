@@ -96,7 +96,7 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
 
     val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*", "android/**/*.*")
 
-    val debugTree = fileTree("${project.layout.buildDirectory}/intermediates/javac/debug") {
+    val debugTree = fileTree("${project.buildDir}/intermediates/javac/debug") {
         exclude(fileFilter)
     }
 
@@ -104,7 +104,7 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
 
     sourceDirectories.setFrom(files(mainSrc))
     classDirectories.setFrom(files(debugTree))
-    executionData.setFrom(fileTree("${project.layout.buildDirectory}") {
+    executionData.setFrom(fileTree("${project.buildDir}") {
         include(
             "jacoco/testDebugUnitTest.exec",
             "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
