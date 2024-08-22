@@ -48,6 +48,7 @@ sonar {
         property("sonar.junit.reportPaths", "build/test-results/testDebugUnitTest/")
         property("sonar.java.binaries", "build")
         property("sonar.sources", "src/main/java")
+        property("sonar.tests", "src/test")
     }
 }
 
