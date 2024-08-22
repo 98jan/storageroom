@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
     // needed for sonarqube analysis
     id("org.sonarqube") version "5.0.0.4638"
+    jacoco
 }
 
 android {
@@ -77,4 +78,34 @@ dependencies {
     //navigation
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
+}
+
+tasks.register("jacocoTestReport", JacocoReport::class) {
+    dependsOn("testDebugUnitTest") // Hier wird sichergestellt, dass die Tests vor der Coverage-Generierung ausgeführt werden
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*", "android/**/*.*")
+
+    val debugTree = fileTree("${project.buildDir}/intermediates/javac/debug") {
+        exclude(fileFilter)
+    }
+
+    val mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories.setFrom(files(mainSrc))
+    classDirectories.setFrom(files(debugTree))
+    executionData.setFrom(fileTree("${project.buildDir}") {
+        include(
+            "jacoco/testDebugUnitTest.exec",
+            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
+        )
+    })
+}
+
+tasks.named("check") {
+    dependsOn("jacocoTestReport")
 }
