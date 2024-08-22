@@ -45,7 +45,7 @@ sonar {
         property("sonar.java.coveragePlugin", "jacoco")
         property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
         property("sonar.androidLint.reportPaths", "build/reports/lint-results-debug.xml")
-        property("sonar.junit.reportPaths", "build/reports/tests/testDebugUnitTest/")
+        property("sonar.junit.reportPaths", "build/test-results/testDebugUnitTest/")
         property("sonar.java.binaries", "build")
         property("sonar.sources", "src/main/java")
     }
@@ -96,7 +96,7 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
 
     val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*", "android/**/*.*")
 
-    val debugTree = fileTree("${project.buildDir}/intermediates/javac/debug") {
+    val debugTree = fileTree("${project.layout.buildDirectory}/intermediates/javac/debug") {
         exclude(fileFilter)
     }
 
@@ -104,7 +104,7 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
 
     sourceDirectories.setFrom(files(mainSrc))
     classDirectories.setFrom(files(debugTree))
-    executionData.setFrom(fileTree("${project.buildDir}") {
+    executionData.setFrom(fileTree("${project.layout.buildDirectory}") {
         include(
             "jacoco/testDebugUnitTest.exec",
             "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
