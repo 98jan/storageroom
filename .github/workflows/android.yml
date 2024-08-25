@@ -50,3 +50,9 @@ jobs:
         with:
           name: app-release-unsigned.apk
           path: app/build/outputs/apk/release/app-release-unsigned.apk
+      - name: Upload APK as GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: app/build/outputs/apk/release/app-release-unsigned.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
