@@ -41,42 +41,39 @@ android {
 sonar {
     properties {
         property("sonar.projectKey", "98jan_storageroom_cab43341-633c-4fab-a4d5-e59b14772719")
-        property("sonar.host.url", System.getenv("SONAR_HOST_URL"))
+        property("sonar.host.url", "https://sonarqube.naj-hosting.de") //System.getenv("SONAR_HOST_URL")
         property("sonar.java.coveragePlugin", "jacoco")
         property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
         property("sonar.androidLint.reportPaths", "build/reports/lint-results-debug.xml")
-        property("sonar.junit.reportPaths", "build/test-results/testDebugUnitTest/")
+        property("sonar.junit.reportPaths", "build/test-results/testDebugUnitTest")
         property("sonar.java.binaries", "build")
-        property("sonar.sources", "src/main/java")
-        property("sonar.tests", "src/test")
     }
 }
 
 dependencies {
 
+    api("com.google.guava:guava:32.0.1-jre")
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.play.services.base)
     implementation(libs.core.ktx)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
 
     // barcode
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1")
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    api("com.google.guava:guava:32.0.1-jre")
-    implementation("androidx.preference:preference-ktx:1.2.1")
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.lifecycle.extensions)
+
+    implementation(libs.preference.ktx)
     // Barcode model
-    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    implementation(libs.barcode.scanning)
     // Object feature and model
-    implementation("com.google.mlkit:object-detection:17.0.1")
+    implementation(libs.objects.detection)
     // json processor
     implementation(libs.jackson.databind)
 
     // using glide for handling of the product images
-    implementation ("com.github.bumptech.glide:glide:4.12.0")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+    implementation (libs.glide)
+    annotationProcessor(libs.compiler)
 
     //Firebase
     implementation(platform(libs.firebase.bom))
@@ -85,9 +82,16 @@ dependencies {
     //navigation
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
+
+    // test dependencies
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 }
 
 tasks.register("jacocoTestReport", JacocoReport::class) {
+    description = "Generates the JaCoCo (Java Code Coverage) Report for SonarQube."
+    group = "Reporting"
     dependsOn("testDebugUnitTest") // Hier wird sichergestellt, dass die Tests vor der Coverage-Generierung ausgeführt werden
 
     reports {

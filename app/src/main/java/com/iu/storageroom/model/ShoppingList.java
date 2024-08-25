@@ -1,10 +1,10 @@
 package com.iu.storageroom.model;
 
-import com.iu.storageroom.R;
-
+import android.util.Log;
 import java.util.List;
 
 public class ShoppingList {
+    private static final String TAG = "ShoppingList";
 
     private String key;
     private String name;
@@ -123,8 +123,8 @@ public class ShoppingList {
         try {
             this.selectedIconInt = Integer.parseInt(selectedIcon);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
-            // Fehlerbehandlung hier, falls die Umwandlung fehlschlägt
+            // show message when icon selection fails
+            Log.e(TAG, "Failed to set icon.");
         }
     }
 }

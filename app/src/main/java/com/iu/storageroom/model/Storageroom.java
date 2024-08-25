@@ -1,9 +1,12 @@
 package com.iu.storageroom.model;
 
+import android.util.Log;
+
 /**
  * Represents a storage room which contains various items and their details.
  */
 public class Storageroom {
+    private static final String TAG = "Storageroom";
 
     private String key;
     private String name;
@@ -119,8 +122,8 @@ public class Storageroom {
         try {
             this.selectedIconInt = Integer.parseInt(selectedIcon);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
-            // Fehlerbehandlung hier, falls die Umwandlung fehlschlägt
+            // selection of icon failed
+            Log.e(TAG, "Icon selection failed");
         }
     }
 
