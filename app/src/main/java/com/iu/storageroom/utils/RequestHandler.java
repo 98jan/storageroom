@@ -1,6 +1,5 @@
 package com.iu.storageroom.utils;
 
-import android.os.Build;
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,6 +56,7 @@ public class RequestHandler {
                 return productResult.get();
             } catch (ExecutionException | InterruptedException e) {
                 Log.e(TAG, e.getMessage());
+                Thread.currentThread().interrupt();
             }
         return null;
     }
