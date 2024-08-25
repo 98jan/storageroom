@@ -41,7 +41,7 @@ android {
 sonar {
     properties {
         property("sonar.projectKey", "98jan_storageroom_cab43341-633c-4fab-a4d5-e59b14772719")
-        property("sonar.host.url", "https://sonarqube.naj-hosting.de") //System.getenv("SONAR_HOST_URL")
+        property("sonar.host.url", System.getenv("SONAR_HOST_URL"))
         property("sonar.java.coveragePlugin", "jacoco")
         property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
         property("sonar.androidLint.reportPaths", "build/reports/lint-results-debug.xml")
