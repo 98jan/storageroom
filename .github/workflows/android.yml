@@ -37,7 +37,9 @@ jobs:
       #- name: Setup Android SDK
       #  uses: amyu/setup-android@v4
       - name: Build with Gradle
-        run: ./gradlew build test lint sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Dsonar.branch.name=${{ github.ref_name }}
+        run: ./gradlew build test lint sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+        # Atleast Developer Edition needed, right now only freeware version is used
+        #-Dsonar.branch.name=${{ github.ref_name }}
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       - name: Build APK
