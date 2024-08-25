@@ -12,6 +12,7 @@ permissions: read-all
 jobs:
   build:
     #runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       # Install git and unzip, as not installed on self-hosted runner images
       #- name: Install Git
