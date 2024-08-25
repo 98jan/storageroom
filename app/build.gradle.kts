@@ -52,7 +52,7 @@ sonar {
 
 dependencies {
 
-    api("com.google.guava:guava:32.0.1-jre")
+    api(libs.guava)
 
     implementation(libs.appcompat)
     implementation(libs.material)
