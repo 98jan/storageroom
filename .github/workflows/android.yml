@@ -37,7 +37,7 @@ jobs:
       #- name: Setup Android SDK
       #  uses: amyu/setup-android@v4
       - name: Build with Gradle
-        run: ./gradlew build test lint sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build test lint sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }} -Dsonar.branch.name=${{ github.ref_name }}
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       - name: Build APK
@@ -46,5 +46,5 @@ jobs:
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: app-release.apk
-          path: app/build/outputs/apk/release/app-release.apk
+          name: app-release-unsigned.apk
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
