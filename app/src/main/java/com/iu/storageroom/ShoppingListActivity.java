@@ -197,14 +197,15 @@ public class ShoppingListActivity extends AppCompatActivity {
             ShoppingList shoppingList;
             if (shoppinglistKey != null) {
                 shoppingList = new ShoppingList(shoppinglistKey, name, storageroomKey, System.currentTimeMillis(), 0, null, null);
+                shoppingList.setSelectedIcon(selectedIconStr);
                 updateData(shoppingList);
             } else {
                 DatabaseReference reference = FirebaseUtil.mDatabaseReference.push();
                 //String key = reference.getKey();
                 shoppingList = new ShoppingList(null, name, storageroomKey, System.currentTimeMillis(), 0, null, null);
+                shoppingList.setSelectedIcon(selectedIconStr);
                 saveNewData(shoppingList);
             }
-            shoppingList.setSelectedIcon(selectedIconStr);
         } else {
             showToastAndFinish(R.string.user_not_auth);
         }
