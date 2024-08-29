@@ -7,14 +7,17 @@ public class ShoppingListProduct {
     private String productName;      // Name of the product
     private int quantity;            // Quantity of the product in the shopping list
 
+    private boolean checkProduct;   // Value for if a product is set
+
     public ShoppingListProduct() {
         // Default constructor required for Firebase serialization
     }
 
-    public ShoppingListProduct(String shoppingListKey, String productName, int quantity) {
+    public ShoppingListProduct(String shoppingListKey, String productName, int quantity, boolean checkProduct) {
         this.shoppingListKey = shoppingListKey;
         this.productName = productName;
         this.quantity = quantity;
+        this.checkProduct = checkProduct;
     }
 
     public String getShoppingListKey() {
@@ -39,6 +42,14 @@ public class ShoppingListProduct {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public boolean isCheckProduct() {
+        return checkProduct;
+    }
+
+    public void setCheckProduct(boolean checkProduct) {
+        this.checkProduct = checkProduct;
     }
 
     public String getKey() {
