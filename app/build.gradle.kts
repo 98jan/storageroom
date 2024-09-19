@@ -55,7 +55,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     // barcode
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     api("com.google.guava:guava:32.0.1-jre")
     implementation("androidx.preference:preference-ktx:1.2.1")
