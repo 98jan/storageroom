@@ -1,7 +1,5 @@
 package com.iu.storageroom;
 
-import static com.iu.storageroom.utils.FirebaseUtil.updateData;
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -18,9 +16,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,9 +25,6 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.iu.storageroom.model.Product;
 import com.iu.storageroom.model.ProductWrapper;
 import com.iu.storageroom.utils.FirebaseUtil;
@@ -41,7 +33,6 @@ import com.iu.storageroom.utils.RequestHandler;
 import android.Manifest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -275,6 +266,8 @@ public class ProductActivity extends AppCompatActivity {
             // start QR Scanning process
             Intent intent = new Intent(this, LiveBarcodeScanningActivity.class);
             intent.putExtra("userId", getIntent().getStringExtra("userId"));
+            intent.putExtra("storageroomKey", storageroomKey);
+            intent.putExtra("storageroomName", storageroomName);
             startActivityForResult(intent, REQUEST_CODE_SCAN_BARCODE);
         }
     }
@@ -291,6 +284,9 @@ public class ProductActivity extends AppCompatActivity {
                 Toast.makeText(this, "Kameraberechtigung erteilt", Toast.LENGTH_SHORT).show();
                 // Hier können Sie Code hinzufügen, der ausgeführt werden soll, wenn die Berechtigung erteilt wurde
                 Intent intent = new Intent(this, LiveBarcodeScanningActivity.class);
+                intent.putExtra("userId", getIntent().getStringExtra("userId"));
+                intent.putExtra("storageroomKey", storageroomKey);
+                intent.putExtra("storageroomName", storageroomName);
                 startActivityForResult(intent, REQUEST_CODE_SCAN_BARCODE);
             } else {
                 // permission denied
@@ -374,7 +370,11 @@ public class ProductActivity extends AppCompatActivity {
                 public void onCallback(boolean isSuccess) {
                     if (isSuccess) {
                         Toast.makeText(ProductActivity.this, getString(R.string.data_save_success), Toast.LENGTH_SHORT).show();
-                        finish(); // Return to the overview activity
+                        Intent intent = new Intent(ProductActivity.this, ProductOverviewActivity.class);
+                        intent.putExtra("userId", userId);
+                        intent.putExtra("storageroomKey", storageroomKey);
+                        intent.putExtra("storageroomName", storageroomName);
+                        startActivity(intent);
                     } else {
                         Toast.makeText(ProductActivity.this, getString(R.string.data_save_fail), Toast.LENGTH_SHORT).show();
                     }
