@@ -86,7 +86,7 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
         }
 
         // Retrieve shopping list data from Firebase
-        FirebaseUtil.readData("shoppinglists/" + userId, ShoppingList.class, new FirebaseUtil.FirebaseCallback() {
+        FirebaseUtil.readData("shoppinglists/" + userId  + "/" + storageroomKey, ShoppingList.class, new FirebaseUtil.FirebaseCallback() {
             @Override
             public void onCallback(boolean isSuccess) {
                 // Not used for reading data
@@ -160,6 +160,8 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
     private void createShoppingListView() {
         Intent intent = new Intent(getApplicationContext(), ShoppingListActivity.class);
         intent.putExtra("userId", userId);
+        intent.putExtra("storageroomKey", storageroomKey);
+        intent.putExtra("storageroomName", storageroomName);
         startActivity(intent);
     }
 
@@ -175,6 +177,7 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
         intent.putExtra("shoppinglistKey", shoppingList.getKey());
         intent.putExtra("shoppinglistName", shoppingList.getName());
         intent.putExtra("shoppinglistIcon", shoppingList.getSelectedIcon());
+        intent.putExtra("storageroomKey", storageroomKey);
         startActivity(intent);
     }
 
@@ -186,7 +189,7 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
     private void deleteShoppingList(ShoppingList shoppingList) {
         String key = shoppingList.getKey();
         if (key != null) {
-            FirebaseUtil.deleteData("shoppinglists/" + userId, key, new FirebaseUtil.FirebaseCallback() {
+            FirebaseUtil.deleteData("shoppinglists/" + userId  + "/" + storageroomKey, key, new FirebaseUtil.FirebaseCallback() {
                 @Override
                 public void onCallback(boolean isSuccess) {
                     if (isSuccess) {
@@ -219,6 +222,7 @@ public class ShoppingListOverviewActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ShoppingListProductActivity.class);
         intent.putExtra("shoppinglistKey", shoppingList.getKey());
         intent.putExtra("storageroomName", storageroomName);
+        intent.putExtra("storageroomKey", storageroomKey);
         intent.putExtra("userId", userId);
         startActivity(intent);
     }
