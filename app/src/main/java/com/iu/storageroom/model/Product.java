@@ -62,7 +62,7 @@ public class Product implements Serializable {
         this.imageUrl = imageUrl;
         this.brand = brand;
         this.categories = categories;
-        this.quantity = quantity;
+        this.quantity = quantity != "0" ? quantity : "1";
         this.store = store;
         this.rating = rating;
         this.favourite = favourite;

@@ -300,143 +300,143 @@ public class ProductActivity extends AppCompatActivity {
         }
     }
 
-        @Override
-        protected void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data){
-            super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == REQUEST_CODE_SCAN_BARCODE && resultCode == RESULT_OK && data != null) {
-                product = data.getParcelableExtra("product");
-                if (product != null) {
-                    populateFields(product);
-                }
+    @Override
+    protected void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SCAN_BARCODE && resultCode == RESULT_OK && data != null) {
+            product = data.getParcelableExtra("product");
+            if (product != null) {
+                populateFields(product);
             }
         }
+    }
 
-        /**
-         * Saves the entered data to Firebase.
-         */
-        private void saveData() {
-            if (userId != null && storageroomKey != null) {
-                // Validate and retrieve product data from UI components
-                String productName = editTextProductName.getText().toString().trim();
-                if (TextUtils.isEmpty(productName)) {
-                    editTextProductName.setError(getString(R.string.product_name_required));
-                    editTextProductName.requestFocus();
-                    return;
-                }
+    /**
+     * Saves the entered data to Firebase.
+     */
+    private void saveData() {
+        if (userId != null && storageroomKey != null) {
+            // Validate and retrieve product data from UI components
+            String productName = editTextProductName.getText().toString().trim();
+            if (TextUtils.isEmpty(productName)) {
+                editTextProductName.setError(getString(R.string.product_name_required));
+                editTextProductName.requestFocus();
+                return;
+            }
 
-                String productNote = editTextProductNote.getText().toString().trim();
-                String productBarcode = editTextProductBarcode.getText().toString().trim();
-                String productBrand = editTextProductBrand.getText().toString().trim();
-                String productQuantity = editTextProductQuantity.getText().toString().trim();
-                String productStore = editTextProductStore.getText().toString().trim();
-                boolean productFavourite = checkBoxProductFavourite.isChecked();
-                String productRatingText = editTextProductRating.getText().toString();
-                int productRating;
-                try {
-                    productRating = Integer.parseInt(productRatingText);
-                } catch (NumberFormatException e) {
-                    productRating = 0;
-                }
+            String productNote = editTextProductNote.getText().toString().trim();
+            String productBarcode = editTextProductBarcode.getText().toString().trim();
+            String productBrand = editTextProductBrand.getText().toString().trim();
+            String productQuantity = editTextProductQuantity.getText().toString().trim();
+            String productStore = editTextProductStore.getText().toString().trim();
+            boolean productFavourite = checkBoxProductFavourite.isChecked();
+            String productRatingText = editTextProductRating.getText().toString();
+            int productRating;
+            try {
+                productRating = Integer.parseInt(productRatingText);
+            } catch (NumberFormatException e) {
+                productRating = 0;
+            }
 
-                List<String> productGroup = new ArrayList<>();
-                String selectedProductGroup = (String) productGroupSpinner.getSelectedItem();
-                if (!selectedProductGroup.equals(getString(R.string.product_group_placeholder))) {
-                    productGroup.add(selectedProductGroup);
-                }
+            List<String> productGroup = new ArrayList<>();
+            String selectedProductGroup = (String) productGroupSpinner.getSelectedItem();
+            if (!selectedProductGroup.equals(getString(R.string.product_group_placeholder))) {
+                productGroup.add(selectedProductGroup);
+            }
 
-                // Create or update the product object
-                if (product == null || product.getKey() == null) {
-                    // Creating a new product
-                    product = new Product(null, productName, productNote, productBarcode, imageUrl,
-                            productBrand, productGroup, productQuantity, productStore, productRating, productFavourite);
-                    saveNewData(product);
-                } else {
-                    // Use the existing productKey
-                    product = new Product(product.getKey(), productName, productNote, productBarcode, imageUrl,
-                            productBrand, productGroup, productQuantity, productStore, productRating, productFavourite);
-                    updateData(product);
-                }
+            // Create or update the product object
+            if (product == null || product.getKey() == null) {
+                // Creating a new product
+                product = new Product(null, productName, productNote, productBarcode, imageUrl,
+                        productBrand, productGroup, productQuantity, productStore, productRating, productFavourite);
+                saveNewData(product);
             } else {
-                showToast(R.string.user_not_auth);
+                // Use the existing productKey
+                product = new Product(product.getKey(), productName, productNote, productBarcode, imageUrl,
+                        productBrand, productGroup, productQuantity, productStore, productRating, productFavourite);
+                updateData(product);
             }
+        } else {
+            showToast(R.string.user_not_auth);
         }
+    }
+
+
+/**
+     * Saves new product data to Firebase.
+     *
+     * @param product The Product object to save.
+     */
+    private void saveNewData (Product product){
+        if (userId != null) {
+            FirebaseUtil.saveData("products/" + userId + "/" + storageroomKey, product, new FirebaseUtil.FirebaseCallback() {
+                @Override
+                public void onCallback(boolean isSuccess) {
+                    if (isSuccess) {
+                        Toast.makeText(ProductActivity.this, getString(R.string.data_save_success), Toast.LENGTH_SHORT).show();
+                        finish(); // Return to the overview activity
+                    } else {
+                        Toast.makeText(ProductActivity.this, getString(R.string.data_save_fail), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onCallback(List<Object> list) {
+                    // Not used in this context
+                }
+            });
+        } else {
+            Toast.makeText(this, getString(R.string.user_not_auth), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void updateData(Product updatedProduct) {
+        if (userId != null) {
+            String path = "products/" + userId + "/" + storageroomKey;
+
+            FirebaseUtil.updateData(path, updatedProduct, new FirebaseUtil.FirebaseCallback() {
+                @Override
+                public void onCallback(boolean isSuccess) {
+                    if (isSuccess) {
+                        Toast.makeText(ProductActivity.this, "Product updated successfully.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ProductActivity.this, "Failed to update product.", Toast.LENGTH_SHORT).show();
+                    }
+                    returnToProductOverview();
+                }
+
+                @Override
+                public void onCallback(List<Object> list) {
+
+                }
+            });
+        } else {
+            showToast(R.string.user_not_auth);
+        }
+    }
 
 
     /**
-         * Saves new product data to Firebase.
-         *
-         * @param product The Product object to save.
-         */
-        private void saveNewData (Product product){
-            if (userId != null) {
-                FirebaseUtil.saveData("products/" + userId + "/" + storageroomKey, product, new FirebaseUtil.FirebaseCallback() {
-                    @Override
-                    public void onCallback(boolean isSuccess) {
-                        if (isSuccess) {
-                            Toast.makeText(ProductActivity.this, getString(R.string.data_save_success), Toast.LENGTH_SHORT).show();
-                            finish(); // Return to the overview activity
-                        } else {
-                            Toast.makeText(ProductActivity.this, getString(R.string.data_save_fail), Toast.LENGTH_SHORT).show();
-                        }
-                    }
+     * Displays a toast message with the specified message.
+     *
+     * @param messageId The resource ID of the string message to display.
+     */
+    private void showToast ( int messageId){
+        Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show();
+    }
 
-                    @Override
-                    public void onCallback(List<Object> list) {
-                        // Not used in this context
-                    }
-                });
-            } else {
-                Toast.makeText(this, getString(R.string.user_not_auth), Toast.LENGTH_SHORT).show();
-            }
-        }
-
-
-        private void updateData(Product updatedProduct) {
-            if (userId != null) {
-                String path = "products/" + userId + "/" + storageroomKey;
-
-                FirebaseUtil.updateData(path, updatedProduct, new FirebaseUtil.FirebaseCallback() {
-                    @Override
-                    public void onCallback(boolean isSuccess) {
-                        if (isSuccess) {
-                            Toast.makeText(ProductActivity.this, "Product updated successfully.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(ProductActivity.this, "Failed to update product.", Toast.LENGTH_SHORT).show();
-                        }
-                        returnToProductOverview();
-                    }
-
-                    @Override
-                    public void onCallback(List<Object> list) {
-
-                    }
-                });
-            } else {
-                showToast(R.string.user_not_auth);
-            }
-        }
-
-
-        /**
-         * Displays a toast message with the specified message.
-         *
-         * @param messageId The resource ID of the string message to display.
-         */
-        private void showToast ( int messageId){
-            Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show();
-        }
-
-        /**
-         * Returns to the product overview activity.
-         */
-        private void returnToProductOverview () {
-            Intent intent = new Intent(ProductActivity.this, ProductOverviewActivity.class);
-            intent.putExtra("userId", userId);
-            intent.putExtra("storageroomKey", storageroomKey);
-            intent.putExtra("storageroomName", storageroomName);
-            startActivity(intent);
-            finish();
-        }
+    /**
+     * Returns to the product overview activity.
+     */
+    private void returnToProductOverview () {
+        Intent intent = new Intent(ProductActivity.this, ProductOverviewActivity.class);
+        intent.putExtra("userId", userId);
+        intent.putExtra("storageroomKey", storageroomKey);
+        intent.putExtra("storageroomName", storageroomName);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -467,4 +467,4 @@ public class ProductActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-    }
+}

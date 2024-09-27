@@ -47,6 +47,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     private String userId;
     private String previousActivity;
     private String shoppinglistKey;
+    private String storageroomKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         FirebaseUtil.initializeFirebase();
 
         if (userId != null) {
-            FirebaseUtil.openFbReference("shoppinglists/" + userId);
+            FirebaseUtil.openFbReference("shoppinglists/" + userId + "/" + storageroomKey);
         } else {
             showToastAndFinish(R.string.user_not_auth);
             return;
@@ -102,6 +103,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         userId = intent.getStringExtra("userId");
         editMode = intent.getBooleanExtra("editMode", false);
         shoppinglistKey = intent.getStringExtra("shoppinglistKey");
+        storageroomKey = intent.getStringExtra("storageroomKey");
         previousActivity = intent.getStringExtra("previousActivity");
     }
 
@@ -186,16 +188,22 @@ public class ShoppingListActivity extends AppCompatActivity {
                 return;
             }
 
+            // Get selected icon resource ID
+            int selectedIconResId = iconResIds[iconSpinner.getSelectedItemPosition()];
+
+            // Convert selectedIconResId to String
             String selectedIconStr = String.valueOf(selectedIconResId);
 
             ShoppingList shoppingList;
             if (shoppinglistKey != null) {
-                shoppingList = new ShoppingList(shoppinglistKey, name, userId, System.currentTimeMillis(), 0, null, null);
+                shoppingList = new ShoppingList(shoppinglistKey, name, storageroomKey, System.currentTimeMillis(), 0, null, null);
+                shoppingList.setSelectedIcon(selectedIconStr);
                 updateData(shoppingList);
             } else {
                 DatabaseReference reference = FirebaseUtil.mDatabaseReference.push();
                 //String key = reference.getKey();
-                shoppingList = new ShoppingList(null, name, userId, System.currentTimeMillis(), 0, null, null);
+                shoppingList = new ShoppingList(null, name, storageroomKey, System.currentTimeMillis(), 0, null, null);
+                shoppingList.setSelectedIcon(selectedIconStr);
                 saveNewData(shoppingList);
             }
         } else {
@@ -209,7 +217,7 @@ public class ShoppingListActivity extends AppCompatActivity {
      * @param shoppingList the shopping list to save
      */
     private void saveNewData(ShoppingList shoppingList) {
-        FirebaseUtil.saveData("shoppinglists/" + userId, shoppingList, new FirebaseUtil.FirebaseCallback() {
+        FirebaseUtil.saveData("shoppinglists/" + userId + "/" + storageroomKey, shoppingList, new FirebaseUtil.FirebaseCallback() {
             @Override
             public void onCallback(boolean isSuccess) {
                 showToast(isSuccess ? R.string.data_save_success : R.string.data_save_fail);
@@ -229,7 +237,7 @@ public class ShoppingListActivity extends AppCompatActivity {
      * @param shoppingList the shopping list to update
      */
     private void updateData(ShoppingList shoppingList) {
-        FirebaseUtil.updateData("shoppinglists/" + userId, shoppingList, new FirebaseUtil.FirebaseCallback() {
+        FirebaseUtil.updateData("shoppinglists/" + userId + "/" + storageroomKey, shoppingList, new FirebaseUtil.FirebaseCallback() {
             @Override
             public void onCallback(boolean isSuccess) {
                 if (isSuccess) {

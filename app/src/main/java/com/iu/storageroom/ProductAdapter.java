@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.iu.storageroom.model.Product;
 
 import java.util.List;
@@ -79,6 +80,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.productName.setText(product.getName());
         holder.productQuantity.setText(String.valueOf(product.getQuantity()));
 
+        // Load product image using Glide
+        Glide.with(context)
+                .load(product.getImageUrl()) // Ensure your Product class has a getImageUrl() method
+                .placeholder(R.drawable.image_placeholder_icon)
+                .into(holder.productImage);
+
         // Edit button click listener
         holder.editButton.setOnClickListener(v -> {
             if (editClickListener != null) {
@@ -133,6 +140,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView productName;
         public TextView productQuantity;
+        public ImageView productImage;
         public ImageButton favoriteButton;
         public ImageView editButton;
         public ImageView deleteButton;
@@ -141,6 +149,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             super(itemView);
             productName = itemView.findViewById(R.id.productName);
             productQuantity = itemView.findViewById(R.id.productQuantity);
+            productImage = itemView.findViewById(R.id.productImage);
             favoriteButton = itemView.findViewById(R.id.favoriteButton);
             editButton = itemView.findViewById(R.id.editButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);
