@@ -38,9 +38,8 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       # Setup google-services.json
-      - name: Write GOOGLE_SERVICES_JSON to google-services.json
-        run: |
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > ./app/google-services.json
+      - name: Create Google Services JSON File
+        run: echo ${{ secrets.GOOGLE_SERVICES_JSON }} | base64 -di > ./app/google-services.json
       # Setup Android for self-hosted runners
       #- name: Setup Android SDK
       #  uses: amyu/setup-android@v4
