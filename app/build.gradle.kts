@@ -45,8 +45,9 @@ sonar {
         property("sonar.java.coveragePlugin", "jacoco")
         property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
         property("sonar.androidLint.reportPaths", "build/reports/lint-results-debug.xml")
-        property("sonar.junit.reportPaths", "build/test-results/testDebugUnitTest")
-        property("sonar.java.binaries", "build")
+        property("sonar.junit.reportPaths", "build/test-results/testDebugUnitTest,build/test-results/testReleaseUnitTest")
+        property("sonar.java.binaries", "build/intermediates/javac/debug,build/intermediates/javac/release,build/tmp/kotlin-classes/debug,build/tmp/kotlin-classes/release")
+        property("sonar.tests", "src/test/java")
     }
 }
 
