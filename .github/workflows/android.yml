@@ -15,6 +15,8 @@ jobs:
   build:
     #runs-on: self-hosted
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       # Install git and unzip, as not installed on self-hosted runner images
       #- name: Install Git
@@ -35,6 +37,10 @@ jobs:
           cache: gradle
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      # Setup google-services.json
+      - name: Write GOOGLE_SERVICES_JSON to google-services.json
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > ./app/src/google-services.json
       # Setup Android for self-hosted runners
       #- name: Setup Android SDK
       #  uses: amyu/setup-android@v4
@@ -56,8 +62,6 @@ jobs:
       - name: Upload APK as GitHub Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
-        permissions:
-          contents: write
         with:
           files: app/build/outputs/apk/release/app-release-unsigned.apk
         env:
