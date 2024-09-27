@@ -328,7 +328,6 @@ public class StorageroomActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
                 Toast.makeText(this, "Failed to return to previous activity", Toast.LENGTH_SHORT).show();
             }
         } else {

@@ -205,6 +205,8 @@ class LiveBarcodeScanningActivity : AppCompatActivity(), OnClickListener {
                 startActivity(Intent(this, ProductActivity::class.java).apply {
                     putExtra("product", productWrapper?.product ?: run {null})
                     putExtra("userId", intent.getStringExtra("userId"))
+                    putExtra("storageroomKey", intent.getStringExtra("storageroomKey"))
+                    putExtra("storageroomName", intent.getStringExtra("storageroomName"))
                 })
             }
         }
